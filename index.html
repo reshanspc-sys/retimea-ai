@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RETIMEA AI — Intelligence for Everyone</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #f5f8ff;
+    }
+    header {
+      padding: 22px;
+      border-bottom: 1px solid #263451;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand { font-size: 23px; font-weight: bold; }
+    .brand span { color: #40d8ff; }
+    .tagline { color: #a9b8d2; font-size: 12px; }
+    main {
+      max-width: 850px;
+      margin: 55px auto;
+      padding: 20px;
+    }
+    h1 { font-size: clamp(30px, 6vw, 48px); }
+    h1 span { color: #40d8ff; }
+    .panel {
+      background: #151e33;
+      border: 1px solid #2c3c5c;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 28px;
+    }
+    #messages {
+      min-height: 180px;
+      max-height: 380px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+    .message { padding: 12px; margin: 8px 0; border-radius: 10px; }
+    .user { background: #203c63; }
+    .assistant { background: #202b42; }
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #0c1427;
+      color: white;
+      border: 1px solid #34496c;
+      font: inherit;
+      resize: vertical;
+    }
+    button {
+      margin-top: 12px;
+      background: #16bfe9;
+      color: #06111e;
+      border: 0;
+      padding: 13px 24px;
+      border-radius: 9px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .5; cursor: wait; }
+    footer { text-align: center; color: #899ab5; padding: 30px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="brand">R<span>ET</span>IMEA AI</div>
+      <div class="tagline">INTELLIGENCE FOR EVERYONE</div>
+    </div>
+    <div>V1.0</div>
+  </header>
+
+  <main>
+    <h1>Think bigger with <span>RETIMEA AI.</span></h1>
+    <p class="tagline">Your AI assistant for ideas, writing, research and business.</p>
+
+    <section class="panel">
+      <h2>AI Assistant</h2>
+      <div id="messages" aria-live="polite">
+        <div class="message assistant">
+          Welcome to RETIMEA AI! What would you like help with?
+        </div>
+      </div>
+      <textarea id="prompt" maxlength="4000"
+        placeholder="Ask RETIMEA AI anything..."></textarea>
+      <button id="send">Send message</button>
+      <p id="status" class="tagline"></p>
+    </section>
+  </main>
+
+  <footer>© 2026 RETIMEA AI. Intelligence for Everyone.</footer>
+
+  <script>
+    const messages = document.getElementById("messages");
+    const promptBox = document.getElementById("prompt");
+    const sendButton = document.getElementById("send");
+    const status = document.getElementById("status");
+    const history = [];
+
+    function addMessage(role, content) {
+      const item = document.createElement("div");
+      item.className = "message " + role;
+      item.textContent = content;
+      messages.appendChild(item);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const message = promptBox.value.trim();
+      if (!message || sendButton.disabled) return;
+
+      addMessage("user", message);
+      history.push({ role: "user", content: message });
+      promptBox.value = "";
+      sendButton.disabled = true;
+      status.textContent = "RETIMEA AI is thinking...";
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: history })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Request failed");
+
+        addMessage("assistant", data.reply);
+        history.push({ role: "assistant", content: data.reply });
+        status.textContent = "Ready";
+      } catch (error) {
+        history.pop();
+        addMessage("assistant", "Sorry, something went wrong: " + error.message);
+        status.textContent = "Please try again.";
+      } finally {
+        sendButton.disabled = false;
+      }
+    }
+
+    sendButton.addEventListener("click", sendMessage);
+    promptBox.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>

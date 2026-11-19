@@ -1,4 +1,4 @@
-
+import { requireUser } from "../_shared/auth.js";
 export async function onRequestPost(context) {
   const { request, env } = context;
 

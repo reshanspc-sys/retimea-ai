@@ -1,5 +1,10 @@
 import { requireUser } from "../_shared/auth.js";
 export async function onRequestPost(context) {
+    const auth = await requireUser(context.request, context.env);
+
+  if (auth.response) {
+    return auth.response;
+  }
   const { request, env } = context;
 
   try {

@@ -6,6 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RETIMEA AI | Intelligence for Everyone</title>
 
+<!-- Browser document readers -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+
 <style>
 :root {
   --bg:#07111f;
@@ -30,7 +34,9 @@ body {
   overflow:hidden;
 }
 
-button,textarea { font:inherit; }
+button,textarea,input { font:inherit; }
+
+button { cursor:pointer; }
 
 .app {
   height:100vh;
@@ -45,6 +51,7 @@ button,textarea { font:inherit; }
   display:flex;
   flex-direction:column;
   padding:20px 13px;
+  overflow-y:auto;
 }
 
 .brand {
@@ -83,7 +90,6 @@ button,textarea { font:inherit; }
   color:white;
   border-radius:11px;
   text-align:left;
-  cursor:pointer;
   margin-bottom:24px;
 }
 
@@ -117,7 +123,6 @@ button,textarea { font:inherit; }
   padding:12px;
   border-radius:10px;
   text-align:left;
-  cursor:pointer;
   transition:.2s;
   font-size:13px;
 }
@@ -240,7 +245,9 @@ button,textarea { font:inherit; }
   margin:0 0 12px;
 }
 
-.welcome h1 span {
+.welcome h1 span,
+.image-heading h1 span,
+.document-heading h1 span {
   background:linear-gradient(90deg,#248eff,#43e4ed);
   -webkit-background-clip:text;
   background-clip:text;
@@ -330,7 +337,6 @@ textarea::placeholder { color:#718aa3; }
   padding:10px 17px;
   color:#041321;
   font-weight:bold;
-  cursor:pointer;
   background:linear-gradient(110deg,#168cff,#35e0ed);
 }
 
@@ -353,46 +359,47 @@ textarea::placeholder { color:#718aa3; }
   margin-top:9px;
 }
 
-/* IMAGE CREATION STUDIO */
+/* SHARED STUDIO LAYOUT */
 
-.image-studio {
+.image-studio,
+.document-studio {
   flex:1;
   min-height:0;
   overflow-y:auto;
   max-width:1050px;
   width:100%;
   margin:0 auto;
-  padding:35px 30px;
+  padding:25px 30px;
 }
 
-.image-studio[hidden] {
+.image-studio[hidden],
+.document-studio[hidden] {
   display:none;
 }
 
-.image-heading {
+.image-heading,
+.document-heading {
   text-align:center;
   margin:25px 0 30px;
 }
 
-.image-heading h1 {
+.image-heading h1,
+.document-heading h1 {
   font-size:clamp(26px,4vw,36px);
   margin:0 0 12px;
 }
 
-.image-heading h1 span {
-  background:linear-gradient(90deg,#248eff,#43e4ed);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-
-.image-heading p {
+.image-heading p,
+.document-heading p {
   color:var(--muted);
   font-size:14px;
   line-height:1.6;
 }
 
-.image-panel {
+/* IMAGE CREATION */
+
+.image-panel,
+.document-panel {
   max-width:760px;
   margin:0 auto;
   padding:22px;
@@ -402,7 +409,8 @@ textarea::placeholder { color:#718aa3; }
   box-shadow:0 12px 35px #0003;
 }
 
-.image-label {
+.image-label,
+.document-label {
   display:block;
   font-size:13px;
   font-weight:600;
@@ -423,11 +431,18 @@ textarea::placeholder { color:#718aa3; }
   font:14px/1.6 Inter,Arial,sans-serif;
 }
 
-.image-prompt:focus { border-color:var(--cyan); }
+.image-prompt:focus,
+.document-question:focus {
+  border-color:var(--cyan);
+}
 
-.image-prompt::placeholder { color:#718aa3; }
+.image-prompt::placeholder,
+.document-question::placeholder {
+  color:#718aa3;
+}
 
-.image-generate {
+.image-generate,
+.document-action {
   width:100%;
   margin-top:15px;
   padding:13px;
@@ -435,16 +450,17 @@ textarea::placeholder { color:#718aa3; }
   border-radius:10px;
   color:#041321;
   font-weight:700;
-  cursor:pointer;
   background:linear-gradient(110deg,#168cff,#35e0ed);
 }
 
-.image-generate:disabled {
+.image-generate:disabled,
+.document-action:disabled {
   opacity:.5;
   cursor:not-allowed;
 }
 
-.image-status {
+.image-status,
+.document-status {
   min-height:22px;
   margin-top:13px;
   text-align:center;
@@ -466,7 +482,8 @@ textarea::placeholder { color:#718aa3; }
   border:1px solid var(--border);
 }
 
-.image-download {
+.image-download,
+.document-download {
   display:inline-block;
   margin-top:15px;
   padding:11px 20px;
@@ -478,9 +495,139 @@ textarea::placeholder { color:#718aa3; }
   font-size:13px;
 }
 
-.image-download:hover { border-color:var(--cyan); }
+.image-download:hover,
+.document-download:hover {
+  border-color:var(--cyan);
+}
 
-.mobile-brand { display:none; }
+/* DOCUMENT STUDIO */
+
+.document-panel {
+  margin-bottom:22px;
+}
+
+.upload-area {
+  border:1px dashed #397094;
+  border-radius:13px;
+  padding:25px 15px;
+  text-align:center;
+  background:#0b1b2b;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.upload-area:hover {
+  border-color:var(--cyan);
+  background:#10263b;
+}
+
+.upload-icon {
+  font-size:32px;
+  color:var(--cyan);
+  margin-bottom:10px;
+}
+
+.upload-title {
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:7px;
+}
+
+.upload-help {
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+
+#documentFile {
+  display:none;
+}
+
+.file-info {
+  margin-top:13px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#0b1b2b;
+  display:none;
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+
+.file-info.visible { display:block; }
+
+.file-info strong { color:var(--cyan); }
+
+.document-question {
+  width:100%;
+  min-height:75px;
+  max-height:150px;
+  resize:vertical;
+  padding:13px;
+  color:var(--text);
+  background:#091725;
+  border:1px solid #294762;
+  border-radius:11px;
+  outline:none;
+  font:14px/1.6 Inter,Arial,sans-serif;
+}
+
+.document-actions {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:15px;
+}
+
+.document-action {
+  margin:0;
+  min-height:46px;
+  font-size:12px;
+}
+
+.document-action.secondary {
+  color:#d9edff;
+  border:1px solid #315a78;
+  background:#12304a;
+}
+
+.document-action:hover:not(:disabled) {
+  filter:brightness(1.12);
+}
+
+.document-result {
+  max-width:760px;
+  margin:20px auto 0;
+  padding:20px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  display:none;
+}
+
+.document-result.visible { display:block; }
+
+.document-result h3 {
+  margin:0 0 14px;
+  color:var(--cyan);
+  font-size:14px;
+}
+
+.document-answer {
+  font-size:13px;
+  line-height:1.8;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.document-smallprint {
+  max-width:760px;
+  margin:14px auto;
+  color:#718aa3;
+  font-size:10px;
+  line-height:1.6;
+  text-align:center;
+}
 
 @media(max-width:700px) {
   .sidebar {
@@ -523,21 +670,27 @@ textarea::placeholder { color:#718aa3; }
 
   .welcome h1 { font-size:27px; }
 
-  .image-studio { padding:20px 12px; }
+  .image-studio,
+  .document-studio {
+    padding:15px 12px;
+  }
 
-  .image-panel { padding:16px; }
+  .image-panel,
+  .document-panel {
+    padding:16px;
+  }
+
+  .document-actions {
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
-  <!-- SIDEBAR -->
-
   <aside class="sidebar">
-
     <div class="brand">
       <div class="brand-icon">R</div>
       <div class="brand-name">RETIMEA<span> AI</span></div>
@@ -551,7 +704,6 @@ textarea::placeholder { color:#718aa3; }
     <div class="section-label">AI WORKSPACE</div>
 
     <nav class="tools" id="tools">
-
       <button class="tool active" data-tool="assistant">
         <span class="tool-icon">✦</span>
         <span class="tool-name">AI Assistant</span>
@@ -587,6 +739,10 @@ textarea::placeholder { color:#718aa3; }
         <span class="tool-name">Image Creation</span>
       </button>
 
+      <button class="tool" data-tool="document">
+        <span class="tool-icon">▤</span>
+        <span class="tool-name">Document Studio</span>
+      </button>
     </nav>
 
     <div class="sidebar-bottom">
@@ -597,32 +753,23 @@ textarea::placeholder { color:#718aa3; }
         </span>
       </div>
     </div>
-
   </aside>
 
-  <!-- MAIN WORKSPACE -->
-
   <section class="main">
-
     <header class="topbar">
-
       <div>
         <div class="top-title" id="topTitle">AI Assistant</div>
         <div class="top-subtitle">Your intelligent workspace</div>
       </div>
-
       <div class="online">
         <span class="dot"></span> AI ONLINE
       </div>
-
     </header>
 
     <main class="chat-area">
 
-      <!-- CHAT MESSAGES -->
-
+      <!-- CHAT -->
       <div class="messages" id="messages">
-
         <div class="welcome" id="welcome">
           <div class="welcome-logo">R</div>
           <h1>Think. Create. <span>Achieve.</span></h1>
@@ -631,20 +778,16 @@ textarea::placeholder { color:#718aa3; }
             Intelligence for Everyone.
           </p>
         </div>
-
       </div>
 
-      <!-- IMAGE CREATION WORKSPACE -->
-
+      <!-- IMAGE STUDIO -->
       <section class="image-studio" id="imageStudio" hidden>
-
         <div class="image-heading">
           <h1>Create with <span>RETIMEA AI</span></h1>
           <p>Turn your imagination into stunning images.</p>
         </div>
 
         <div class="image-panel">
-
           <label class="image-label" for="imagePrompt">
             Describe the image you want to create
           </label>
@@ -656,30 +799,99 @@ textarea::placeholder { color:#718aa3; }
             placeholder="Example: A futuristic city with glowing blue buildings, cinematic lighting, ultra-realistic digital art..."
           ></textarea>
 
-          <button
-            class="image-generate"
-            id="generateImage"
-            type="button"
-          >
+          <button class="image-generate" id="generateImage" type="button">
             ✧ Generate Image
           </button>
 
-          <div class="image-status" id="imageStatus">
-            Ready to create
-          </div>
-
+          <div class="image-status" id="imageStatus">Ready to create</div>
         </div>
 
         <div class="image-result" id="imageResult"></div>
+      </section>
 
+      <!-- DOCUMENT STUDIO -->
+      <section class="document-studio" id="documentStudio" hidden>
+        <div class="document-heading">
+          <h1>Your documents, <span>made smarter.</span></h1>
+          <p>Upload a document and let RETIMEA AI help you understand it.</p>
+        </div>
+
+        <div class="document-panel">
+          <label class="document-label">Upload your document</label>
+
+          <label class="upload-area" for="documentFile">
+            <div class="upload-icon">⇧</div>
+            <div class="upload-title">Click here to choose a document</div>
+            <div class="upload-help">
+              Supported formats: PDF, DOCX and TXT<br>
+              Maximum file size: 10 MB
+            </div>
+          </label>
+
+          <input
+            id="documentFile"
+            type="file"
+            accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+          >
+
+          <div class="file-info" id="fileInfo"></div>
+
+          <div class="document-status" id="documentStatus">
+            Please upload a document to get started.
+          </div>
+        </div>
+
+        <div class="document-panel">
+          <label class="document-label" for="documentQuestion">
+            Ask a question about your document
+          </label>
+
+          <textarea
+            class="document-question"
+            id="documentQuestion"
+            placeholder="Example: What are the five most important points in this document?"
+          ></textarea>
+
+          <div class="document-actions">
+            <button class="document-action" data-action="summarize">
+              ✦ Summarize
+            </button>
+
+            <button class="document-action secondary" data-action="ask">
+              ? Ask Questions
+            </button>
+
+            <button class="document-action secondary" data-action="keypoints">
+              ☷ Extract Key Points
+            </button>
+
+            <button class="document-action secondary" data-action="rewrite">
+              ✎ Rewrite Document
+            </button>
+          </div>
+        </div>
+
+        <div class="document-result" id="documentResult">
+          <h3>RETIMEA AI RESULT</h3>
+          <div class="document-answer" id="documentAnswer"></div>
+          <a
+            href="#"
+            class="document-download"
+            id="documentDownload"
+            download="retimea-document-result.txt"
+          >↓ Download Result</a>
+        </div>
+
+        <div class="document-smallprint">
+          Your document is processed to extract text in your browser and sent to
+          RETIMEA AI for analysis. Avoid uploading confidential or sensitive
+          documents. Scanned PDFs may need OCR and may not produce readable text.
+        </div>
       </section>
 
       <!-- CHAT COMPOSER -->
-
       <div class="composer-wrap" id="composerWrap">
-
         <form class="composer" id="chatForm">
-
           <textarea
             id="prompt"
             placeholder="Message RETIMEA AI..."
@@ -695,7 +907,6 @@ textarea::placeholder { color:#718aa3; }
               ↑ Send
             </button>
           </div>
-
         </form>
 
         <div class="status" id="status">Ready</div>
@@ -703,19 +914,19 @@ textarea::placeholder { color:#718aa3; }
         <div class="disclaimer">
           AI can make mistakes. Verify important information.
         </div>
-
       </div>
-
     </main>
-
   </section>
-
 </div>
 
 <script>
+/* PDF.JS CONFIGURATION */
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+}
 
 /* TOOL CONFIGURATION */
-
 const descriptions = {
   assistant:"Your intelligent workspace",
   writer:"Create professional written content",
@@ -723,14 +934,16 @@ const descriptions = {
   trading:"Research gold and Bitcoin markets",
   translator:"Translate between languages",
   business:"Plan and grow your business",
-  image:"Create stunning AI-generated images"
+  image:"Create stunning AI-generated images",
+  document:"Upload, analyze and understand documents"
 };
 
 let selectedTool = "assistant";
 let history = [];
+let extractedDocumentText = "";
+let selectedDocumentName = "";
 
 /* ELEMENT REFERENCES */
-
 const messages = document.getElementById("messages");
 const promptBox = document.getElementById("prompt");
 const statusBox = document.getElementById("status");
@@ -739,14 +952,22 @@ const sendButton = document.getElementById("sendButton");
 const messagesArea = document.getElementById("messages");
 const composerWrap = document.getElementById("composerWrap");
 const imageStudio = document.getElementById("imageStudio");
+const documentStudio = document.getElementById("documentStudio");
 
 const imagePrompt = document.getElementById("imagePrompt");
 const generateImageButton = document.getElementById("generateImage");
 const imageStatus = document.getElementById("imageStatus");
 const imageResult = document.getElementById("imageResult");
 
-/* WELCOME SCREEN */
+const documentFile = document.getElementById("documentFile");
+const fileInfo = document.getElementById("fileInfo");
+const documentStatus = document.getElementById("documentStatus");
+const documentQuestion = document.getElementById("documentQuestion");
+const documentResult = document.getElementById("documentResult");
+const documentAnswer = document.getElementById("documentAnswer");
+const documentDownload = document.getElementById("documentDownload");
 
+/* WELCOME SCREEN */
 function showWelcome() {
   messages.innerHTML = `
     <div class="welcome" id="welcome">
@@ -760,7 +981,6 @@ function showWelcome() {
 }
 
 /* DISPLAY CHAT MESSAGE */
-
 function addMessage(role, content) {
   const item = document.createElement("div");
   item.className = "message " + role;
@@ -774,17 +994,27 @@ function addMessage(role, content) {
 
   item.appendChild(label);
   item.appendChild(body);
-
   messages.appendChild(item);
   messages.scrollTop = messages.scrollHeight;
 }
 
+/* RESET DOCUMENT STUDIO */
+function resetDocumentStudio() {
+  extractedDocumentText = "";
+  selectedDocumentName = "";
+  documentFile.value = "";
+  documentQuestion.value = "";
+  fileInfo.textContent = "";
+  fileInfo.classList.remove("visible");
+  documentResult.classList.remove("visible");
+  documentAnswer.textContent = "";
+  documentDownload.removeAttribute("href");
+  documentStatus.textContent = "Please upload a document to get started.";
+}
+
 /* SIDEBAR TOOL SWITCHING */
-
 document.querySelectorAll(".tool").forEach(button => {
-
   button.addEventListener("click", () => {
-
     selectedTool = button.dataset.tool;
     history = [];
 
@@ -795,123 +1025,95 @@ document.querySelectorAll(".tool").forEach(button => {
     button.classList.add("active");
 
     const name = button.querySelector(".tool-name").textContent;
-
     document.getElementById("topTitle").textContent = name;
-
     document.querySelector(".top-subtitle").textContent =
       descriptions[selectedTool];
 
     const isImageTool = selectedTool === "image";
+    const isDocumentTool = selectedTool === "document";
 
-    messagesArea.hidden = isImageTool;
-    composerWrap.hidden = isImageTool;
+    messagesArea.hidden = isImageTool || isDocumentTool;
+    composerWrap.hidden = isImageTool || isDocumentTool;
     imageStudio.hidden = !isImageTool;
+    documentStudio.hidden = !isDocumentTool;
 
     if (isImageTool) {
-
       imageStatus.textContent = "Ready to create";
       imagePrompt.focus();
-
+    } else if (isDocumentTool) {
+      documentStatus.textContent = extractedDocumentText
+        ? "Document ready: " + selectedDocumentName
+        : "Please upload a document to get started.";
     } else {
-
       showWelcome();
       statusBox.textContent = "Ready";
       promptBox.focus();
-
     }
-
   });
-
 });
 
 /* NEW CONVERSATION */
-
 document.getElementById("newChat").addEventListener("click", () => {
-
   history = [];
 
   if (selectedTool === "image") {
-
     imagePrompt.value = "";
     imageResult.innerHTML = "";
     imageStatus.textContent = "Ready to create";
+    return;
+  }
 
+  if (selectedTool === "document") {
+    resetDocumentStudio();
     return;
   }
 
   showWelcome();
   statusBox.textContent = "New conversation started";
   promptBox.focus();
-
 });
 
 /* CHAT API */
-
 document.getElementById("chatForm").addEventListener(
   "submit",
   async event => {
-
     event.preventDefault();
 
     const text = promptBox.value.trim();
-
     if (!text || sendButton.disabled) return;
 
     const welcome = document.getElementById("welcome");
-
     if (welcome) welcome.remove();
 
     addMessage("user", text);
-
-    history.push({
-      role:"user",
-      content:text
-    });
+    history.push({ role:"user", content:text });
 
     promptBox.value = "";
     sendButton.disabled = true;
-
     statusBox.textContent = "RETIMEA AI is thinking...";
 
     try {
-
       const response = await fetch("/api/chat", {
-
         method:"POST",
-
-        headers:{
-          "Content-Type":"application/json"
-        },
-
+        headers:{ "Content-Type":"application/json" },
         body:JSON.stringify({
           tool:selectedTool,
           messages:history
         })
-
       });
 
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.error || "Request failed");
       }
 
-      const reply =
-        data.reply || "I couldn't generate a response.";
-
+      const reply = data.reply || "I couldn't generate a response.";
       addMessage("assistant", reply);
-
-      history.push({
-        role:"assistant",
-        content:reply
-      });
-
+      history.push({ role:"assistant", content:reply });
       statusBox.textContent = "Response received";
 
     } catch (error) {
-
       history.pop();
-
       console.error("Chat error:", error);
 
       addMessage(
@@ -923,128 +1125,263 @@ document.getElementById("chatForm").addEventListener(
         "Connection error. Please check your deployment.";
 
     } finally {
-
       sendButton.disabled = false;
       promptBox.focus();
-
     }
-
   }
 );
 
 /* IMAGE GENERATION API */
-
 generateImageButton.addEventListener("click", async () => {
-
   const prompt = imagePrompt.value.trim();
 
   if (!prompt) {
-
-    imageStatus.textContent =
-      "Please describe the image first.";
-
+    imageStatus.textContent = "Please describe the image first.";
     imagePrompt.focus();
-
     return;
   }
 
   generateImageButton.disabled = true;
-
-  generateImageButton.textContent =
-    "Creating your image...";
-
+  generateImageButton.textContent = "Creating your image...";
   imageStatus.textContent =
     "RETIMEA AI is bringing your idea to life...";
-
   imageResult.innerHTML = "";
 
   try {
-
     const response = await fetch("/api/image", {
-
       method:"POST",
-
-      headers:{
-        "Content-Type":"application/json"
-      },
-
-      body:JSON.stringify({
-        prompt:prompt
-      })
-
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ prompt })
     });
 
     const data = await response.json();
 
     if (!response.ok || !data.success || !data.image) {
-
-      throw new Error(
-        data.error || "Image generation failed."
-      );
-
+      throw new Error(data.error || "Image generation failed.");
     }
 
-    /* GENERATED IMAGE */
-
     const img = document.createElement("img");
-
     img.src = data.image;
-
     img.alt = "Image generated by RETIMEA AI";
 
-    /* DOWNLOAD LINK */
-
     const download = document.createElement("a");
-
     download.href = data.image;
-
     download.download = "retimea-ai-image.jpg";
-
     download.className = "image-download";
-
     download.textContent = "↓ Download Image";
 
-    /* DISPLAY RESULT */
-
     imageResult.appendChild(img);
-
     imageResult.appendChild(download);
-
-    imageStatus.textContent =
-      "Your image is ready!";
+    imageStatus.textContent = "Your image is ready!";
 
   } catch (error) {
-
     console.error("Image generation error:", error);
-
     imageStatus.textContent =
       error.message || "Something went wrong. Please try again.";
-
   } finally {
-
     generateImageButton.disabled = false;
+    generateImageButton.textContent = "✧ Generate Image";
+  }
+});
 
-    generateImageButton.textContent =
-      "✧ Generate Image";
+/* READ TEXT FILE */
+async function readTextFile(file) {
+  return await file.text();
+}
 
+/* READ DOCX FILE */
+async function readDocxFile(file) {
+  if (!window.mammoth) {
+    throw new Error("The DOCX reader could not load. Refresh the page and try again.");
   }
 
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
+  return result.value || "";
+}
+
+/* READ PDF FILE */
+async function readPdfFile(file) {
+  if (!window.pdfjsLib) {
+    throw new Error("The PDF reader could not load. Refresh the page and try again.");
+  }
+
+  const buffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({
+    data: new Uint8Array(buffer)
+  }).promise;
+
+  let fullText = "";
+
+  for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+    const page = await pdf.getPage(pageNumber);
+    const content = await page.getTextContent();
+    const pageText = content.items
+      .map(item => item.str)
+      .join(" ");
+
+    fullText += `\n\nPage ${pageNumber}\n${pageText}`;
+  }
+
+  return fullText;
+}
+
+/* DOCUMENT UPLOAD AND TEXT EXTRACTION */
+documentFile.addEventListener("change", async () => {
+  const file = documentFile.files[0];
+  if (!file) return;
+
+  resetDocumentStudio();
+
+  // Restore selected file after clearing the previous document state.
+  documentFile.files = (() => {
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    return transfer.files;
+  })();
+
+  const extension = file.name.split(".").pop().toLowerCase();
+  const allowed = ["pdf", "docx", "txt"];
+
+  if (!allowed.includes(extension)) {
+    documentStatus.textContent = "Unsupported file. Please select a PDF, DOCX or TXT file.";
+    documentFile.value = "";
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    documentStatus.textContent = "File is too large. Maximum file size is 10 MB.";
+    documentFile.value = "";
+    return;
+  }
+
+  selectedDocumentName = file.name;
+  documentStatus.textContent = "Reading your document...";
+
+  fileInfo.innerHTML = "";
+  const fileName = document.createElement("strong");
+  fileName.textContent = file.name;
+  const fileSize = document.createElement("span");
+  fileSize.textContent = ` · ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+  fileInfo.append(fileName, fileSize);
+  fileInfo.classList.add("visible");
+
+  try {
+    let text = "";
+
+    if (extension === "txt") {
+      text = await readTextFile(file);
+    } else if (extension === "docx") {
+      text = await readDocxFile(file);
+    } else if (extension === "pdf") {
+      text = await readPdfFile(file);
+    }
+
+    text = text.trim();
+
+    if (!text) {
+      throw new Error(
+        "No readable text was found. This may be a scanned PDF. OCR support is not included yet."
+      );
+    }
+
+    if (text.length > 80000) {
+      throw new Error(
+        "This document contains too much text. Please use a shorter document (maximum 80,000 characters)."
+      );
+    }
+
+    extractedDocumentText = text;
+
+    documentStatus.textContent =
+      "Document ready! " + text.length.toLocaleString() + " characters extracted.";
+
+  } catch (error) {
+    console.error("Document reading error:", error);
+    extractedDocumentText = "";
+    documentStatus.textContent =
+      error.message || "Could not read this document.";
+  }
+});
+
+/* DOCUMENT STUDIO API */
+async function processDocument(action) {
+  if (!extractedDocumentText) {
+    documentStatus.textContent =
+      "Please upload a readable document first.";
+    return;
+  }
+
+  const question = documentQuestion.value.trim();
+
+  if (action === "ask" && !question) {
+    documentStatus.textContent =
+      "Please type your question before selecting Ask Questions.";
+    documentQuestion.focus();
+    return;
+  }
+
+  const buttons = document.querySelectorAll(".document-action");
+  buttons.forEach(button => button.disabled = true);
+
+  documentStatus.textContent = "RETIMEA AI is analyzing your document...";
+  documentResult.classList.remove("visible");
+
+  try {
+    const response = await fetch("/api/document", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        action,
+        text:extractedDocumentText,
+        question
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || "Document processing failed.");
+    }
+
+    documentAnswer.textContent = data.answer || "No answer was returned.";
+    documentResult.classList.add("visible");
+
+    const resultBlob = new Blob(
+      [data.answer || ""],
+      { type:"text/plain;charset=utf-8" }
+    );
+
+    const downloadUrl = URL.createObjectURL(resultBlob);
+    documentDownload.href = downloadUrl;
+    documentDownload.download =
+      "retimea-" + action + "-result.txt";
+
+    documentStatus.textContent = "Document analysis completed successfully.";
+
+  } catch (error) {
+    console.error("Document API error:", error);
+    documentStatus.textContent =
+      error.message || "Something went wrong. Please try again.";
+  } finally {
+    buttons.forEach(button => button.disabled = false);
+  }
+}
+
+/* DOCUMENT ACTION BUTTONS */
+document.querySelectorAll(".document-action").forEach(button => {
+  button.addEventListener("click", () => {
+    processDocument(button.dataset.action);
+  });
 });
 
 /* ENTER KEY FOR CHAT */
-
 promptBox.addEventListener("keydown", event => {
-
   if (event.key === "Enter" && !event.shiftKey) {
-
     event.preventDefault();
-
     document.getElementById("chatForm").requestSubmit();
-
   }
-
 });
-
 </script>
 
 </body>

@@ -20,6 +20,11 @@ const TOOL_INSTRUCTIONS = {
 };
 
 export async function onRequestPost(context) {
+    const auth = await requireUser(context.request, context.env);
+
+  if (auth.response) {
+    return auth.response;
+  }
   try {
     const apiKey = context.env.GROQ_API_KEY;
 

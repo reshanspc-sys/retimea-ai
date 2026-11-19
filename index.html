@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RETIMEA AI | Intelligence for Everyone</title>
+
 <style>
 :root {
   --bg:#07111f;
@@ -17,332 +18,1034 @@
   --muted:#8da5bd;
   --border:#203a54;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,Arial,sans-serif;height:100vh;overflow:hidden;
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  height:100vh;
+  overflow:hidden;
 }
-button,textarea{font:inherit}
-.app{height:100vh;display:flex}
-.sidebar{
-  width:245px;flex-shrink:0;background:var(--sidebar);
-  border-right:1px solid var(--border);display:flex;
-  flex-direction:column;padding:20px 13px;
+
+button,textarea { font:inherit; }
+
+.app {
+  height:100vh;
+  display:flex;
 }
-.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 27px}
-.brand-icon{
-  width:39px;height:39px;border-radius:12px;
-  display:grid;place-items:center;font-size:24px;font-weight:900;
-  color:#fff;background:linear-gradient(140deg,#0878dc,#35dce9);
+
+.sidebar {
+  width:245px;
+  flex-shrink:0;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  padding:20px 13px;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:4px 8px 27px;
+}
+
+.brand-icon {
+  width:39px;
+  height:39px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  font-weight:900;
+  color:#fff;
+  background:linear-gradient(140deg,#0878dc,#35dce9);
   box-shadow:0 0 22px #168cff55;
 }
-.brand-name{font-size:19px;font-weight:800;letter-spacing:1.3px}
-.brand-name span{color:var(--cyan)}
-.new-chat{
-  width:100%;padding:13px;border:1px solid #285276;
-  background:#102b46;color:white;border-radius:11px;
-  text-align:left;cursor:pointer;margin-bottom:24px;
+
+.brand-name {
+  font-size:19px;
+  font-weight:800;
+  letter-spacing:1.3px;
 }
-.new-chat:hover{border-color:var(--cyan);background:#153958}
-.section-label{
-  font-size:10px;color:#66819b;letter-spacing:1.5px;
-  font-weight:bold;padding:0 12px 10px;
+
+.brand-name span { color:var(--cyan); }
+
+.new-chat {
+  width:100%;
+  padding:13px;
+  border:1px solid #285276;
+  background:#102b46;
+  color:white;
+  border-radius:11px;
+  text-align:left;
+  cursor:pointer;
+  margin-bottom:24px;
 }
-.tools{display:flex;flex-direction:column;gap:6px}
-.tool{
-  border:0;background:transparent;color:#a9bed2;
-  width:100%;display:flex;align-items:center;gap:13px;
-  padding:12px;border-radius:10px;text-align:left;
-  cursor:pointer;transition:.2s;font-size:13px;
+
+.new-chat:hover {
+  border-color:var(--cyan);
+  background:#153958;
 }
-.tool:hover{background:#112940;color:white}
-.tool.active{
+
+.section-label {
+  font-size:10px;
+  color:#66819b;
+  letter-spacing:1.5px;
+  font-weight:bold;
+  padding:0 12px 10px;
+}
+
+.tools {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.tool {
+  border:0;
+  background:transparent;
+  color:#a9bed2;
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:12px;
+  border-radius:10px;
+  text-align:left;
+  cursor:pointer;
+  transition:.2s;
+  font-size:13px;
+}
+
+.tool:hover {
+  background:#112940;
+  color:white;
+}
+
+.tool.active {
   background:linear-gradient(100deg,#153d5e,#12304b);
-  color:#fff;box-shadow:inset 3px 0 var(--cyan);
+  color:#fff;
+  box-shadow:inset 3px 0 var(--cyan);
 }
-.tool-icon{
-  width:24px;text-align:center;font-size:19px;
+
+.tool-icon {
+  width:24px;
+  text-align:center;
+  font-size:19px;
   color:var(--cyan);
 }
-.sidebar-bottom{margin-top:auto}
-.sidebar-note{
-  border-top:1px solid var(--border);padding:17px 9px 0;
-  color:var(--muted);font-size:11px;line-height:1.6;
+
+.sidebar-bottom { margin-top:auto; }
+
+.sidebar-note {
+  border-top:1px solid var(--border);
+  padding:17px 9px 0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
 }
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
-.topbar{
-  height:67px;flex-shrink:0;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 27px;background:#091725;
+
+.main {
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
 }
-.top-title{font-size:14px;font-weight:600}
-.top-subtitle{font-size:11px;color:var(--muted);margin-top:4px}
-.online{font-size:11px;color:#5be2bd;display:flex;align-items:center;gap:7px}
-.dot{width:7px;height:7px;border-radius:50%;background:#45dcae}
-.chat-area{
-  flex:1;min-height:0;display:flex;flex-direction:column;
-  max-width:1050px;width:100%;margin:0 auto;padding:25px 30px 20px;
+
+.topbar {
+  height:67px;
+  flex-shrink:0;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 27px;
+  background:#091725;
 }
-.messages{flex:1;overflow-y:auto;padding:8px 3px 20px}
-.welcome{
-  height:100%;min-height:280px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;
+
+.top-title {
+  font-size:14px;
+  font-weight:600;
 }
-.welcome-logo{
-  width:66px;height:66px;border-radius:20px;display:grid;
-  place-items:center;font-size:37px;font-weight:900;
+
+.top-subtitle {
+  font-size:11px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.online {
+  font-size:11px;
+  color:#5be2bd;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#45dcae;
+}
+
+.chat-area {
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  max-width:1050px;
+  width:100%;
+  margin:0 auto;
+  padding:25px 30px 20px;
+}
+
+.messages {
+  flex:1;
+  overflow-y:auto;
+  padding:8px 3px 20px;
+}
+
+.welcome {
+  height:100%;
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.welcome-logo {
+  width:66px;
+  height:66px;
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  font-size:37px;
+  font-weight:900;
   background:linear-gradient(140deg,#0878dc,#35dce9);
-  color:white;box-shadow:0 0 40px #168cff40;margin-bottom:23px;
+  color:white;
+  box-shadow:0 0 40px #168cff40;
+  margin-bottom:23px;
 }
-.welcome h1{font-size:clamp(26px,4vw,38px);margin:0 0 12px}
-.welcome h1 span{
+
+.welcome h1 {
+  font-size:clamp(26px,4vw,38px);
+  margin:0 0 12px;
+}
+
+.welcome h1 span {
   background:linear-gradient(90deg,#248eff,#43e4ed);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
-.welcome p{color:var(--muted);font-size:14px;line-height:1.7}
-.message{
-  max-width:850px;margin:14px auto;padding:15px 18px;
-  border-radius:13px;line-height:1.7;font-size:14px;
-  white-space:pre-wrap;overflow-wrap:anywhere;
+
+.welcome p {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
 }
-.message.user{background:#143b5d;border:1px solid #24567e}
-.message.assistant{background:#102137;border:1px solid #1d3851}
-.message-label{
-  font-size:10px;color:var(--cyan);font-weight:bold;
-  letter-spacing:1px;margin-bottom:6px;
+
+.message {
+  max-width:850px;
+  margin:14px auto;
+  padding:15px 18px;
+  border-radius:13px;
+  line-height:1.7;
+  font-size:14px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
-.composer-wrap{flex-shrink:0}
-.composer{
-  border:1px solid #2a4966;background:#0d1d2e;
-  border-radius:17px;padding:12px 13px;
+
+.message.user {
+  background:#143b5d;
+  border:1px solid #24567e;
+}
+
+.message.assistant {
+  background:#102137;
+  border:1px solid #1d3851;
+}
+
+.message-label {
+  font-size:10px;
+  color:var(--cyan);
+  font-weight:bold;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+
+.composer-wrap { flex-shrink:0; }
+
+.composer {
+  border:1px solid #2a4966;
+  background:#0d1d2e;
+  border-radius:17px;
+  padding:12px 13px;
   box-shadow:0 10px 35px #0004;
 }
-.composer:focus-within{border-color:#238dcc;box-shadow:0 0 0 2px #168cff18}
-textarea{
-  width:100%;min-height:55px;max-height:170px;resize:vertical;
-  border:0;outline:0;background:transparent;color:var(--text);
-  padding:7px;font-size:14px;line-height:1.6;
+
+.composer:focus-within {
+  border-color:#238dcc;
+  box-shadow:0 0 0 2px #168cff18;
 }
-textarea::placeholder{color:#718aa3}
-.composer-bottom{display:flex;align-items:center;justify-content:space-between}
-.composer-hint{font-size:10px;color:#738ba2}
-.send{
-  border:0;border-radius:10px;padding:10px 17px;
-  color:#041321;font-weight:bold;cursor:pointer;
+
+textarea {
+  width:100%;
+  min-height:55px;
+  max-height:170px;
+  resize:vertical;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  padding:7px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+textarea::placeholder { color:#718aa3; }
+
+.composer-bottom {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.composer-hint {
+  font-size:10px;
+  color:#738ba2;
+}
+
+.send {
+  border:0;
+  border-radius:10px;
+  padding:10px 17px;
+  color:#041321;
+  font-weight:bold;
+  cursor:pointer;
   background:linear-gradient(110deg,#168cff,#35e0ed);
 }
-.send:disabled{opacity:.5;cursor:not-allowed}
-.disclaimer{text-align:center;color:#617a92;font-size:10px;padding:12px 0 0}
-.status{font-size:11px;color:var(--muted);min-height:17px;margin-top:9px}
-.mobile-brand{display:none}
-@media(max-width:700px){
-  .sidebar{width:68px;padding:15px 8px}
-  .brand{justify-content:center;padding:3px 0 24px}
-  .brand-name,.new-chat-label,.tool-name,.section-label,.sidebar-note{display:none}
-  .new-chat{height:43px;padding:0;text-align:center;font-size:19px}
-  .tool{justify-content:center;padding:13px 5px}
-  .tool-icon{font-size:21px}
-  .topbar{padding:0 15px}
-  .chat-area{padding:15px 12px}
-  .message{font-size:13px}
-  .welcome h1{font-size:27px}
+
+.send:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.disclaimer {
+  text-align:center;
+  color:#617a92;
+  font-size:10px;
+  padding:12px 0 0;
+}
+
+.status {
+  font-size:11px;
+  color:var(--muted);
+  min-height:17px;
+  margin-top:9px;
+}
+
+/* IMAGE CREATION STUDIO */
+
+.image-studio {
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  max-width:1050px;
+  width:100%;
+  margin:0 auto;
+  padding:35px 30px;
+}
+
+.image-studio[hidden] {
+  display:none;
+}
+
+.image-heading {
+  text-align:center;
+  margin:25px 0 30px;
+}
+
+.image-heading h1 {
+  font-size:clamp(26px,4vw,36px);
+  margin:0 0 12px;
+}
+
+.image-heading h1 span {
+  background:linear-gradient(90deg,#248eff,#43e4ed);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.image-heading p {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+}
+
+.image-panel {
+  max-width:760px;
+  margin:0 auto;
+  padding:22px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:17px;
+  box-shadow:0 12px 35px #0003;
+}
+
+.image-label {
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.image-prompt {
+  width:100%;
+  min-height:115px;
+  max-height:220px;
+  resize:vertical;
+  padding:14px;
+  color:var(--text);
+  background:#091725;
+  border:1px solid #294762;
+  border-radius:11px;
+  outline:none;
+  font:14px/1.6 Inter,Arial,sans-serif;
+}
+
+.image-prompt:focus { border-color:var(--cyan); }
+
+.image-prompt::placeholder { color:#718aa3; }
+
+.image-generate {
+  width:100%;
+  margin-top:15px;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  color:#041321;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(110deg,#168cff,#35e0ed);
+}
+
+.image-generate:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.image-status {
+  min-height:22px;
+  margin-top:13px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.image-result {
+  max-width:760px;
+  margin:25px auto 0;
+  text-align:center;
+}
+
+.image-result img {
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+
+.image-download {
+  display:inline-block;
+  margin-top:15px;
+  padding:11px 20px;
+  border-radius:9px;
+  background:#123957;
+  border:1px solid #28618a;
+  color:white;
+  text-decoration:none;
+  font-size:13px;
+}
+
+.image-download:hover { border-color:var(--cyan); }
+
+.mobile-brand { display:none; }
+
+@media(max-width:700px) {
+  .sidebar {
+    width:68px;
+    padding:15px 8px;
+  }
+
+  .brand {
+    justify-content:center;
+    padding:3px 0 24px;
+  }
+
+  .brand-name,
+  .new-chat-label,
+  .tool-name,
+  .section-label,
+  .sidebar-note {
+    display:none;
+  }
+
+  .new-chat {
+    height:43px;
+    padding:0;
+    text-align:center;
+    font-size:19px;
+  }
+
+  .tool {
+    justify-content:center;
+    padding:13px 5px;
+  }
+
+  .tool-icon { font-size:21px; }
+
+  .topbar { padding:0 15px; }
+
+  .chat-area { padding:15px 12px; }
+
+  .message { font-size:13px; }
+
+  .welcome h1 { font-size:27px; }
+
+  .image-studio { padding:20px 12px; }
+
+  .image-panel { padding:16px; }
 }
 </style>
 </head>
+
 <body>
+
 <div class="app">
 
+  <!-- SIDEBAR -->
+
   <aside class="sidebar">
+
     <div class="brand">
       <div class="brand-icon">R</div>
       <div class="brand-name">RETIMEA<span> AI</span></div>
     </div>
 
     <button class="new-chat" id="newChat">
-      <span>＋</span> <span class="new-chat-label">New conversation</span>
+      <span>＋</span>
+      <span class="new-chat-label">New conversation</span>
     </button>
 
     <div class="section-label">AI WORKSPACE</div>
 
     <nav class="tools" id="tools">
+
       <button class="tool active" data-tool="assistant">
-        <span class="tool-icon">✦</span><span class="tool-name">AI Assistant</span>
+        <span class="tool-icon">✦</span>
+        <span class="tool-name">AI Assistant</span>
       </button>
+
       <button class="tool" data-tool="writer">
-        <span class="tool-icon">✎</span><span class="tool-name">AI Writer</span>
+        <span class="tool-icon">✎</span>
+        <span class="tool-name">AI Writer</span>
       </button>
+
       <button class="tool" data-tool="research">
-        <span class="tool-icon">⌕</span><span class="tool-name">Research Studio</span>
+        <span class="tool-icon">⌕</span>
+        <span class="tool-name">Research Studio</span>
       </button>
+
       <button class="tool" data-tool="trading">
-        <span class="tool-icon">↗</span><span class="tool-name">Trading Research</span>
+        <span class="tool-icon">↗</span>
+        <span class="tool-name">Trading Research</span>
       </button>
+
       <button class="tool" data-tool="translator">
-        <span class="tool-icon">文</span><span class="tool-name">Translator</span>
+        <span class="tool-icon">文</span>
+        <span class="tool-name">Translator</span>
       </button>
+
       <button class="tool" data-tool="business">
-        <span class="tool-icon">◇</span><span class="tool-name">Business AI</span>
+        <span class="tool-icon">◇</span>
+        <span class="tool-name">Business AI</span>
       </button>
+
+      <button class="tool" data-tool="image">
+        <span class="tool-icon">✧</span>
+        <span class="tool-name">Image Creation</span>
+      </button>
+
     </nav>
 
     <div class="sidebar-bottom">
       <div class="sidebar-note">
         Intelligence for Everyone.<br>
-        <span style="color:#35e0ed">Think · Create · Research · Achieve</span>
+        <span style="color:#35e0ed">
+          Think · Create · Research · Achieve
+        </span>
       </div>
     </div>
+
   </aside>
 
+  <!-- MAIN WORKSPACE -->
+
   <section class="main">
+
     <header class="topbar">
+
       <div>
         <div class="top-title" id="topTitle">AI Assistant</div>
         <div class="top-subtitle">Your intelligent workspace</div>
       </div>
-      <div class="online"><span class="dot"></span> AI ONLINE</div>
+
+      <div class="online">
+        <span class="dot"></span> AI ONLINE
+      </div>
+
     </header>
 
     <main class="chat-area">
+
+      <!-- CHAT MESSAGES -->
+
       <div class="messages" id="messages">
+
         <div class="welcome" id="welcome">
           <div class="welcome-logo">R</div>
           <h1>Think. Create. <span>Achieve.</span></h1>
-          <p>Welcome to RETIMEA AI.<br>
-          Intelligence for Everyone.</p>
+          <p>
+            Welcome to RETIMEA AI.<br>
+            Intelligence for Everyone.
+          </p>
         </div>
+
       </div>
 
-      <div class="composer-wrap">
-        <form class="composer" id="chatForm">
-          <textarea id="prompt" placeholder="Message RETIMEA AI..." required></textarea>
-          <div class="composer-bottom">
-            <span class="composer-hint">Enter to send · Shift + Enter for a new line</span>
-            <button class="send" id="sendButton" type="submit">↑ Send</button>
+      <!-- IMAGE CREATION WORKSPACE -->
+
+      <section class="image-studio" id="imageStudio" hidden>
+
+        <div class="image-heading">
+          <h1>Create with <span>RETIMEA AI</span></h1>
+          <p>Turn your imagination into stunning images.</p>
+        </div>
+
+        <div class="image-panel">
+
+          <label class="image-label" for="imagePrompt">
+            Describe the image you want to create
+          </label>
+
+          <textarea
+            id="imagePrompt"
+            class="image-prompt"
+            maxlength="1200"
+            placeholder="Example: A futuristic city with glowing blue buildings, cinematic lighting, ultra-realistic digital art..."
+          ></textarea>
+
+          <button
+            class="image-generate"
+            id="generateImage"
+            type="button"
+          >
+            ✧ Generate Image
+          </button>
+
+          <div class="image-status" id="imageStatus">
+            Ready to create
           </div>
+
+        </div>
+
+        <div class="image-result" id="imageResult"></div>
+
+      </section>
+
+      <!-- CHAT COMPOSER -->
+
+      <div class="composer-wrap" id="composerWrap">
+
+        <form class="composer" id="chatForm">
+
+          <textarea
+            id="prompt"
+            placeholder="Message RETIMEA AI..."
+            required
+          ></textarea>
+
+          <div class="composer-bottom">
+            <span class="composer-hint">
+              Enter to send · Shift + Enter for a new line
+            </span>
+
+            <button class="send" id="sendButton" type="submit">
+              ↑ Send
+            </button>
+          </div>
+
         </form>
+
         <div class="status" id="status">Ready</div>
-        <div class="disclaimer">AI can make mistakes. Verify important information.</div>
+
+        <div class="disclaimer">
+          AI can make mistakes. Verify important information.
+        </div>
+
       </div>
+
     </main>
+
   </section>
+
 </div>
 
 <script>
+
+/* TOOL CONFIGURATION */
+
 const descriptions = {
   assistant:"Your intelligent workspace",
   writer:"Create professional written content",
   research:"Explore information and ideas",
   trading:"Research gold and Bitcoin markets",
   translator:"Translate between languages",
-  business:"Plan and grow your business"
+  business:"Plan and grow your business",
+  image:"Create stunning AI-generated images"
 };
 
 let selectedTool = "assistant";
 let history = [];
+
+/* ELEMENT REFERENCES */
 
 const messages = document.getElementById("messages");
 const promptBox = document.getElementById("prompt");
 const statusBox = document.getElementById("status");
 const sendButton = document.getElementById("sendButton");
 
-function showWelcome(){
+const messagesArea = document.getElementById("messages");
+const composerWrap = document.getElementById("composerWrap");
+const imageStudio = document.getElementById("imageStudio");
+
+const imagePrompt = document.getElementById("imagePrompt");
+const generateImageButton = document.getElementById("generateImage");
+const imageStatus = document.getElementById("imageStatus");
+const imageResult = document.getElementById("imageResult");
+
+/* WELCOME SCREEN */
+
+function showWelcome() {
   messages.innerHTML = `
     <div class="welcome" id="welcome">
       <div class="welcome-logo">R</div>
       <h1>Think. Create. <span>Achieve.</span></h1>
-      <p>Welcome to RETIMEA AI.<br>Intelligence for Everyone.</p>
+      <p>
+        Welcome to RETIMEA AI.<br>
+        Intelligence for Everyone.
+      </p>
     </div>`;
 }
 
-function addMessage(role, content){
+/* DISPLAY CHAT MESSAGE */
+
+function addMessage(role, content) {
   const item = document.createElement("div");
   item.className = "message " + role;
+
   const label = document.createElement("div");
   label.className = "message-label";
   label.textContent = role === "user" ? "YOU" : "RETIMEA AI";
+
   const body = document.createElement("div");
   body.textContent = content;
+
   item.appendChild(label);
   item.appendChild(body);
+
   messages.appendChild(item);
   messages.scrollTop = messages.scrollHeight;
 }
 
+/* SIDEBAR TOOL SWITCHING */
+
 document.querySelectorAll(".tool").forEach(button => {
+
   button.addEventListener("click", () => {
+
     selectedTool = button.dataset.tool;
     history = [];
 
-    document.querySelectorAll(".tool").forEach(b =>
-      b.classList.remove("active"));
+    document.querySelectorAll(".tool").forEach(b => {
+      b.classList.remove("active");
+    });
+
     button.classList.add("active");
 
     const name = button.querySelector(".tool-name").textContent;
+
     document.getElementById("topTitle").textContent = name;
+
     document.querySelector(".top-subtitle").textContent =
       descriptions[selectedTool];
 
-    showWelcome();
-    statusBox.textContent = "Ready";
-    promptBox.focus();
+    const isImageTool = selectedTool === "image";
+
+    messagesArea.hidden = isImageTool;
+    composerWrap.hidden = isImageTool;
+    imageStudio.hidden = !isImageTool;
+
+    if (isImageTool) {
+
+      imageStatus.textContent = "Ready to create";
+      imagePrompt.focus();
+
+    } else {
+
+      showWelcome();
+      statusBox.textContent = "Ready";
+      promptBox.focus();
+
+    }
+
   });
+
 });
 
+/* NEW CONVERSATION */
+
 document.getElementById("newChat").addEventListener("click", () => {
+
   history = [];
+
+  if (selectedTool === "image") {
+
+    imagePrompt.value = "";
+    imageResult.innerHTML = "";
+    imageStatus.textContent = "Ready to create";
+
+    return;
+  }
+
   showWelcome();
   statusBox.textContent = "New conversation started";
   promptBox.focus();
+
 });
 
-document.getElementById("chatForm").addEventListener("submit", async event => {
-  event.preventDefault();
+/* CHAT API */
 
-  const text = promptBox.value.trim();
-  if (!text || sendButton.disabled) return;
+document.getElementById("chatForm").addEventListener(
+  "submit",
+  async event => {
 
-  const welcome = document.getElementById("welcome");
-  if (welcome) welcome.remove();
+    event.preventDefault();
 
-  addMessage("user", text);
-  history.push({role:"user", content:text});
-  promptBox.value = "";
-  sendButton.disabled = true;
-  statusBox.textContent = "RETIMEA AI is thinking...";
+    const text = promptBox.value.trim();
+
+    if (!text || sendButton.disabled) return;
+
+    const welcome = document.getElementById("welcome");
+
+    if (welcome) welcome.remove();
+
+    addMessage("user", text);
+
+    history.push({
+      role:"user",
+      content:text
+    });
+
+    promptBox.value = "";
+    sendButton.disabled = true;
+
+    statusBox.textContent = "RETIMEA AI is thinking...";
+
+    try {
+
+      const response = await fetch("/api/chat", {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          tool:selectedTool,
+          messages:history
+        })
+
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Request failed");
+      }
+
+      const reply =
+        data.reply || "I couldn't generate a response.";
+
+      addMessage("assistant", reply);
+
+      history.push({
+        role:"assistant",
+        content:reply
+      });
+
+      statusBox.textContent = "Response received";
+
+    } catch (error) {
+
+      history.pop();
+
+      console.error("Chat error:", error);
+
+      addMessage(
+        "assistant",
+        "Sorry, something went wrong. Please try again."
+      );
+
+      statusBox.textContent =
+        "Connection error. Please check your deployment.";
+
+    } finally {
+
+      sendButton.disabled = false;
+      promptBox.focus();
+
+    }
+
+  }
+);
+
+/* IMAGE GENERATION API */
+
+generateImageButton.addEventListener("click", async () => {
+
+  const prompt = imagePrompt.value.trim();
+
+  if (!prompt) {
+
+    imageStatus.textContent =
+      "Please describe the image first.";
+
+    imagePrompt.focus();
+
+    return;
+  }
+
+  generateImageButton.disabled = true;
+
+  generateImageButton.textContent =
+    "Creating your image...";
+
+  imageStatus.textContent =
+    "RETIMEA AI is bringing your idea to life...";
+
+  imageResult.innerHTML = "";
 
   try {
-    const response = await fetch("/api/chat", {
+
+    const response = await fetch("/api/image", {
+
       method:"POST",
-      headers:{"Content-Type":"application/json"},
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
       body:JSON.stringify({
-        tool:selectedTool,
-        messages:history
+        prompt:prompt
       })
+
     });
 
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Request failed");
 
-    const reply = data.reply || "I couldn't generate a response.";
-    addMessage("assistant", reply);
-    history.push({role:"assistant", content:reply});
-    statusBox.textContent = "Response received";
+    if (!response.ok || !data.success || !data.image) {
+
+      throw new Error(
+        data.error || "Image generation failed."
+      );
+
+    }
+
+    /* GENERATED IMAGE */
+
+    const img = document.createElement("img");
+
+    img.src = data.image;
+
+    img.alt = "Image generated by RETIMEA AI";
+
+    /* DOWNLOAD LINK */
+
+    const download = document.createElement("a");
+
+    download.href = data.image;
+
+    download.download = "retimea-ai-image.jpg";
+
+    download.className = "image-download";
+
+    download.textContent = "↓ Download Image";
+
+    /* DISPLAY RESULT */
+
+    imageResult.appendChild(img);
+
+    imageResult.appendChild(download);
+
+    imageStatus.textContent =
+      "Your image is ready!";
+
   } catch (error) {
-    history.pop();
-    addMessage("assistant", "Sorry, something went wrong. Please try again.");
-    statusBox.textContent = "Connection error. Please check your deployment.";
+
+    console.error("Image generation error:", error);
+
+    imageStatus.textContent =
+      error.message || "Something went wrong. Please try again.";
+
   } finally {
-    sendButton.disabled = false;
-    promptBox.focus();
+
+    generateImageButton.disabled = false;
+
+    generateImageButton.textContent =
+      "✧ Generate Image";
+
   }
+
 });
+
+/* ENTER KEY FOR CHAT */
 
 promptBox.addEventListener("keydown", event => {
+
   if (event.key === "Enter" && !event.shiftKey) {
+
     event.preventDefault();
+
     document.getElementById("chatForm").requestSubmit();
+
   }
+
 });
+
 </script>
+
 </body>
 </html>

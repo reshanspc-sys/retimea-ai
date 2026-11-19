@@ -921,6 +921,13 @@ textarea::placeholder { color:#718aa3; }
 </div>
 
 <script>
+ const SUPABASE_URL = https://rpehenlzkwnvwwagcish.supabase.co;
+const SUPABASE_ANON_KEY = sb_publishable_jHNxNfE5YBCJsUsK696b3A_BPHl3m_h;
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+); 
 /* PDF.JS CONFIGURATION */
 if (window.pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =

@@ -1,32 +1,57 @@
 
-export async function onRequestPost(context) {
-  const corsHeaders = {
-    "Content-Type": "application/json"
-  };
+const TOOL_INSTRUCTIONS = {
+  assistant:
+    "You are RETIMEA AI, a helpful general-purpose assistant. Answer clearly and accurately.",
 
+  writer:
+    "You are RETIMEA AI Writer. Help create original books, articles, stories, descriptions and professional content. Use clear structure and adapt to the requested tone.",
+
+  research:
+    "You are RETIMEA Research Studio. Analyze topics, explain evidence, identify uncertainty and distinguish established facts from assumptions. Do not invent sources.",
+
+  trading:
+    "You are RETIMEA Trading Research. Focus on gold (XAUUSD) and Bitcoin (BTC). Explain technical analysis, market structure, support and resistance, BOS, CHoCH, order blocks and risk management. Do not pretend to have live market data unless supplied. Never guarantee profits or present analysis as personalized financial advice.",
+
+  translator:
+    "You are RETIMEA Translator. Translate faithfully while preserving meaning, tone and formatting. Support Sinhala and English as well as other languages.",
+
+  business:
+    "You are RETIMEA Business AI. Help users develop business ideas, business plans, marketing strategies, digital products and practical startup plans. Be realistic about costs and risks."
+};
+
+export async function onRequestPost(context) {
   try {
     const apiKey = context.env.GROQ_API_KEY;
 
     if (!apiKey) {
       return Response.json(
-        { error: "Groq API key is not configured." },
+        { error: "AI service is not configured." },
         { status: 500 }
       );
     }
 
     const body = await context.request.json();
+    const tool = body.tool || "assistant";
 
-    if (!Array.isArray(body.messages) || body.messages.length === 0) {
+    if (!Object.hasOwn(TOOL_INSTRUCTIONS, tool)) {
       return Response.json(
-        { error: "Please provide a message." },
+        { error: "Unknown RETIMEA AI tool." },
         { status: 400 }
       );
     }
 
-    // Keep only the latest 10 messages.
-    const messages = body.messages.slice(-10);
+    if (
+      !Array.isArray(body.messages) ||
+      body.messages.length === 0 ||
+      body.messages.length > 20
+    ) {
+      return Response.json(
+        { error: "Invalid conversation." },
+        { status: 400 }
+      );
+    }
 
-    const validMessages = messages.every(message =>
+    const validMessages = body.messages.every(message =>
       message &&
       ["user", "assistant"].includes(message.role) &&
       typeof message.content === "string" &&
@@ -41,7 +66,7 @@ export async function onRequestPost(context) {
       );
     }
 
-    const groqResponse = await fetch(
+    const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
@@ -54,9 +79,9 @@ export async function onRequestPost(context) {
           messages: [
             {
               role: "system",
-              content: "You are RETIMEA AI, a helpful, friendly and intelligent assistant. Give clear, accurate and useful answers. Be honest when you are uncertain."
+              content: TOOL_INSTRUCTIONS[tool]
             },
-            ...messages
+            ...body.messages.slice(-10)
           ],
           temperature: 0.7,
           max_completion_tokens: 1500
@@ -64,12 +89,12 @@ export async function onRequestPost(context) {
       }
     );
 
-    const result = await groqResponse.json();
+    const result = await response.json();
 
-    if (!groqResponse.ok) {
+    if (!response.ok) {
       return Response.json(
-        { error: "The AI provider could not process your request. Please try again." },
-        { status: groqResponse.status === 429 ? 429 : 502 }
+        { error: "AI provider error. Please try again." },
+        { status: response.status === 429 ? 429 : 502 }
       );
     }
 
@@ -82,11 +107,11 @@ export async function onRequestPost(context) {
       );
     }
 
-    return Response.json({ reply }, { headers: corsHeaders });
+    return Response.json({ reply });
 
   } catch (error) {
     return Response.json(
-      { error: "Something went wrong. Please try again." },
+      { error: "Unable to process your request." },
       { status: 500 }
     );
   }

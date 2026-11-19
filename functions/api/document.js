@@ -3,6 +3,11 @@ const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "openai/gpt-oss-120b";
 
 export async function onRequestPost({ request, env }) {
+    const auth = await requireUser(request, env);
+
+  if (auth.response) {
+    return auth.response;
+  }
   try {
     if (!env.GROQ_API_KEY) {
       return Response.json(

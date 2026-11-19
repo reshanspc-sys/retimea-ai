@@ -1,4 +1,4 @@
-
+import { requireUser } from "../_shared/auth.js";
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "openai/gpt-oss-120b";
 

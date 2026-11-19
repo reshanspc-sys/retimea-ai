@@ -1,4 +1,4 @@
-
+import { requireUser } from "../_shared/auth.js";
 const TOOL_INSTRUCTIONS = {
   assistant:
     "You are RETIMEA AI, a helpful general-purpose assistant. Answer clearly and accurately.",

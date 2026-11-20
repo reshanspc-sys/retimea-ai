@@ -1,4 +1,4 @@
-import { requireUser } from "../_shared/auth.js";
+
 const TOOL_INSTRUCTIONS = {
   assistant:
     "You are RETIMEA AI, a helpful general-purpose assistant. Answer clearly and accurately.",
@@ -20,11 +20,6 @@ const TOOL_INSTRUCTIONS = {
 };
 
 export async function onRequestPost(context) {
-    const auth = await requireUser(context.request, context.env);
-
-  if (auth.response) {
-    return auth.response;
-  }
   try {
     const apiKey = context.env.GROQ_API_KEY;
 
@@ -115,6 +110,8 @@ export async function onRequestPost(context) {
     return Response.json({ reply });
 
   } catch (error) {
+    console.error("RETIMEA chat error:", error);
+
     return Response.json(
       { error: "Unable to process your request." },
       { status: 500 }

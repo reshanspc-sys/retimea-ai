@@ -36,7 +36,7 @@ export async function onRequestPost(context) {
     }
 
     const result = await env.AI.run(
-      "@cf/black-forest-labs/flux-1-schnell',
+      "@cf/black-forest-labs/flux-1-schnell",
       {
         prompt: prompt,
         steps: 4

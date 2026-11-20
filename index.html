@@ -826,8 +826,8 @@ textarea::placeholder { color:#718aa3; }
    Replace both placeholders with your existing values.
    Use the Publishable key, never a Secret key.
 */
-const SUPABASE_URL = https://rpehenlzkwnvwwagcish.supabase.co;
-const SUPABASE_ANON_KEY = sb_publishable_jHNxNfE5YBCJsUsK696b3A_BPHl3m_h;
+const SUPABASE_URL = https://rpehenlzkwnvwwagcish.supabase.co ;
+const SUPABASE_ANON_KEY = sb_publishable_jHNxNfE5YBCJsUsK696b3A_BPHl3m_h ;
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -882,9 +882,12 @@ function updateAuthScreen() {
   }
 }
 
-authSwitch.addEventListener("click", () => {
+authSwitch.addEventListener("click", function () {
   authMode = authMode === "login" ? "signup" : "login";
+
   authMessage.textContent = "";
+  authForm.reset();
+
   updateAuthScreen();
 });
 

@@ -1,13 +1,16 @@
+
 import { requireUser } from "../_shared/auth.js";
+
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "openai/gpt-oss-120b";
 
 export async function onRequestPost({ request, env }) {
-    const auth = await requireUser(request, env);
+  const auth = await requireUser(request, env);
 
   if (auth.response) {
     return auth.response;
   }
+
   try {
     if (!env.GROQ_API_KEY) {
       return Response.json(
@@ -106,6 +109,8 @@ export async function onRequestPost({ request, env }) {
     });
 
   } catch (error) {
+    console.error("RETIMEA Document processing error:", error);
+
     return Response.json(
       { success: false, error: "Something went wrong while processing the document." },
       { status: 500 }

@@ -1,10 +1,5 @@
-import { requireUser } from "../_shared/auth.js";
-export async function onRequestPost(context) {
-    const auth = await requireUser(context.request, context.env);
 
-  if (auth.response) {
-    return auth.response;
-  }
+export async function onRequestPost(context) {
   const { request, env } = context;
 
   try {
@@ -28,6 +23,7 @@ export async function onRequestPost(context) {
     }
 
     const body = await request.json();
+
     const prompt = typeof body.prompt === "string"
       ? body.prompt.trim()
       : "";
@@ -40,7 +36,7 @@ export async function onRequestPost(context) {
     }
 
     const result = await env.AI.run(
-      "@cf/black-forest-labs/flux-1-schnell",
+      "@cf/black-forest-labs/flux-1-schnell',
       {
         prompt: prompt,
         steps: 4

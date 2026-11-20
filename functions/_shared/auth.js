@@ -61,7 +61,10 @@ export async function requireUser(request, env) {
       response: null
     };
 
+  
   } catch (error) {
+    console.error("RETIMEA Supabase authentication error:", error);
+
     return {
       user: null,
       response: Response.json(

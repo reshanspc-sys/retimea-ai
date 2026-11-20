@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RETIMEA AI | Intelligence for Everyone</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Browser document readers -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
 
@@ -14,6 +15,7 @@
   --bg:#07111f;
   --sidebar:#091726;
   --panel:#102137;
+  --panel2:#142a43;
   --blue:#168cff;
   --cyan:#35e0ed;
   --text:#edf6ff;
@@ -28,88 +30,13 @@ body {
   background:var(--bg);
   color:var(--text);
   font-family:Inter,Arial,sans-serif;
-  min-height:100vh;
+  height:100vh;
+  overflow:hidden;
 }
 
 button,textarea,input { font:inherit; }
+
 button { cursor:pointer; }
-
-/* AUTHENTICATION */
-
-#authScreen {
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  background:radial-gradient(circle at top,#102b55 0%,#071426 45%,#030812 100%);
-}
-
-.auth-card {
-  width:100%;
-  max-width:420px;
-  padding:40px 32px;
-  border:1px solid rgba(0,195,255,.35);
-  border-radius:20px;
-  background:rgba(10,25,48,.95);
-  box-shadow:0 0 40px rgba(0,170,255,.12);
-  text-align:center;
-}
-
-.auth-card h1 {
-  font-size:30px;
-  letter-spacing:3px;
-  margin-bottom:8px;
-}
-
-.auth-card h1 span { color:var(--cyan); }
-
-.auth-card p { color:#9db5d2; }
-
-.auth-card h2 { margin-top:32px; }
-
-#authForm {
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  margin-top:24px;
-}
-
-#authForm input {
-  width:100%;
-  padding:15px;
-  border:1px solid #29476b;
-  border-radius:10px;
-  background:#07172b;
-  color:white;
-  outline:none;
-}
-
-#authForm input:focus { border-color:var(--cyan); }
-
-#authSubmit {
-  padding:15px;
-  border:0;
-  border-radius:10px;
-  background:linear-gradient(90deg,#087cff,#00c8ff);
-  color:white;
-  font-weight:bold;
-}
-
-#authSwitch {
-  border:0;
-  background:transparent;
-  color:var(--cyan);
-  font-weight:bold;
-}
-
-#authMessage {
-  min-height:20px;
-  font-size:13px;
-  overflow-wrap:anywhere;
-}
-
-/* MAIN APPLICATION */
 
 .app {
   height:100vh;
@@ -134,20 +61,17 @@ button { cursor:pointer; }
   padding:4px 8px 27px;
 }
 
-.brand-icon,.welcome-logo {
-  display:grid;
-  place-items:center;
-  color:white;
-  font-weight:900;
-  background:linear-gradient(140deg,#0878dc,#35dce9);
-  box-shadow:0 0 22px #168cff55;
-}
-
 .brand-icon {
   width:39px;
   height:39px;
   border-radius:12px;
+  display:grid;
+  place-items:center;
   font-size:24px;
+  font-weight:900;
+  color:#fff;
+  background:linear-gradient(140deg,#0878dc,#35dce9);
+  box-shadow:0 0 22px #168cff55;
 }
 
 .brand-name {
@@ -167,6 +91,11 @@ button { cursor:pointer; }
   border-radius:11px;
   text-align:left;
   margin-bottom:24px;
+}
+
+.new-chat:hover {
+  border-color:var(--cyan);
+  background:#153958;
 }
 
 .section-label {
@@ -194,14 +123,18 @@ button { cursor:pointer; }
   padding:12px;
   border-radius:10px;
   text-align:left;
+  transition:.2s;
   font-size:13px;
 }
 
-.tool:hover { background:#112940;color:white; }
+.tool:hover {
+  background:#112940;
+  color:white;
+}
 
 .tool.active {
   background:linear-gradient(100deg,#153d5e,#12304b);
-  color:white;
+  color:#fff;
   box-shadow:inset 3px 0 var(--cyan);
 }
 
@@ -230,24 +163,25 @@ button { cursor:pointer; }
 }
 
 .topbar {
-  min-height:67px;
+  height:67px;
   flex-shrink:0;
   border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:15px;
-  padding:10px 22px;
+  padding:0 27px;
   background:#091725;
 }
 
-.top-title { font-size:14px;font-weight:600; }
-.top-subtitle { font-size:11px;color:var(--muted);margin-top:4px; }
+.top-title {
+  font-size:14px;
+  font-weight:600;
+}
 
-.top-right {
-  display:flex;
-  align-items:center;
-  gap:18px;
+.top-subtitle {
+  font-size:11px;
+  color:var(--muted);
+  margin-top:4px;
 }
 
 .online {
@@ -264,30 +198,6 @@ button { cursor:pointer; }
   border-radius:50%;
   background:#45dcae;
 }
-
-#userBar {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:0;
-}
-
-#userEmail {
-  color:#9db5d2;
-  font-size:11px;
-  overflow-wrap:anywhere;
-}
-
-#logoutButton {
-  border:1px solid #315a78;
-  border-radius:8px;
-  background:#12304a;
-  color:white;
-  padding:9px 12px;
-  font-size:11px;
-}
-
-#logoutButton:disabled { opacity:.5; }
 
 .chat-area {
   flex:1;
@@ -320,7 +230,13 @@ button { cursor:pointer; }
   width:66px;
   height:66px;
   border-radius:20px;
+  display:grid;
+  place-items:center;
   font-size:37px;
+  font-weight:900;
+  background:linear-gradient(140deg,#0878dc,#35dce9);
+  color:white;
+  box-shadow:0 0 40px #168cff40;
   margin-bottom:23px;
 }
 
@@ -380,9 +296,13 @@ button { cursor:pointer; }
   background:#0d1d2e;
   border-radius:17px;
   padding:12px 13px;
+  box-shadow:0 10px 35px #0004;
 }
 
-.composer:focus-within { border-color:#238dcc; }
+.composer:focus-within {
+  border-color:#238dcc;
+  box-shadow:0 0 0 2px #168cff18;
+}
 
 textarea {
   width:100%;
@@ -406,7 +326,10 @@ textarea::placeholder { color:#718aa3; }
   justify-content:space-between;
 }
 
-.composer-hint { font-size:10px;color:#738ba2; }
+.composer-hint {
+  font-size:10px;
+  color:#738ba2;
+}
 
 .send {
   border:0;
@@ -417,7 +340,10 @@ textarea::placeholder { color:#718aa3; }
   background:linear-gradient(110deg,#168cff,#35e0ed);
 }
 
-.send:disabled { opacity:.5;cursor:not-allowed; }
+.send:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
 
 .disclaimer {
   text-align:center;
@@ -433,9 +359,10 @@ textarea::placeholder { color:#718aa3; }
   margin-top:9px;
 }
 
-/* STUDIOS */
+/* SHARED STUDIO LAYOUT */
 
-.image-studio,.document-studio {
+.image-studio,
+.document-studio {
   flex:1;
   min-height:0;
   overflow-y:auto;
@@ -445,27 +372,36 @@ textarea::placeholder { color:#718aa3; }
   padding:25px 30px;
 }
 
-.image-studio[hidden],.document-studio[hidden] { display:none; }
+.image-studio[hidden],
+.document-studio[hidden] {
+  display:none;
+}
 
-.image-heading,.document-heading {
+.image-heading,
+.document-heading {
   text-align:center;
   margin:25px 0 30px;
 }
 
-.image-heading h1,.document-heading h1 {
+.image-heading h1,
+.document-heading h1 {
   font-size:clamp(26px,4vw,36px);
   margin:0 0 12px;
 }
 
-.image-heading p,.document-heading p {
+.image-heading p,
+.document-heading p {
   color:var(--muted);
   font-size:14px;
   line-height:1.6;
 }
 
-.image-panel,.document-panel {
+/* IMAGE CREATION */
+
+.image-panel,
+.document-panel {
   max-width:760px;
-  margin:0 auto 22px;
+  margin:0 auto;
   padding:22px;
   background:var(--panel);
   border:1px solid var(--border);
@@ -473,16 +409,17 @@ textarea::placeholder { color:#718aa3; }
   box-shadow:0 12px 35px #0003;
 }
 
-.image-label,.document-label {
+.image-label,
+.document-label {
   display:block;
   font-size:13px;
   font-weight:600;
   margin-bottom:12px;
 }
 
-.image-prompt,.document-question {
+.image-prompt {
   width:100%;
-  min-height:100px;
+  min-height:115px;
   max-height:220px;
   resize:vertical;
   padding:14px;
@@ -494,9 +431,18 @@ textarea::placeholder { color:#718aa3; }
   font:14px/1.6 Inter,Arial,sans-serif;
 }
 
-.image-prompt:focus,.document-question:focus { border-color:var(--cyan); }
+.image-prompt:focus,
+.document-question:focus {
+  border-color:var(--cyan);
+}
 
-.image-generate,.document-action {
+.image-prompt::placeholder,
+.document-question::placeholder {
+  color:#718aa3;
+}
+
+.image-generate,
+.document-action {
   width:100%;
   margin-top:15px;
   padding:13px;
@@ -507,12 +453,14 @@ textarea::placeholder { color:#718aa3; }
   background:linear-gradient(110deg,#168cff,#35e0ed);
 }
 
-.image-generate:disabled,.document-action:disabled {
+.image-generate:disabled,
+.document-action:disabled {
   opacity:.5;
   cursor:not-allowed;
 }
 
-.image-status,.document-status {
+.image-status,
+.document-status {
   min-height:22px;
   margin-top:13px;
   text-align:center;
@@ -534,7 +482,8 @@ textarea::placeholder { color:#718aa3; }
   border:1px solid var(--border);
 }
 
-.image-download,.document-download {
+.image-download,
+.document-download {
   display:inline-block;
   margin-top:15px;
   padding:11px 20px;
@@ -546,21 +495,53 @@ textarea::placeholder { color:#718aa3; }
   font-size:13px;
 }
 
+.image-download:hover,
+.document-download:hover {
+  border-color:var(--cyan);
+}
+
+/* DOCUMENT STUDIO */
+
+.document-panel {
+  margin-bottom:22px;
+}
+
 .upload-area {
-  display:block;
   border:1px dashed #397094;
   border-radius:13px;
   padding:25px 15px;
   text-align:center;
   background:#0b1b2b;
   cursor:pointer;
+  transition:.2s;
 }
 
-.upload-icon { font-size:32px;color:var(--cyan);margin-bottom:10px; }
-.upload-title { font-size:14px;font-weight:600;margin-bottom:7px; }
-.upload-help { color:var(--muted);font-size:11px;line-height:1.6; }
+.upload-area:hover {
+  border-color:var(--cyan);
+  background:#10263b;
+}
 
-#documentFile { display:none; }
+.upload-icon {
+  font-size:32px;
+  color:var(--cyan);
+  margin-bottom:10px;
+}
+
+.upload-title {
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:7px;
+}
+
+.upload-help {
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+
+#documentFile {
+  display:none;
+}
 
 .file-info {
   margin-top:13px;
@@ -574,9 +555,22 @@ textarea::placeholder { color:#718aa3; }
 }
 
 .file-info.visible { display:block; }
+
 .file-info strong { color:var(--cyan); }
 
-.document-question { min-height:75px;max-height:150px; }
+.document-question {
+  width:100%;
+  min-height:75px;
+  max-height:150px;
+  resize:vertical;
+  padding:13px;
+  color:var(--text);
+  background:#091725;
+  border:1px solid #294762;
+  border-radius:11px;
+  outline:none;
+  font:14px/1.6 Inter,Arial,sans-serif;
+}
 
 .document-actions {
   display:grid;
@@ -597,6 +591,10 @@ textarea::placeholder { color:#718aa3; }
   background:#12304a;
 }
 
+.document-action:hover:not(:disabled) {
+  filter:brightness(1.12);
+}
+
 .document-result {
   max-width:760px;
   margin:20px auto 0;
@@ -608,7 +606,12 @@ textarea::placeholder { color:#718aa3; }
 }
 
 .document-result.visible { display:block; }
-.document-result h3 { margin:0 0 14px;color:var(--cyan);font-size:14px; }
+
+.document-result h3 {
+  margin:0 0 14px;
+  color:var(--cyan);
+  font-size:14px;
+}
 
 .document-answer {
   font-size:13px;
@@ -627,57 +630,65 @@ textarea::placeholder { color:#718aa3; }
 }
 
 @media(max-width:700px) {
-  .sidebar { width:68px;padding:15px 8px; }
-  .brand { justify-content:center;padding:3px 0 24px; }
-  .brand-name,.new-chat-label,.tool-name,.section-label,.sidebar-note { display:none; }
-  .new-chat { height:43px;padding:0;text-align:center;font-size:19px; }
-  .tool { justify-content:center;padding:13px 5px; }
+  .sidebar {
+    width:68px;
+    padding:15px 8px;
+  }
+
+  .brand {
+    justify-content:center;
+    padding:3px 0 24px;
+  }
+
+  .brand-name,
+  .new-chat-label,
+  .tool-name,
+  .section-label,
+  .sidebar-note {
+    display:none;
+  }
+
+  .new-chat {
+    height:43px;
+    padding:0;
+    text-align:center;
+    font-size:19px;
+  }
+
+  .tool {
+    justify-content:center;
+    padding:13px 5px;
+  }
+
   .tool-icon { font-size:21px; }
-  .topbar { padding:10px; }
-  .top-right { gap:8px; }
-  #userBar { gap:5px; }
-  #userEmail { max-width:90px; }
-  #logoutButton { padding:8px; }
+
+  .topbar { padding:0 15px; }
+
   .chat-area { padding:15px 12px; }
+
   .message { font-size:13px; }
+
   .welcome h1 { font-size:27px; }
-  .image-studio,.document-studio { padding:15px 12px; }
-  .image-panel,.document-panel { padding:16px; }
-  .document-actions { grid-template-columns:1fr; }
+
+  .image-studio,
+  .document-studio {
+    padding:15px 12px;
+  }
+
+  .image-panel,
+  .document-panel {
+    padding:16px;
+  }
+
+  .document-actions {
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
 
 <body>
-
-<!-- LOGIN AND REGISTRATION SCREEN -->
-<div id="authScreen">
-  <div class="auth-card">
-    <h1>RETIMEA <span>AI</span></h1>
-    <p>Intelligence for Everyone</p>
-
-    <h2 id="authTitle">Welcome Back</h2>
-    <p id="authDescription">Sign in to continue to RETIMEA AI.</p>
-
-    <form id="authForm">
-      <input type="email" id="authEmail" placeholder="Email address" required>
-      <input type="password" id="authPassword"
-        placeholder="Password (minimum 6 characters)"
-        minlength="6" required>
-      <button type="submit" id="authSubmit">Sign In</button>
-    </form>
-
-    <p id="authMessage"></p>
-
-    <p>
-      <span id="authSwitchText">Don't have an account?</span>
-      <button type="button" id="authSwitch">Create Account</button>
-    </p>
-  </div>
-</div>
-
-<!-- MAIN APPLICATION -->
-<div class="app" id="app" style="display:none;">
+<div class="app">
 
   <aside class="sidebar">
     <div class="brand">
@@ -693,20 +704,53 @@ textarea::placeholder { color:#718aa3; }
     <div class="section-label">AI WORKSPACE</div>
 
     <nav class="tools" id="tools">
-      <button class="tool active" data-tool="assistant"><span class="tool-icon">✦</span><span class="tool-name">AI Assistant</span></button>
-      <button class="tool" data-tool="writer"><span class="tool-icon">✎</span><span class="tool-name">AI Writer</span></button>
-      <button class="tool" data-tool="research"><span class="tool-icon">⌕</span><span class="tool-name">Research Studio</span></button>
-      <button class="tool" data-tool="trading"><span class="tool-icon">↗</span><span class="tool-name">Trading Research</span></button>
-      <button class="tool" data-tool="translator"><span class="tool-icon">文</span><span class="tool-name">Translator</span></button>
-      <button class="tool" data-tool="business"><span class="tool-icon">◇</span><span class="tool-name">Business AI</span></button>
-      <button class="tool" data-tool="image"><span class="tool-icon">✧</span><span class="tool-name">Image Creation</span></button>
-      <button class="tool" data-tool="document"><span class="tool-icon">▤</span><span class="tool-name">Document Studio</span></button>
+      <button class="tool active" data-tool="assistant">
+        <span class="tool-icon">✦</span>
+        <span class="tool-name">AI Assistant</span>
+      </button>
+
+      <button class="tool" data-tool="writer">
+        <span class="tool-icon">✎</span>
+        <span class="tool-name">AI Writer</span>
+      </button>
+
+      <button class="tool" data-tool="research">
+        <span class="tool-icon">⌕</span>
+        <span class="tool-name">Research Studio</span>
+      </button>
+
+      <button class="tool" data-tool="trading">
+        <span class="tool-icon">↗</span>
+        <span class="tool-name">Trading Research</span>
+      </button>
+
+      <button class="tool" data-tool="translator">
+        <span class="tool-icon">文</span>
+        <span class="tool-name">Translator</span>
+      </button>
+
+      <button class="tool" data-tool="business">
+        <span class="tool-icon">◇</span>
+        <span class="tool-name">Business AI</span>
+      </button>
+
+      <button class="tool" data-tool="image">
+        <span class="tool-icon">✧</span>
+        <span class="tool-name">Image Creation</span>
+      </button>
+
+      <button class="tool" data-tool="document">
+        <span class="tool-icon">▤</span>
+        <span class="tool-name">Document Studio</span>
+      </button>
     </nav>
 
     <div class="sidebar-bottom">
       <div class="sidebar-note">
         Intelligence for Everyone.<br>
-        <span style="color:#35e0ed">Think · Create · Research · Achieve</span>
+        <span style="color:#35e0ed">
+          Think · Create · Research · Achieve
+        </span>
       </div>
     </div>
   </aside>
@@ -717,23 +761,22 @@ textarea::placeholder { color:#718aa3; }
         <div class="top-title" id="topTitle">AI Assistant</div>
         <div class="top-subtitle">Your intelligent workspace</div>
       </div>
-
-      <div class="top-right">
-        <div class="online"><span class="dot"></span> AI ONLINE</div>
-        <div id="userBar">
-          <span id="userEmail"></span>
-          <button id="logoutButton" type="button">Sign Out</button>
-        </div>
+      <div class="online">
+        <span class="dot"></span> AI ONLINE
       </div>
     </header>
 
     <main class="chat-area">
 
+      <!-- CHAT -->
       <div class="messages" id="messages">
         <div class="welcome" id="welcome">
           <div class="welcome-logo">R</div>
           <h1>Think. Create. <span>Achieve.</span></h1>
-          <p>Welcome to RETIMEA AI.<br>Intelligence for Everyone.</p>
+          <p>
+            Welcome to RETIMEA AI.<br>
+            Intelligence for Everyone.
+          </p>
         </div>
       </div>
 
@@ -745,10 +788,21 @@ textarea::placeholder { color:#718aa3; }
         </div>
 
         <div class="image-panel">
-          <label class="image-label" for="imagePrompt">Describe the image you want to create</label>
-          <textarea id="imagePrompt" class="image-prompt" maxlength="1200"
-            placeholder="Example: A futuristic city with glowing blue buildings, cinematic lighting, ultra-realistic digital art..."></textarea>
-          <button class="image-generate" id="generateImage" type="button">✧ Generate Image</button>
+          <label class="image-label" for="imagePrompt">
+            Describe the image you want to create
+          </label>
+
+          <textarea
+            id="imagePrompt"
+            class="image-prompt"
+            maxlength="1200"
+            placeholder="Example: A futuristic city with glowing blue buildings, cinematic lighting, ultra-realistic digital art..."
+          ></textarea>
+
+          <button class="image-generate" id="generateImage" type="button">
+            ✧ Generate Image
+          </button>
+
           <div class="image-status" id="imageStatus">Ready to create</div>
         </div>
 
@@ -768,224 +822,105 @@ textarea::placeholder { color:#718aa3; }
           <label class="upload-area" for="documentFile">
             <div class="upload-icon">⇧</div>
             <div class="upload-title">Click here to choose a document</div>
-            <div class="upload-help">Supported formats: PDF, DOCX and TXT<br>Maximum file size: 10 MB</div>
+            <div class="upload-help">
+              Supported formats: PDF, DOCX and TXT<br>
+              Maximum file size: 10 MB
+            </div>
           </label>
 
-          <input id="documentFile" type="file"
-            accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain">
+          <input
+            id="documentFile"
+            type="file"
+            accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+          >
 
           <div class="file-info" id="fileInfo"></div>
-          <div class="document-status" id="documentStatus">Please upload a document to get started.</div>
+
+          <div class="document-status" id="documentStatus">
+            Please upload a document to get started.
+          </div>
         </div>
 
         <div class="document-panel">
-          <label class="document-label" for="documentQuestion">Ask a question about your document</label>
-          <textarea class="document-question" id="documentQuestion"
-            placeholder="Example: What are the five most important points in this document?"></textarea>
+          <label class="document-label" for="documentQuestion">
+            Ask a question about your document
+          </label>
+
+          <textarea
+            class="document-question"
+            id="documentQuestion"
+            placeholder="Example: What are the five most important points in this document?"
+          ></textarea>
 
           <div class="document-actions">
-            <button class="document-action" data-action="summarize">✦ Summarize</button>
-            <button class="document-action secondary" data-action="ask">? Ask Questions</button>
-            <button class="document-action secondary" data-action="keypoints">☷ Extract Key Points</button>
-            <button class="document-action secondary" data-action="rewrite">✎ Rewrite Document</button>
+            <button class="document-action" data-action="summarize">
+              ✦ Summarize
+            </button>
+
+            <button class="document-action secondary" data-action="ask">
+              ? Ask Questions
+            </button>
+
+            <button class="document-action secondary" data-action="keypoints">
+              ☷ Extract Key Points
+            </button>
+
+            <button class="document-action secondary" data-action="rewrite">
+              ✎ Rewrite Document
+            </button>
           </div>
         </div>
 
         <div class="document-result" id="documentResult">
           <h3>RETIMEA AI RESULT</h3>
           <div class="document-answer" id="documentAnswer"></div>
-          <a href="#" class="document-download" id="documentDownload" download="retimea-document-result.txt">↓ Download Result</a>
+          <a
+            href="#"
+            class="document-download"
+            id="documentDownload"
+            download="retimea-document-result.txt"
+          >↓ Download Result</a>
         </div>
 
         <div class="document-smallprint">
-          Your document is processed to extract text in your browser and sent to RETIMEA AI for analysis.
-          Avoid uploading confidential or sensitive documents. Scanned PDFs may need OCR.
+          Your document is processed to extract text in your browser and sent to
+          RETIMEA AI for analysis. Avoid uploading confidential or sensitive
+          documents. Scanned PDFs may need OCR and may not produce readable text.
         </div>
       </section>
 
       <!-- CHAT COMPOSER -->
       <div class="composer-wrap" id="composerWrap">
         <form class="composer" id="chatForm">
-          <textarea id="prompt" placeholder="Message RETIMEA AI..." required></textarea>
+          <textarea
+            id="prompt"
+            placeholder="Message RETIMEA AI..."
+            required
+          ></textarea>
+
           <div class="composer-bottom">
-            <span class="composer-hint">Enter to send · Shift + Enter for a new line</span>
-            <button class="send" id="sendButton" type="submit">↑ Send</button>
+            <span class="composer-hint">
+              Enter to send · Shift + Enter for a new line
+            </span>
+
+            <button class="send" id="sendButton" type="submit">
+              ↑ Send
+            </button>
           </div>
         </form>
-        <div class="status" id="status">Ready</div>
-        <div class="disclaimer">AI can make mistakes. Verify important information.</div>
-      </div>
 
+        <div class="status" id="status">Ready</div>
+
+        <div class="disclaimer">
+          AI can make mistakes. Verify important information.
+        </div>
+      </div>
     </main>
   </section>
 </div>
 
 <script>
-/* SUPABASE CONFIGURATION
-   Replace both placeholders with your existing values.
-   Use the Publishable key, never a Secret key.
-*/
-const SUPABASE_URL = "https://rpehenlzkwnvwwagcish.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_jHNxNfE5YBCJsUsK696b3A_BPHl3m_h";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-/* AUTHENTICATION ELEMENTS */
-const authScreen = document.getElementById("authScreen");
-const authForm = document.getElementById("authForm");
-const authTitle = document.getElementById("authTitle");
-const authDescription = document.getElementById("authDescription");
-const authSubmit = document.getElementById("authSubmit");
-const authSwitch = document.getElementById("authSwitch");
-const authSwitchText = document.getElementById("authSwitchText");
-const authMessage = document.getElementById("authMessage");
-const appElement = document.getElementById("app");
-const userEmail = document.getElementById("userEmail");
-const logoutButton = document.getElementById("logoutButton");
-
-let authMode = "login";
-
-function showSignedOut() {
-  authScreen.style.display = "flex";
-  appElement.style.display = "none";
-  userEmail.textContent = "";
-}
-
-function showSignedIn(session) {
-  if (!session) {
-    showSignedOut();
-    return;
-  }
-
-  authScreen.style.display = "none";
-  appElement.style.display = "flex";
-  userEmail.textContent = session.user.email || "";
-}
-
-function updateAuthScreen() {
-  if (authMode === "login") {
-    authTitle.textContent = "Welcome Back";
-    authDescription.textContent = "Sign in to continue to RETIMEA AI.";
-    authSubmit.textContent = "Sign In";
-    authSwitchText.textContent = "Don't have an account?";
-    authSwitch.textContent = "Create Account";
-  } else {
-    authTitle.textContent = "Create Your Account";
-    authDescription.textContent = "Join RETIMEA AI today.";
-    authSubmit.textContent = "Create Account";
-    authSwitchText.textContent = "Already have an account?";
-    authSwitch.textContent = "Sign In";
-  }
-}
-
-authSwitch.addEventListener("click", function () {
-  authMode = authMode === "login" ? "signup" : "login";
-
-  authMessage.textContent = "";
-  authForm.reset();
-
-  updateAuthScreen();
-});
-
-authForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
-
-  authSubmit.disabled = true;
-  authMessage.textContent = "Please wait...";
-
-  try {
-    if (authMode === "signup") {
-      const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: window.location.origin
-        }
-      });
-
-      if (error) throw error;
-
-      if (data.session) {
-        authMessage.textContent = "Account created successfully!";
-        showSignedIn(data.session);
-      } else {
-        authMessage.textContent =
-          "Account created! Please check your email to confirm your account.";
-      }
-    } else {
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({ email, password });
-
-      if (error) throw error;
-
-      showSignedIn(data.session);
-      authMessage.textContent = "";
-    }
-  } catch (error) {
-    authMessage.textContent = error.message || "Authentication failed.";
-  } finally {
-    authSubmit.disabled = false;
-  }
-});
-
-/* CHECK SESSION */
-async function checkUserSession() {
-  showSignedOut();
-
-  const { data, error } = await supabaseClient.auth.getSession();
-
-  if (error) {
-    authMessage.textContent = error.message;
-    return;
-  }
-
-  showSignedIn(data.session);
-}
-
-/* SESSION CHANGES */
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  showSignedIn(session);
-
-  if (event === "SIGNED_OUT") {
-    history = [];
-  }
-});
-
-/* AUTHENTICATED API HEADERS */
-async function getAuthHeaders() {
-  const { data, error } = await supabaseClient.auth.getSession();
-
-  if (error || !data.session) {
-    throw new Error("Please sign in again to use RETIMEA AI.");
-  }
-
-  return {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${data.session.access_token}`
-  };
-}
-
-/* LOGOUT */
-logoutButton.addEventListener("click", async () => {
-  logoutButton.disabled = true;
-
-  try {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) throw error;
-  } catch (error) {
-    alert(error.message || "Could not sign out.");
-  } finally {
-    logoutButton.disabled = false;
-  }
-});
-
-/* PDF READER */
+/* PDF.JS CONFIGURATION */
 if (window.pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -1013,14 +948,17 @@ const messages = document.getElementById("messages");
 const promptBox = document.getElementById("prompt");
 const statusBox = document.getElementById("status");
 const sendButton = document.getElementById("sendButton");
+
 const messagesArea = document.getElementById("messages");
 const composerWrap = document.getElementById("composerWrap");
 const imageStudio = document.getElementById("imageStudio");
 const documentStudio = document.getElementById("documentStudio");
+
 const imagePrompt = document.getElementById("imagePrompt");
 const generateImageButton = document.getElementById("generateImage");
 const imageStatus = document.getElementById("imageStatus");
 const imageResult = document.getElementById("imageResult");
+
 const documentFile = document.getElementById("documentFile");
 const fileInfo = document.getElementById("fileInfo");
 const documentStatus = document.getElementById("documentStatus");
@@ -1035,7 +973,10 @@ function showWelcome() {
     <div class="welcome" id="welcome">
       <div class="welcome-logo">R</div>
       <h1>Think. Create. <span>Achieve.</span></h1>
-      <p>Welcome to RETIMEA AI.<br>Intelligence for Everyone.</p>
+      <p>
+        Welcome to RETIMEA AI.<br>
+        Intelligence for Everyone.
+      </p>
     </div>`;
 }
 
@@ -1077,12 +1018,16 @@ document.querySelectorAll(".tool").forEach(button => {
     selectedTool = button.dataset.tool;
     history = [];
 
-    document.querySelectorAll(".tool").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tool").forEach(b => {
+      b.classList.remove("active");
+    });
+
     button.classList.add("active");
 
     const name = button.querySelector(".tool-name").textContent;
     document.getElementById("topTitle").textContent = name;
-    document.querySelector(".top-subtitle").textContent = descriptions[selectedTool];
+    document.querySelector(".top-subtitle").textContent =
+      descriptions[selectedTool];
 
     const isImageTool = selectedTool === "image";
     const isDocumentTool = selectedTool === "document";
@@ -1129,50 +1074,62 @@ document.getElementById("newChat").addEventListener("click", () => {
 });
 
 /* CHAT API */
-document.getElementById("chatForm").addEventListener("submit", async event => {
-  event.preventDefault();
+document.getElementById("chatForm").addEventListener(
+  "submit",
+  async event => {
+    event.preventDefault();
 
-  const text = promptBox.value.trim();
-  if (!text || sendButton.disabled) return;
+    const text = promptBox.value.trim();
+    if (!text || sendButton.disabled) return;
 
-  const welcome = document.getElementById("welcome");
-  if (welcome) welcome.remove();
+    const welcome = document.getElementById("welcome");
+    if (welcome) welcome.remove();
 
-  addMessage("user", text);
-  history.push({ role:"user", content:text });
+    addMessage("user", text);
+    history.push({ role:"user", content:text });
 
-  promptBox.value = "";
-  sendButton.disabled = true;
-  statusBox.textContent = "RETIMEA AI is thinking...";
+    promptBox.value = "";
+    sendButton.disabled = true;
+    statusBox.textContent = "RETIMEA AI is thinking...";
 
-  try {
-    const response = await fetch("/api/chat", {
-      method:"POST",
-      headers:await getAuthHeaders(),
-      body:JSON.stringify({
-        tool:selectedTool,
-        messages:history
-      })
-    });
+    try {
+      const response = await fetch("/api/chat", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({
+          tool:selectedTool,
+          messages:history
+        })
+      });
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Request failed");
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Request failed");
+      }
 
-    const reply = data.reply || "I couldn't generate a response.";
-    addMessage("assistant", reply);
-    history.push({ role:"assistant", content:reply });
-    statusBox.textContent = "Response received";
+      const reply = data.reply || "I couldn't generate a response.";
+      addMessage("assistant", reply);
+      history.push({ role:"assistant", content:reply });
+      statusBox.textContent = "Response received";
 
-  } catch (error) {
-    history.pop();
-    console.error("Chat error:", error);
-    addMessage("assistant", error.message || "Sorry, something went wrong.");
-    statusBox.textContent = "Connection error. Please try again.";
-  } finally {
-    sendButton.disabled = false;
-    promptBox.focus();
+    } catch (error) {
+      history.pop();
+      console.error("Chat error:", error);
+
+      addMessage(
+        "assistant",
+        "Sorry, something went wrong. Please try again."
+      );
+
+      statusBox.textContent =
+        "Connection error. Please check your deployment.";
+
+    } finally {
+      sendButton.disabled = false;
+      promptBox.focus();
+    }
   }
-});
+);
 
 /* IMAGE GENERATION API */
 generateImageButton.addEventListener("click", async () => {
@@ -1186,13 +1143,14 @@ generateImageButton.addEventListener("click", async () => {
 
   generateImageButton.disabled = true;
   generateImageButton.textContent = "Creating your image...";
-  imageStatus.textContent = "RETIMEA AI is bringing your idea to life...";
+  imageStatus.textContent =
+    "RETIMEA AI is bringing your idea to life...";
   imageResult.innerHTML = "";
 
   try {
     const response = await fetch("/api/image", {
       method:"POST",
-      headers:await getAuthHeaders(),
+      headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({ prompt })
     });
 
@@ -1218,127 +1176,161 @@ generateImageButton.addEventListener("click", async () => {
 
   } catch (error) {
     console.error("Image generation error:", error);
-    imageStatus.textContent = error.message || "Image generation failed.";
+    imageStatus.textContent =
+      error.message || "Something went wrong. Please try again.";
   } finally {
     generateImageButton.disabled = false;
     generateImageButton.textContent = "✧ Generate Image";
   }
 });
 
-/* DOCUMENT READERS */
+/* READ TEXT FILE */
 async function readTextFile(file) {
   return await file.text();
 }
 
+/* READ DOCX FILE */
 async function readDocxFile(file) {
-  if (!window.mammoth) throw new Error("DOCX reader could not load.");
+  if (!window.mammoth) {
+    throw new Error("The DOCX reader could not load. Refresh the page and try again.");
+  }
+
   const arrayBuffer = await file.arrayBuffer();
   const result = await mammoth.extractRawText({ arrayBuffer });
   return result.value || "";
 }
 
+/* READ PDF FILE */
 async function readPdfFile(file) {
-  if (!window.pdfjsLib) throw new Error("PDF reader could not load.");
+  if (!window.pdfjsLib) {
+    throw new Error("The PDF reader could not load. Refresh the page and try again.");
+  }
 
   const buffer = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data:new Uint8Array(buffer) }).promise;
+  const pdf = await pdfjsLib.getDocument({
+    data: new Uint8Array(buffer)
+  }).promise;
 
   let fullText = "";
 
   for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
     const page = await pdf.getPage(pageNumber);
     const content = await page.getTextContent();
-    const pageText = content.items.map(item => item.str).join(" ");
+    const pageText = content.items
+      .map(item => item.str)
+      .join(" ");
+
     fullText += `\n\nPage ${pageNumber}\n${pageText}`;
   }
 
   return fullText;
 }
 
-/* DOCUMENT UPLOAD */
+/* DOCUMENT UPLOAD AND TEXT EXTRACTION */
 documentFile.addEventListener("change", async () => {
   const file = documentFile.files[0];
   if (!file) return;
 
-  const extension = file.name.split(".").pop().toLowerCase();
+  resetDocumentStudio();
 
-  if (!["pdf","docx","txt"].includes(extension)) {
-    documentStatus.textContent = "Unsupported file. Select PDF, DOCX or TXT.";
+  // Restore selected file after clearing the previous document state.
+  documentFile.files = (() => {
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    return transfer.files;
+  })();
+
+  const extension = file.name.split(".").pop().toLowerCase();
+  const allowed = ["pdf", "docx", "txt"];
+
+  if (!allowed.includes(extension)) {
+    documentStatus.textContent = "Unsupported file. Please select a PDF, DOCX or TXT file.";
     documentFile.value = "";
     return;
   }
 
   if (file.size > 10 * 1024 * 1024) {
-    documentStatus.textContent = "File is too large. Maximum size is 10 MB.";
+    documentStatus.textContent = "File is too large. Maximum file size is 10 MB.";
     documentFile.value = "";
     return;
   }
 
-  extractedDocumentText = "";
   selectedDocumentName = file.name;
-  documentResult.classList.remove("visible");
   documentStatus.textContent = "Reading your document...";
 
-  fileInfo.textContent = "";
-  const name = document.createElement("strong");
-  name.textContent = file.name;
-  const size = document.createElement("span");
-  size.textContent = ` · ${(file.size / 1024 / 1024).toFixed(2)} MB`;
-  fileInfo.append(name, size);
+  fileInfo.innerHTML = "";
+  const fileName = document.createElement("strong");
+  fileName.textContent = file.name;
+  const fileSize = document.createElement("span");
+  fileSize.textContent = ` · ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+  fileInfo.append(fileName, fileSize);
   fileInfo.classList.add("visible");
 
   try {
     let text = "";
 
-    if (extension === "txt") text = await readTextFile(file);
-    if (extension === "docx") text = await readDocxFile(file);
-    if (extension === "pdf") text = await readPdfFile(file);
+    if (extension === "txt") {
+      text = await readTextFile(file);
+    } else if (extension === "docx") {
+      text = await readDocxFile(file);
+    } else if (extension === "pdf") {
+      text = await readPdfFile(file);
+    }
 
     text = text.trim();
 
     if (!text) {
-      throw new Error("No readable text found. Scanned PDFs may require OCR.");
+      throw new Error(
+        "No readable text was found. This may be a scanned PDF. OCR support is not included yet."
+      );
     }
 
     if (text.length > 80000) {
-      throw new Error("Document is too long. Maximum 80,000 characters.");
+      throw new Error(
+        "This document contains too much text. Please use a shorter document (maximum 80,000 characters)."
+      );
     }
 
     extractedDocumentText = text;
+
     documentStatus.textContent =
       "Document ready! " + text.length.toLocaleString() + " characters extracted.";
 
   } catch (error) {
     console.error("Document reading error:", error);
     extractedDocumentText = "";
-    documentStatus.textContent = error.message || "Could not read this document.";
+    documentStatus.textContent =
+      error.message || "Could not read this document.";
   }
 });
 
 /* DOCUMENT STUDIO API */
 async function processDocument(action) {
   if (!extractedDocumentText) {
-    documentStatus.textContent = "Please upload a readable document first.";
+    documentStatus.textContent =
+      "Please upload a readable document first.";
     return;
   }
 
   const question = documentQuestion.value.trim();
 
   if (action === "ask" && !question) {
-    documentStatus.textContent = "Please type your question first.";
+    documentStatus.textContent =
+      "Please type your question before selecting Ask Questions.";
     documentQuestion.focus();
     return;
   }
 
   const buttons = document.querySelectorAll(".document-action");
   buttons.forEach(button => button.disabled = true);
+
   documentStatus.textContent = "RETIMEA AI is analyzing your document...";
   documentResult.classList.remove("visible");
 
   try {
     const response = await fetch("/api/document", {
       method:"POST",
-      headers:await getAuthHeaders(),
+      headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({
         action,
         text:extractedDocumentText,
@@ -1347,6 +1339,7 @@ async function processDocument(action) {
     });
 
     const data = await response.json();
+
     if (!response.ok || !data.success) {
       throw new Error(data.error || "Document processing failed.");
     }
@@ -1354,25 +1347,28 @@ async function processDocument(action) {
     documentAnswer.textContent = data.answer || "No answer was returned.";
     documentResult.classList.add("visible");
 
-    const resultBlob = new Blob([data.answer || ""], {
-      type:"text/plain;charset=utf-8"
-    });
+    const resultBlob = new Blob(
+      [data.answer || ""],
+      { type:"text/plain;charset=utf-8" }
+    );
 
     const downloadUrl = URL.createObjectURL(resultBlob);
     documentDownload.href = downloadUrl;
-    documentDownload.download = "retimea-" + action + "-result.txt";
+    documentDownload.download =
+      "retimea-" + action + "-result.txt";
 
     documentStatus.textContent = "Document analysis completed successfully.";
 
   } catch (error) {
     console.error("Document API error:", error);
-    documentStatus.textContent = error.message || "Document processing failed.";
+    documentStatus.textContent =
+      error.message || "Something went wrong. Please try again.";
   } finally {
     buttons.forEach(button => button.disabled = false);
   }
 }
 
-/* DOCUMENT BUTTONS */
+/* DOCUMENT ACTION BUTTONS */
 document.querySelectorAll(".document-action").forEach(button => {
   button.addEventListener("click", () => {
     processDocument(button.dataset.action);
@@ -1386,9 +1382,6 @@ promptBox.addEventListener("keydown", event => {
     document.getElementById("chatForm").requestSubmit();
   }
 });
-
-/* INITIAL SESSION CHECK */
-checkUserSession();
 </script>
 
 </body>

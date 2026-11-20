@@ -1,4 +1,3 @@
-
 /* =========================================
    RETIMEA AI - COMPLETE MAIN APPLICATION
    Authentication + Chat + Image + Documents
@@ -15,6 +14,13 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
+
+/* =========================================
+   SETTINGS
+========================================= */
+
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_HISTORY_MESSAGES = 20;
 
 /* =========================================
    AUTHENTICATION ELEMENTS
@@ -188,6 +194,12 @@ authForm.addEventListener("submit", async (event) => {
   const password =
     document.getElementById("authPassword").value;
 
+  if (authMode === "signup" && password.length < MIN_PASSWORD_LENGTH) {
+    authMessage.textContent =
+      `Password must contain at least ${MIN_PASSWORD_LENGTH} characters.`;
+    return;
+  }
+
   authSubmit.disabled = true;
   authMessage.textContent = "Please wait...";
 
@@ -253,9 +265,9 @@ resetPasswordForm.addEventListener("submit", async (event) => {
   const confirmPassword =
     document.getElementById("confirmPassword").value;
 
-  if (newPassword.length < 6) {
+  if (newPassword.length < MIN_PASSWORD_LENGTH) {
     authMessage.textContent =
-      "Password must contain at least 6 characters.";
+      `Password must contain at least ${MIN_PASSWORD_LENGTH} characters.`;
     return;
   }
 
@@ -288,6 +300,13 @@ resetPasswordForm.addEventListener("submit", async (event) => {
         signOutError
       );
     }
+
+    /* Remove leftover recovery tokens from the address bar. */
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search
+    );
 
     isPasswordRecovery = false;
 
@@ -333,7 +352,9 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 
   if (event === "SIGNED_OUT") {
     isPasswordRecovery = false;
-    chatHistory = [];
+
+    /* Wipe everything belonging to the previous user. */
+    clearUserData();
 
     resetPasswordForm.style.display = "none";
     authForm.style.display = "flex";
@@ -506,6 +527,8 @@ function addMessage(role, content) {
 
   messages.appendChild(item);
   messages.scrollTop = messages.scrollHeight;
+
+  return item;
 }
 
 /* =========================================
@@ -534,6 +557,27 @@ function resetDocumentStudio() {
 
   documentStatus.textContent =
     "Please upload a document to get started.";
+}
+
+/* =========================================
+   CLEAR ALL USER DATA (used on sign-out)
+========================================= */
+
+function clearUserData() {
+  chatHistory = [];
+
+  /* Chat */
+  promptBox.value = "";
+  showWelcome();
+  statusBox.textContent = "Ready";
+
+  /* Image studio */
+  imagePrompt.value = "";
+  imageResult.innerHTML = "";
+  imageStatus.textContent = "Ready to create";
+
+  /* Document studio */
+  resetDocumentStudio();
 }
 
 /* =========================================
@@ -634,7 +678,7 @@ document.getElementById("chatForm").addEventListener(
 
     if (welcome) welcome.remove();
 
-    addMessage("user", text);
+    const userMessageElement = addMessage("user", text);
 
     chatHistory.push({
       role: "user",
@@ -648,12 +692,16 @@ document.getElementById("chatForm").addEventListener(
       "RETIMEA AI is thinking...";
 
     try {
+      /* Only send the most recent messages to keep requests small. */
+      const recentMessages =
+        chatHistory.slice(-MAX_HISTORY_MESSAGES);
+
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: await getAuthHeaders(),
         body: JSON.stringify({
           tool: selectedTool,
-          messages: chatHistory
+          messages: recentMessages
         })
       });
 
@@ -676,9 +724,17 @@ document.getElementById("chatForm").addEventListener(
       statusBox.textContent = "Response received";
 
     } catch (error) {
+      console.error("Chat error:", error);
+
+      /* Remove the failed message from BOTH history and screen,
+         and put the text back so the user can retry. */
       chatHistory.pop();
 
-      console.error("Chat error:", error);
+      if (userMessageElement && userMessageElement.parentNode) {
+        userMessageElement.remove();
+      }
+
+      promptBox.value = text;
 
       addMessage(
         "assistant",
@@ -698,6 +754,19 @@ document.getElementById("chatForm").addEventListener(
 /* =========================================
    IMAGE GENERATION API
 ========================================= */
+
+function getImageExtension(dataUrl) {
+  const match = /^data:image\/([a-zA-Z0-9.+-]+);/.exec(dataUrl);
+
+  if (!match) return "jpg";
+
+  const type = match[1].toLowerCase();
+
+  if (type === "jpeg") return "jpg";
+  if (type === "svg+xml") return "svg";
+
+  return type;
+}
 
 generateImageButton.addEventListener("click", async () => {
 
@@ -743,7 +812,8 @@ generateImageButton.addEventListener("click", async () => {
     const download = document.createElement("a");
 
     download.href = data.image;
-    download.download = "retimea-ai-image.jpg";
+    download.download =
+      "retimea-ai-image." + getImageExtension(data.image);
     download.className = "image-download";
     download.textContent = "↓ Download Image";
 
@@ -1035,6 +1105,9 @@ document.querySelectorAll(".document-action").forEach(button => {
 ========================================= */
 
 promptBox.addEventListener("keydown", event => {
+
+  /* Ignore Enter while an input method (IME) is composing text. */
+  if (event.isComposing || event.keyCode === 229) return;
 
   if (event.key === "Enter" && !event.shiftKey) {
 

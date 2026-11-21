@@ -66,6 +66,11 @@
     .rt-entry-primary{box-shadow:0 12px 30px rgba(57,121,245,.24)}
     .rt-entry-secondary{border-color:rgba(151,190,214,.4);background:rgba(255,255,255,.055)}
     @media(max-width:600px){.rt-entry{padding:16px}.rt-entry-card{padding:34px 22px;border-radius:22px}.rt-entry h1{font-size:39px}.rt-entry-tagline{font-size:10px;letter-spacing:2px}.rt-entry-copy{font-size:14px}}
+    /* Intro page: artwork only; preserve the full image without cropping */
+    .rt-entry{position:fixed;inset:0;display:block;padding:0;overflow:hidden;background:#061326;color:#f1f7fc}
+    .rt-entry-artwork{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+    .rt-entry-status{display:none}
+
 `;
   const style = document.createElement("style");
   style.textContent = css;
@@ -92,18 +97,8 @@
   entry.className = "rt-entry";
   entry.setAttribute("aria-label", "RETIMEA AI welcome");
   entry.innerHTML = `
-    <div class="rt-entry-card">
-      <div class="rt-entry-mark">RETIMEA AI</div>
-      <h1>Intelligence <span>Beyond Limits.</span></h1>
-      <div class="rt-entry-tagline">One account. Every intelligent tool.</div>
-      <p class="rt-entry-copy">Your all-in-one workspace to think, create, research and achieve. Create your free account to explore the RETIMEA AI platform.</p>
-      <div class="rt-entry-actions">
-        <button class="rt-entry-primary" type="button" id="rtEntrySignup">Create your free account</button>
-        <button class="rt-entry-secondary" type="button" id="rtEntrySignin">Already have an account? Sign in</button>
-      </div>
-      <div class="rt-entry-status" id="rtEntryStatus" role="status" aria-live="polite">Preparing your secure workspace…</div>
-      <div class="rt-entry-foot">Free membership · Pro and Business options coming later</div>
-    </div>`;
+    <img class="rt-entry-artwork" src="/assets/retimea-ai-shared-hero.jpg" alt="RETIMEA AI — Intelligence Beyond Limits">
+    <div class="rt-entry-status" id="rtEntryStatus" role="status" aria-live="polite">Preparing your secure workspace…</div>`;
   document.body.appendChild(entry);
 
   const backdrop = document.createElement("div");

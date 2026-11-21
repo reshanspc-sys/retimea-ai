@@ -158,7 +158,10 @@
     say(mode === "signup" ? "Creating your account…" : "Signing in…");
     try {
       if (mode === "signup") {
-        const { data, error } = await supabase.auth.signUp({ email: mail, password: pass });
+        const { data, error } = await supabase.auth.signUp(
+          { email: mail, password: pass },
+          { emailRedirectTo: window.location.origin }
+        );
         if (error) throw error;
         say(data.session ? "Account created and signed in." : "Account created. Check your email for a confirmation link before signing in.");
       } else {

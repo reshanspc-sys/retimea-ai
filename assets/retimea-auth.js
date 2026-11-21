@@ -111,6 +111,7 @@
   const status = backdrop.querySelector("#rtAuthStatus");
   const reset = backdrop.querySelector("#rtAuthReset");
   const signOut = backdrop.querySelector("#rtAuthSignOut");
+  const dashboardButton = backdrop.querySelector("#rtAuthDashboard");
   const modeButtons = [...backdrop.querySelectorAll("[data-mode]")];
   let mode = "signin";
   let supabase = null;
@@ -127,11 +128,26 @@
   }
   function show() { backdrop.hidden = false; if (supabase) email.focus(); }
   function hide() { backdrop.hidden = true; }
+  function openDashboard() {
+    if (!supabase) return;
+    dashboard.querySelector("#rtDashEmail").textContent = supabase.auth.getUser ? "Loading account…" : "Signed-in account";
+    dashboard.hidden = false;
+    hide();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user?.email) dashboard.querySelector("#rtDashEmail").textContent = data.user.email;
+    }).catch(() => {});
+  }
+  function closeDashboard() { dashboard.hidden = true; }
 
   accountButton.addEventListener("click", show);
+  dashboardButton.addEventListener("click", openDashboard);
+  dashboard.querySelector(".rt-dash-close").addEventListener("click", closeDashboard);
+  dashboard.querySelector("#rtDashBack").addEventListener("click", closeDashboard);
+  dashboard.querySelector("#rtDashAccountSettings").addEventListener("click", () => { closeDashboard(); show(); });
+  dashboard.addEventListener("click", event => { if (event.target === dashboard) closeDashboard(); });
   backdrop.querySelector(".rt-auth-close").addEventListener("click", hide);
   backdrop.addEventListener("click", event => { if (event.target === backdrop) hide(); });
-  document.addEventListener("keydown", event => { if (event.key === "Escape" && !backdrop.hidden) hide(); });
+  document.addEventListener("keydown", event => { if (event.key === "Escape" && !dashboard.hidden) closeDashboard(); else if (event.key === "Escape" && !backdrop.hidden) hide(); });
   modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
 
   function renderSession(session) {
@@ -144,6 +160,7 @@
       form.hidden = true;
       reset.hidden = true;
       signOut.hidden = false;
+      dashboardButton.hidden = false;
       say("Signed in successfully. Account and saved-project features will be connected in upcoming stages.");
     } else {
       accountButton.textContent = "Sign in";
@@ -152,6 +169,8 @@
       backdrop.querySelector(".rt-auth-sub").textContent = "Sign in or create an account to get ready for your personal workspace.";
       form.hidden = false;
       signOut.hidden = true;
+      dashboardButton.hidden = true;
+      closeDashboard();
       setMode("signin");
     }
   }

@@ -4,12 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RETIMEA AI | Intelligence for Everyone</title>
+<title>RETIMEA AI — Intelligence Beyond Limits</title>
+<meta name="theme-color" content="#080f1b">
+<meta name="description" content="RETIMEA AI — an intelligent workspace to think, create, research and achieve.">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script src="/assets/visualization-engine.js"></script>
   
 <style>
 :root {
@@ -62,25 +65,35 @@ button { cursor:pointer; }
 }
 
 .brand-icon {
-  width:39px;
-  height:39px;
-  border-radius:12px;
+  width:43px;
+  height:43px;
   display:grid;
   place-items:center;
-  font-size:24px;
-  font-weight:900;
-  color:#fff;
-  background:linear-gradient(140deg,#0878dc,#35dce9);
-  box-shadow:0 0 22px #168cff55;
+  flex:0 0 auto;
 }
+.brand-icon svg { width:100%; height:100%; display:block; overflow:visible; }
 
+ .brand-copy { display:flex; flex-direction:column; gap:4px; min-width:0; }
 .brand-name {
-  font-size:19px;
-  font-weight:800;
-  letter-spacing:1.3px;
+  font-size:18px;
+  line-height:1;
+  font-weight:650;
+  letter-spacing:2.15px;
+  color:#f3f7fc;
+  white-space:nowrap;
 }
-
-.brand-name span { color:var(--cyan); }
+.brand-name span {
+  color:#62d6d0;
+  font-weight:700;
+  letter-spacing:1.5px;
+}
+.brand-tagline {
+  color:#8194aa;
+  font-size:7px;
+  line-height:1.2;
+  letter-spacing:1.65px;
+  white-space:nowrap;
+}
 
 .new-chat {
   width:100%;
@@ -227,18 +240,13 @@ button { cursor:pointer; }
 }
 
 .welcome-logo {
-  width:66px;
-  height:66px;
-  border-radius:20px;
+  width:78px;
+  height:78px;
   display:grid;
   place-items:center;
-  font-size:37px;
-  font-weight:900;
-  background:linear-gradient(140deg,#0878dc,#35dce9);
-  color:white;
-  box-shadow:0 0 40px #168cff40;
   margin-bottom:23px;
 }
+.welcome-logo svg { width:100%; height:100%; display:block; overflow:visible; }
 
 .welcome h1 {
   font-size:clamp(26px,4vw,38px);
@@ -500,6 +508,16 @@ textarea::placeholder { color:#718aa3; }
   border-color:var(--cyan);
 }
 
+
+
+/* CREATE DOCUMENT */
+.document-help{color:var(--muted);font-size:12px;line-height:1.5;margin:-8px 0 12px}
+.document-mode-divider{display:flex;align-items:center;gap:14px;margin:8px 0 18px;color:var(--muted);font-size:10px;letter-spacing:1.3px;font-weight:700}
+.document-mode-divider:before,.document-mode-divider:after{content:"";height:1px;flex:1;background:var(--border)}
+#createDocumentStatus{margin-top:12px}
+.document-action:disabled{opacity:.55;cursor:wait}
+@media print{body *{visibility:hidden!important}#documentResult,#documentResult *{visibility:visible!important}#documentResult{display:block!important;position:absolute;inset:0;width:auto;max-width:none;border:0;box-shadow:none;color:#111;background:#fff}#documentResult h3{color:#111}#documentAnswer{color:#111;white-space:pre-wrap}}
+
 /* DOCUMENT STUDIO */
 
 .document-panel {
@@ -734,6 +752,642 @@ textarea::placeholder { color:#718aa3; }
     grid-template-columns:1fr;
   }
 }
+
+/* RETIMEA PREMIUM DESIGN LAYER */
+:root{--bg:#07111f;--sidebar:#0a1728;--panel:#102137;--panel2:#162d46;--blue:#3979f5;--cyan:#61d5d0;--text:#f1f7fc;--muted:#91a5ba;--border:rgba(133,177,207,.17);--shadow:0 18px 50px rgba(0,0,0,.24)}
+body{background:radial-gradient(ellipse at 72% -15%,rgba(57,121,245,.16),transparent 42%),radial-gradient(ellipse at 12% 90%,rgba(72,213,210,.055),transparent 35%),var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.sidebar{width:258px;padding:24px 15px 18px;background:rgba(8,19,33,.96);border-right:1px solid var(--border);backdrop-filter:blur(18px)}
+.brand{padding:3px 9px 26px;gap:12px}.brand-icon,.welcome-logo{background:transparent;box-shadow:none}
+.brand-icon{border-radius:0}.brand-name{letter-spacing:2.15px;font-size:18px}.brand-name span{color:#75d8d0}
+.new-chat{border:1px solid rgba(108,151,205,.28);background:linear-gradient(120deg,rgba(53,94,151,.23),rgba(50,126,132,.12));border-radius:12px;padding:13px 14px;transition:.2s ease}
+.new-chat:hover{border-color:rgba(101,214,208,.65);transform:translateY(-1px)}
+.section-label{color:#71849c;font-size:9px;letter-spacing:1.7px;padding:0 12px 11px}
+.tool{color:#aab8c9;border-radius:11px;padding:11px 12px;font-size:13px;transition:background .18s ease,color .18s ease,transform .18s ease}
+.tool:hover{background:rgba(109,145,187,.11);color:#fff}.tool.active{color:#f4f8ff;background:linear-gradient(100deg,rgba(67,112,179,.25),rgba(64,145,148,.12));box-shadow:inset 2px 0 #6bd2cb}
+.tool-icon{color:#77d5cf}.sidebar-note{border-color:var(--border)}.main{background:transparent}
+.topbar{height:74px;padding:0 30px;background:rgba(8,19,33,.82);border-color:var(--border);backdrop-filter:blur(18px)}
+.top-title{font-size:14px;letter-spacing:.1px}.top-subtitle{color:#8293a9}.online{color:#7bd8b7;letter-spacing:.5px;font-size:10px}.dot{box-shadow:0 0 0 4px rgba(69,220,174,.10)}
+.chat-area,.image-studio,.document-studio{max-width:1120px}.chat-area{padding-top:32px}.welcome-logo{border-radius:21px}.welcome h1{letter-spacing:-1.3px}.welcome p{color:#9aa9bc}
+.message{border-radius:15px;box-shadow:0 8px 24px rgba(0,0,0,.10)}.message.user{background:rgba(54,99,153,.22);border-color:rgba(91,145,203,.25)}.message.assistant{background:rgba(17,31,48,.9);border-color:var(--border)}
+.composer{border:1px solid rgba(125,157,193,.24);background:rgba(13,25,40,.94);border-radius:18px;box-shadow:var(--shadow)}.composer:focus-within{border-color:rgba(101,214,208,.7)}
+.send,.image-generate,.document-action{background:linear-gradient(115deg,#5888e8,#63c9c1);color:#081321;border-radius:11px;box-shadow:0 7px 18px rgba(72,132,195,.16)}
+.image-panel,.document-panel,.document-result{background:linear-gradient(145deg,rgba(18,32,49,.96),rgba(13,25,40,.96));border-color:var(--border);border-radius:18px;box-shadow:var(--shadow)}
+.image-prompt,.document-question,.upload-area{background:rgba(7,16,27,.65);border-color:rgba(125,157,193,.22);border-radius:12px}
+.image-prompt:focus,.document-question:focus{border-color:#66cfc8}.document-action.secondary{color:#d9e7f6;background:rgba(72,111,153,.15);border-color:rgba(125,157,193,.24);box-shadow:none}
+.visual-card{background:rgba(8,19,32,.72);border-color:var(--border)}.visual-title{color:#7ad8d1}
+.topbar-actions{display:flex;align-items:center;gap:18px}.theme-toggle{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--border);border-radius:11px;color:var(--text);background:rgba(120,150,185,.09);font-size:16px;cursor:pointer;transition:.2s ease}
+.theme-toggle:hover{border-color:rgba(101,214,208,.6);transform:translateY(-1px)}
+body[data-theme="light"]{--bg:#f3f6fa;--sidebar:#fff;--panel:#fff;--panel2:#edf2f8;--text:#172538;--muted:#64748b;--border:rgba(45,67,94,.14);--shadow:0 16px 42px rgba(25,45,70,.08);background:radial-gradient(ellipse at 75% -15%,rgba(89,150,205,.12),transparent 42%),var(--bg)}
+body[data-theme="light"] .sidebar,body[data-theme="light"] .topbar{background:rgba(255,255,255,.9)}
+body[data-theme="light"] .tool{color:#53657b}body[data-theme="light"] .tool:hover{background:#edf3f8;color:#172538}body[data-theme="light"] .tool.active{color:#1d3854;background:#eaf2f8}
+body[data-theme="light"] .top-subtitle,body[data-theme="light"] .welcome p{color:#64748b}
+body[data-theme="light"] .message.user{color:#17324d;background:#e6f0fb;border-color:#d3e2f2}
+body[data-theme="light"] .message.assistant,body[data-theme="light"] .image-panel,body[data-theme="light"] .document-panel,body[data-theme="light"] .document-result{background:#fff;color:#172538}
+body[data-theme="light"] .composer{background:#fff}
+body[data-theme="light"] .image-prompt,body[data-theme="light"] .document-question,body[data-theme="light"] .upload-area{background:#f7f9fc;color:#172538}
+body[data-theme="light"] .document-action.secondary{color:#29435f;background:#eef3f8}body[data-theme="light"] .visual-card{background:#f7f9fc}
+body[data-theme="light"] .visual-description,body[data-theme="light"] .disclaimer,body[data-theme="light"] .composer-hint{color:#64748b}
+@media(max-width:700px){.sidebar{width:72px;padding:15px 8px}.topbar{padding:0 14px;height:66px}.topbar-actions{gap:10px}.online{font-size:9px}.chat-area{padding:16px 12px}}
+
+
+/* CLEAN DOCUMENT UPLOAD: remove redundant nested card treatments */
+.document-panel.upload-panel {
+  max-width:760px;
+  padding:0;
+  margin:0 auto 22px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+}
+.document-panel.upload-panel .document-label {
+  margin:0 0 12px 2px;
+}
+.document-panel.upload-panel .upload-area {
+  display:block;
+  border:1px dashed rgba(125,157,193,.35);
+  border-radius:14px;
+  padding:30px 18px;
+  background:rgba(120,150,185,.045);
+}
+.document-panel.upload-panel .file-info {
+  display:none;
+  padding:9px 2px 0;
+  margin-top:8px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+}
+.document-panel.upload-panel .file-info.visible { display:block; }
+.document-panel.upload-panel .file-info strong { color:var(--cyan); }
+
+
+/* HOME DASHBOARD */
+.home-dashboard{flex:1;min-height:0;overflow-y:auto;padding:34px 34px 42px;max-width:1120px;width:100%;margin:0 auto}
+.home-hero{position:relative;overflow:hidden;padding:0;border:1px solid rgba(97,213,208,.24);border-radius:22px;background:var(--panel);box-shadow:var(--shadow)}
+.home-banner-image{display:block;width:100%;height:auto;aspect-ratio:1600/533;object-fit:cover}
+.home-hero-copy{padding:26px 30px 30px;background:linear-gradient(110deg,rgba(57,121,245,.10),rgba(97,213,208,.06))}
+@media(max-width:640px){.home-dashboard{padding:18px 14px 28px}.home-hero-copy{padding:20px}.home-banner-image{aspect-ratio:1.8/1;object-fit:cover}}
+.home-hero:after{content:"R";position:absolute;right:28px;top:-48px;font-size:250px;font-weight:900;line-height:1;color:rgba(122,175,211,.055);pointer-events:none}
+.home-eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;color:#78d5cf;text-transform:uppercase}
+.home-hero h1{font-size:clamp(28px,4vw,42px);letter-spacing:-1.4px;margin:13px 0 9px;max-width:650px}
+.home-hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.7;max-width:570px}
+.home-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
+.home-primary,.home-secondary{border-radius:11px;padding:11px 16px;font-weight:700;font-size:12px;border:1px solid transparent}
+.home-primary{background:linear-gradient(115deg,#3979f5,#61d5d0);color:#071321}
+.home-secondary{background:rgba(120,150,185,.09);color:var(--text);border-color:var(--border)}
+.home-section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:28px 2px 13px}
+.home-section-head h2{font-size:15px;margin:0}.home-section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.home-tools-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.home-tool-card{min-height:128px;text-align:left;padding:17px;border:1px solid var(--border);border-radius:16px;background:var(--panel);color:var(--text);transition:.18s ease}
+.home-tool-card:hover{transform:translateY(-2px);border-color:rgba(101,214,208,.55);background:var(--panel2)}
+.home-tool-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(57,121,245,.17),rgba(97,213,208,.16));color:#79d8d1;font-size:18px;margin-bottom:13px}
+.home-tool-card strong{display:block;font-size:12px;margin-bottom:5px}.home-tool-card span:last-child{display:block;color:var(--muted);font-size:10px;line-height:1.5}
+.home-lower-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:13px;margin-top:13px}
+.home-info-card{padding:19px;border:1px solid var(--border);border-radius:16px;background:var(--panel)}
+.home-info-card h3{font-size:13px;margin:0 0 7px}.home-info-card p{font-size:11px;line-height:1.7;color:var(--muted);margin:0}
+.home-status-line{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:10px;color:var(--muted)}
+.home-status-pill{font-size:9px;border:1px solid rgba(101,214,208,.24);background:rgba(101,214,208,.08);color:#78d5cf;padding:4px 8px;border-radius:20px}
+body[data-theme="light"] .home-hero{background:linear-gradient(120deg,#e8f0fb,#e9f6f3)}
+body[data-theme="light"] .home-tool-card,body[data-theme="light"] .home-info-card{background:#fff}
+body[data-theme="light"] .home-secondary{color:#29435f;background:#f1f5f9}
+@media(max-width:900px){.home-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.home-dashboard{padding:18px 13px 28px}.home-hero{padding:23px}.home-lower-grid{grid-template-columns:1fr}.home-tools-grid{gap:9px}.home-tool-card{padding:13px;min-height:118px}.home-hero:after{right:-18px;font-size:180px}}
+
+
+/* RETIMEA BANNER-MATCHED COLOUR FINISH */
+:root{
+  --bg:#071321;
+  --sidebar:#09182a;
+  --panel:#10243a;
+  --panel2:#15304a;
+  --blue:#3987ed;
+  --cyan:#62d5d0;
+  --text:#f2f7fc;
+  --muted:#9aafc3;
+  --border:rgba(111,169,205,.19);
+}
+body{
+  background:
+    radial-gradient(ellipse at 18% 8%,rgba(48,112,202,.16),transparent 38%),
+    radial-gradient(ellipse at 82% 92%,rgba(58,194,190,.09),transparent 34%),
+    var(--bg);
+}
+.welcome h1 span,.image-heading h1 span,.document-heading h1 span{
+  background:linear-gradient(100deg,#4d8ff0 0%,#43b9df 52%,#69ddd0 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.send,.image-generate,.document-action{
+  background:linear-gradient(110deg,#397fe5 0%,#36a9d5 52%,#62d5d0 100%);
+}
+.tool.active{
+  background:linear-gradient(105deg,rgba(57,127,229,.24),rgba(98,213,208,.13));
+  box-shadow:inset 2px 0 #62d5d0;
+}
+.home-hero-copy{
+  background:linear-gradient(110deg,rgba(57,127,229,.12),rgba(98,213,208,.08));
+}
+body[data-theme="light"]{
+  --blue:#3478d8;
+  --cyan:#258f91;
+}
+
+
+/* BANNER-MATCHED TOP BRAND AND ACCENT FINISH */
+/* Original sidebar ribbon remains visible; top-right artwork is handled separately. */
+.topbar-brand{display:none!important;background-image:none!important}
+.topbar-actions{gap:12px}
+.send,.image-generate,.document-action,.home-primary{background:linear-gradient(110deg,#258cff 0%,#3979f5 48%,#48d5d2 100%)}.tool-icon,.visual-title,.document-result h3{color:#63d5cf}
+.home-hero{border-color:rgba(72,213,210,.28)}
+@media(max-width:700px){.topbar-actions{gap:8px}}
+
+
+
+/* RETIMEA INTERFACE COLOUR REFINEMENT — ribbon artwork intentionally untouched */
+:root{
+  --bg:#071321;
+  --sidebar:#09182a;
+  --panel:#10243a;
+  --panel2:#15304a;
+  --blue:#4389ec;
+  --cyan:#65d6cf;
+  --text:#f2f7fc;
+  --muted:#9aafc3;
+  --border:rgba(123,170,202,.20);
+  --shadow:0 18px 48px rgba(0,8,18,.28);
+}
+.topbar{
+  background:rgba(8,21,36,.92);
+  border-bottom-color:var(--border);
+}
+.tool:hover,.home-tool-card:hover{
+  border-color:rgba(101,214,207,.38);
+}
+.tool.active{
+  background:linear-gradient(100deg,rgba(67,137,236,.22),rgba(101,214,207,.12));
+  box-shadow:inset 2px 0 var(--cyan);
+}
+.composer:focus-within,.image-prompt:focus,.document-question:focus{
+  border-color:rgba(101,214,207,.72);
+  box-shadow:0 0 0 3px rgba(101,214,207,.08);
+}
+.send,.image-generate,.document-action,.home-primary{
+  background:linear-gradient(110deg,#4389ec 0%,#438fdc 48%,#65d6cf 100%);
+  color:#071321;
+}
+body[data-theme="light"]{
+  --bg:#f3f6fa;
+  --sidebar:#ffffff;
+  --panel:#ffffff;
+  --panel2:#edf3f8;
+  --blue:#347bd8;
+  --cyan:#258f91;
+  --text:#17283b;
+  --muted:#64788e;
+  --border:rgba(45,75,103,.16);
+  --shadow:0 16px 42px rgba(25,45,70,.09);
+}
+body[data-theme="light"] .topbar{
+  background:rgba(255,255,255,.94);
+  border-bottom-color:var(--border);
+}
+body[data-theme="light"] .tool.active{
+  background:linear-gradient(100deg,rgba(52,123,216,.11),rgba(37,143,145,.09));
+  box-shadow:inset 2px 0 #258f91;
+}
+body[data-theme="light"] .composer,
+body[data-theme="light"] .image-panel,
+body[data-theme="light"] .document-panel,
+body[data-theme="light"] .document-result,
+body[data-theme="light"] .home-tool-card,
+body[data-theme="light"] .home-info-card{
+  border-color:var(--border);
+  box-shadow:var(--shadow);
+}
+
+
+/* FINAL BANNER-ALIGNED RETIMEA PALETTE */
+:root{
+  --bg:#050d1b;
+  --sidebar:#071426;
+  --panel:#0b1c31;
+  --panel2:#102943;
+  --blue:#168bff;
+  --cyan:#36c8c3;
+  --text:#f4f8ff;
+  --muted:#91a9c2;
+  --border:rgba(75,151,207,.22);
+  --shadow:0 18px 48px rgba(0,5,15,.38);
+}
+body{
+  background:
+    radial-gradient(ellipse at 14% 0%,rgba(22,139,255,.16),transparent 38%),
+    radial-gradient(ellipse at 88% 100%,rgba(54,200,195,.10),transparent 36%),
+    var(--bg);
+}
+.sidebar{background:rgba(5,16,31,.97);border-right-color:rgba(54,143,199,.22)}
+.topbar{background:rgba(5,15,29,.94);border-bottom-color:rgba(54,143,199,.22)}
+.tool.active{
+  color:#f4f8ff;
+  background:linear-gradient(100deg,rgba(22,139,255,.23),rgba(54,200,195,.13));
+  box-shadow:inset 2px 0 #36c8c3;
+}
+.tool-icon,.visual-title,.document-result h3{color:#55d7d0}
+.home-hero,.home-tool-card,.home-info-card,.image-panel,.document-panel,.document-result,.visual-card{
+  border-color:rgba(65,151,204,.23);
+}
+.home-hero-copy{background:linear-gradient(110deg,rgba(22,139,255,.13),rgba(54,200,195,.09))}
+.send,.image-generate,.document-action,.home-primary{
+  background:linear-gradient(110deg,#168bff 0%,#3479e9 48%,#36c8c3 100%);
+  color:#04111f;
+}
+.composer:focus-within,.image-prompt:focus,.document-question:focus{
+  border-color:rgba(54,200,195,.78);
+  box-shadow:0 0 0 3px rgba(54,200,195,.10);
+}
+body[data-theme="light"]{
+  --bg:#f2f7fb;
+  --sidebar:#f8fbfe;
+  --panel:#ffffff;
+  --panel2:#eaf3fa;
+  --blue:#1676d2;
+  --cyan:#168f91;
+  --text:#12263b;
+  --muted:#5f7890;
+  --border:rgba(31,94,143,.17);
+  --shadow:0 16px 42px rgba(17,55,86,.09);
+  background:
+    radial-gradient(ellipse at 10% 0%,rgba(22,139,255,.08),transparent 38%),
+    radial-gradient(ellipse at 90% 100%,rgba(54,200,195,.07),transparent 36%),
+    var(--bg);
+}
+body[data-theme="light"] .sidebar,body[data-theme="light"] .topbar{background:rgba(248,251,254,.96)}
+body[data-theme="light"] .tool.active{
+  color:#153b5b;
+  background:linear-gradient(100deg,rgba(22,118,210,.12),rgba(22,143,145,.10));
+  box-shadow:inset 2px 0 #168f91;
+}
+body[data-theme="light"] .send,body[data-theme="light"] .image-generate,body[data-theme="light"] .document-action,body[data-theme="light"] .home-primary{color:#fff}
+
+
+
+/* FULL-WIDTH CENTRE WORKSPACE — retain sidebar, banner and approved palette */
+.chat-area,
+.image-studio,
+.document-studio,
+.home-dashboard {
+  box-sizing:border-box;
+  width:100%;
+  max-width:none !important;
+  margin-left:0;
+  margin-right:0;
+}
+.chat-area,
+.image-studio,
+.document-studio {
+  padding-left:clamp(24px,3.2vw,56px);
+  padding-right:clamp(24px,3.2vw,56px);
+}
+.home-dashboard {
+  padding-left:clamp(24px,3.2vw,56px);
+  padding-right:clamp(24px,3.2vw,56px);
+}
+.message {
+  width:100%;
+  max-width:1400px;
+}
+.image-panel,
+.document-panel,
+.image-result,
+.document-result,
+.document-smallprint {
+  width:100%;
+  max-width:1400px;
+}
+@media(max-width:700px) {
+  .chat-area,.image-studio,.document-studio,.home-dashboard {
+    padding-left:12px;
+    padding-right:12px;
+  }
+  .message {max-width:100%}
+}
+
+/* RESPONSIVE VIEWPORT FIT — desktop, laptop, tablet and mobile */
+html {
+  width:100%;
+  min-height:100%;
+  overflow:hidden;
+}
+body {
+  width:100%;
+  min-width:320px;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+.app {
+  width:100%;
+  min-width:0;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+.main {
+  flex:1 1 0%;
+  width:calc(100% - 258px);
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+}
+.topbar {
+  flex:0 0 74px;
+  min-width:0;
+}
+.chat-area,
+.image-studio,
+.document-studio,
+.home-dashboard {
+  min-width:0;
+  width:100%;
+  max-width:none !important;
+  margin-inline:0;
+  box-sizing:border-box;
+}
+.chat-area {
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
+}
+.messages,
+.image-studio,
+.document-studio,
+.home-dashboard {
+  min-height:0;
+  overscroll-behavior:contain;
+}
+.home-dashboard {
+  overflow-x:hidden;
+}
+.home-hero,
+.home-tools-grid,
+.home-lower-grid,
+.image-panel,
+.document-panel,
+.image-result,
+.document-result {
+  min-width:0;
+  max-width:100%;
+}
+.home-banner-image {
+  width:100%;
+  max-width:100%;
+  height:auto;
+}
+img,video,canvas,svg {
+  max-width:100%;
+}
+.message,
+.composer,
+textarea,
+input {
+  min-width:0;
+  max-width:100%;
+}
+@media (max-width:900px) {
+  .home-tools-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-lower-grid {grid-template-columns:1fr}
+}
+@media (max-width:700px) {
+  .app {height:100dvh}
+  .sidebar {width:68px;flex:0 0 68px}
+  .main {width:calc(100% - 68px)}
+  .topbar {flex-basis:66px;padding-inline:12px}
+  .chat-area,.image-studio,.document-studio,.home-dashboard {
+    padding-left:12px;
+    padding-right:12px;
+  }
+  .home-tools-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-lower-grid {grid-template-columns:1fr}
+  .message {max-width:100%}
+}
+@media (max-width:420px) {
+  .topbar {padding-inline:9px}
+  .topbar-actions {gap:7px}
+  .online {font-size:8px;gap:5px}
+  .topbar-ribbon {flex-basis:32px;width:32px;height:32px}
+  .home-tools-grid {grid-template-columns:1fr}
+  .home-hero-copy {padding:18px}
+  .image-panel,.document-panel {padding:14px}
+}
+
+
+/* HOMEPAGE ONE-SCREEN LAYOUT — preserve original artwork and palette */
+@media (min-width: 901px) and (min-height: 650px) {
+  .home-dashboard {
+    height:100%;
+    overflow-y:hidden;
+    padding:clamp(10px,1.8vh,20px) clamp(18px,2.2vw,34px);
+    display:flex;
+    flex-direction:column;
+    gap:clamp(7px,1.1vh,12px);
+  }
+  .home-hero {
+    flex:0 0 auto;
+    border-radius:16px;
+  }
+  .home-banner-image {
+    height:clamp(112px,19vh,168px);
+    aspect-ratio:auto;
+    object-fit:cover;
+    object-position:center 48%;
+  }
+  .home-hero-copy {
+    padding:clamp(9px,1.4vh,14px) clamp(16px,2vw,24px);
+  }
+  .home-eyebrow {font-size:9px}
+  .home-hero h1 {
+    font-size:clamp(21px,2.3vw,30px);
+    margin:5px 0 4px;
+    letter-spacing:-.8px;
+  }
+  .home-hero p {font-size:11px;line-height:1.4}
+  .home-actions {margin-top:9px;gap:7px}
+  .home-primary,.home-secondary {padding:7px 11px;font-size:10px}
+  .home-section-head {margin:clamp(3px,.7vh,7px) 2px 0}
+  .home-section-head h2 {font-size:13px}
+  .home-section-head p {font-size:9px;margin-top:2px}
+  .home-tools-grid {
+    flex:0 0 auto;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:clamp(7px,.8vw,10px);
+  }
+  .home-tool-card {
+    min-height:0;
+    height:clamp(70px,10.4vh,88px);
+    padding:clamp(8px,1vw,12px);
+    border-radius:12px;
+  }
+  .home-tool-icon {
+    width:25px;height:25px;border-radius:8px;
+    font-size:14px;margin-bottom:5px;
+  }
+  .home-tool-card strong {font-size:11px;margin-bottom:2px}
+  .home-tool-card span:last-child {font-size:9px;line-height:1.25}
+  .home-lower-grid {
+    flex:1 1 auto;
+    min-height:0;
+    margin-top:0;
+    gap:9px;
+  }
+  .home-info-card {
+    padding:clamp(9px,1.2vh,13px);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .home-info-card h3 {font-size:11px;margin-bottom:4px}
+  .home-info-card p {font-size:9px;line-height:1.35}
+  .home-status-line {margin-top:6px;font-size:8px;gap:6px}
+  .home-status-pill {font-size:8px;padding:3px 6px}
+}
+@media (min-width: 901px) and (max-height: 649px) {
+  .home-dashboard {padding-top:8px;padding-bottom:8px}
+  .home-banner-image {height:100px;aspect-ratio:auto;object-fit:cover}
+  .home-hero-copy {padding:8px 16px}
+  .home-hero h1 {font-size:20px;margin:4px 0}
+  .home-hero p {font-size:10px;line-height:1.3}
+  .home-actions {margin-top:6px}
+  .home-section-head {margin:5px 2px 5px}
+  .home-tool-card {min-height:0;height:66px;padding:7px}
+  .home-tool-icon {width:22px;height:22px;margin-bottom:3px}
+  .home-lower-grid {margin-top:7px}
+  .home-info-card {padding:8px}
+}
+
+
+
+/* SHOW THE COMPLETE APPROVED BANNER — never crop the artwork */
+.home-banner-image {
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto !important;
+  aspect-ratio:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+}
+
+
+/* Keep the banner close to its original size, with only a modest reduction */
+.home-banner-image {
+  width:100%;
+  height:auto !important;
+  max-height:clamp(150px,17.5vh,160px);
+  object-fit:contain !important;
+  object-position:center !important;
+}
+@media (max-width:700px) {
+  .home-banner-image {
+    max-height:clamp(112px,16vh,132px);
+  }
+}
+
+
+/* FIT THE COMPLETE HOMEPAGE TO THE VIEWPORT */
+@media (min-width: 701px) {
+  .home-dashboard {
+    height:100%;
+    min-height:0;
+    overflow-y:auto;
+    padding-top:clamp(8px,1.2vh,14px);
+    padding-bottom:clamp(8px,1.2vh,14px);
+    gap:clamp(5px,.7vh,9px);
+  }
+  .home-banner-image {
+    display:block;
+    width:100%;
+    height:clamp(118px,17vh,150px) !important;
+    max-height:none !important;
+    aspect-ratio:auto !important;
+    object-fit:contain !important;
+    object-position:center !important;
+  }
+  .home-hero-copy {
+    padding:clamp(7px,1vh,11px) clamp(14px,1.6vw,20px);
+  }
+  .home-actions {margin-top:6px}
+  .home-section-head {margin-top:3px;margin-bottom:3px}
+  .home-tools-grid {gap:7px}
+  .home-tool-card {height:clamp(62px,8.5vh,76px);padding:7px}
+  .home-lower-grid {min-height:105px;gap:7px}
+  .home-info-card {padding:8px}
+}
+@media (max-width:700px) {
+  .home-dashboard {
+    overflow-y:auto;
+    height:100%;
+  }
+  .home-banner-image {
+    width:100%;
+    height:auto !important;
+    max-height:none !important;
+    aspect-ratio:1600/533 !important;
+    object-fit:contain !important;
+  }
+}
+
+
+/* HOMEPAGE FIT: restore a wide banner and compact the two lower information cards */
+@media (min-width: 901px) and (min-height: 650px) {
+  .home-dashboard {
+    height:100%;
+    min-height:0;
+    overflow-y:auto;
+    box-sizing:border-box;
+    padding:8px 22px 10px;
+    gap:5px;
+  }
+  .home-hero {flex:0 0 auto;text-align:center}
+  .home-banner-image {
+    display:block;
+    width:100%;
+    height:auto !important;
+    max-height:none !important;
+    aspect-ratio:1600/533 !important;
+    object-fit:contain !important;
+    object-position:center !important;
+    margin:0 auto;
+  }
+  .home-hero-copy {text-align:left;padding:7px 16px 8px}
+  .home-eyebrow {font-size:8px;letter-spacing:1.5px}
+  .home-hero h1 {font-size:22px;line-height:1.12;margin:3px 0}
+  .home-hero p {font-size:9px;line-height:1.25}
+  .home-actions {margin-top:5px;gap:6px}
+  .home-primary,.home-secondary {padding:6px 10px;font-size:9px}
+  .home-section-head {margin:3px 2px 4px}
+  .home-section-head h2 {font-size:11px}
+  .home-section-head p {font-size:8px;margin-top:1px}
+  .home-tools-grid {gap:7px}
+  .home-tool-card {height:70px;min-height:0;padding:8px 10px}
+  .home-tool-icon {width:22px;height:22px;font-size:12px;margin-bottom:3px}
+  .home-tool-card strong {font-size:10px;margin-bottom:2px}
+  .home-tool-card span:last-child {font-size:8px;line-height:1.2}
+  .home-lower-grid {
+    margin-top:0;
+    gap:7px;
+    flex:0 0 auto;
+    min-height:0;
+    grid-template-columns:1.15fr .85fr;
+  }
+  .home-info-card {padding:5px 9px;min-height:0}
+  .home-info-card h3 {font-size:9px;margin-bottom:2px}
+  .home-info-card p {font-size:8px;line-height:1.2}
+  .home-status-line {margin-top:3px;font-size:7px}
+  .home-status-pill {font-size:7px;padding:2px 5px}
+}
+
+/* Keep the large homepage banner/dashboard off every non-home page. */
+.home-dashboard[hidden]{display:none !important;}
 </style>
 </head>
 
@@ -742,8 +1396,20 @@ textarea::placeholder { color:#718aa3; }
 
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-icon">R</div>
-      <div class="brand-name">RETIMEA<span> AI</span></div>
+      <span class="brand-icon"><svg viewBox="0 0 120 100" role="img" aria-label="RETIMEA flowing ribbon symbol" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="retimeaRibbon" x1="8" y1="6" x2="108" y2="94" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#159CFF"/><stop offset=".48" stop-color="#3979F5"/><stop offset=".78" stop-color="#48D5D2"/><stop offset="1" stop-color="#8BE9D6"/>
+    </linearGradient>
+    <linearGradient id="retimeaRibbonLight" x1="22" y1="15" x2="90" y2="84" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A5F5E7"/><stop offset=".5" stop-color="#31BEEB"/><stop offset="1" stop-color="#2864E8"/>
+    </linearGradient>
+  </defs>
+  <path d="M9 34C23 18 37 7 55 8c17 1 28 11 27 24-1 12-12 19-25 25L24 76c-6 3-10 7-9 10 2 5 12 5 22 1l65-29" fill="none" stroke="url(#retimeaRibbon)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 30c13-12 26-18 39-16 11 1 17 7 16 15-1 7-8 12-19 17l-5 2" fill="none" stroke="url(#retimeaRibbonLight)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M38 50c10-5 20-5 27 1 7 6 8 15 14 22 5 6 12 9 22 7" fill="none" stroke="url(#retimeaRibbon)" stroke-width="9" stroke-linecap="round"/>
+</svg></span>
+      <div class="brand-copy"><div class="brand-name">RETIMEA<span> AI</span></div><div class="brand-tagline">INTELLIGENCE BEYOND LIMITS</div></div>
     </div>
 
     <button class="new-chat" id="newChat">
@@ -751,6 +1417,10 @@ textarea::placeholder { color:#718aa3; }
       <span class="new-chat-label">New conversation</span>
     </button>
 
+    <div class="section-label">WORKSPACE</div>
+    <nav class="tools" aria-label="Main navigation">
+      <button class="tool active" data-tool="home"><span class="tool-icon">⌂</span><span class="tool-name">Overview</span></button>
+    </nav>
     <div class="section-label">AI WORKSPACE</div>
 
     <nav class="tools" id="tools">
@@ -797,7 +1467,7 @@ textarea::placeholder { color:#718aa3; }
 
     <div class="sidebar-bottom">
       <div class="sidebar-note">
-        Intelligence for Everyone.<br>
+        Intelligence Beyond Limits.<br>
         <span style="color:#35e0ed">
           Think · Create · Research · Achieve
         </span>
@@ -811,16 +1481,70 @@ textarea::placeholder { color:#718aa3; }
         <div class="top-title" id="topTitle">AI Assistant</div>
         <div class="top-subtitle">Your intelligent workspace</div>
       </div>
-      <div class="online">
-        <span class="dot"></span> AI ONLINE
+      <div class="topbar-actions">
+        <span class="topbar-ribbon" role="img" aria-label="RETIMEA ribbon artwork"><svg viewBox="0 0 120 100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="retimeaRibbonTop" x1="8" y1="6" x2="108" y2="94" gradientUnits="userSpaceOnUse"><stop stop-color="#159CFF"/><stop offset=".48" stop-color="#3979F5"/><stop offset=".78" stop-color="#48D5D2"/><stop offset="1" stop-color="#8BE9D6"/></linearGradient>
+<linearGradient id="retimeaRibbonLightTop" x1="22" y1="15" x2="90" y2="84" gradientUnits="userSpaceOnUse"><stop stop-color="#A5F5E7"/><stop offset=".5" stop-color="#31BEEB"/><stop offset="1" stop-color="#2864E8"/></linearGradient>
+</defs>
+<path d="M9 34C23 18 37 7 55 8c17 1 28 11 27 24-1 12-12 19-25 25L24 76c-6 3-10 7-9 10 2 5 12 5 22 1l65-29" fill="none" stroke="url(#retimeaRibbonTop)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M16 30c13-12 26-18 39-16 11 1 17 7 16 15-1 7-8 12-19 17l-5 2" fill="none" stroke="url(#retimeaRibbonLightTop)" stroke-width="5" stroke-linecap="round"/>
+<path d="M38 50c10-5 20-5 27 1 7 6 8 15 14 22 5 6 12 9 22 7" fill="none" stroke="url(#retimeaRibbonTop)" stroke-width="9" stroke-linecap="round"/>
+</svg></span>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch colour theme" title="Switch theme">☼</button>
+        <div class="online">
+          <span class="dot"></span> AI ONLINE
+        </div>
       </div>
     </header>
 
     <main class="chat-area">
 
+      <section class="home-dashboard" id="homeDashboard">
+        <div class="home-hero">
+          <img class="home-banner-image" src="/assets/retimea-home-banner%20(1).jpg" alt="RETIMEA AI — Intelligence Beyond Limits, with the flowing blue and teal ribbon symbol">
+          <div class="home-hero-copy">
+          <div class="home-eyebrow">RETIMEA AI WORKSPACE</div>
+          <h1>Intelligence Beyond Limits.</h1>
+          <p>Your space to think clearly, create confidently and turn ideas into progress. Choose a tool to get started.</p>
+          <div class="home-actions">
+            <button class="home-primary" type="button" data-launch-tool="assistant">Start with AI Assistant <span aria-hidden="true">→</span></button>
+            <button class="home-secondary" type="button" data-launch-tool="business">Explore Business AI</button>
+          </div>
+          </div>
+        </div>
+        <div class="home-section-head"><div><h2>Your AI tools</h2><p>Everything you need, organised in one workspace.</p></div></div>
+        <div class="home-tools-grid">
+          <button class="home-tool-card" data-launch-tool="assistant"><span class="home-tool-icon">✦</span><strong>AI Assistant</strong><span>Ask questions and work through ideas</span></button>
+          <button class="home-tool-card" data-launch-tool="writer"><span class="home-tool-icon">✎</span><strong>AI Writer</strong><span>Create and refine written content</span></button>
+          <button class="home-tool-card" data-launch-tool="research"><span class="home-tool-icon">⌕</span><strong>Research Studio</strong><span>Explore topics and organise insights</span></button>
+          <button class="home-tool-card" data-launch-tool="business"><span class="home-tool-icon">◇</span><strong>Business AI</strong><span>Develop plans, ideas and strategies</span></button>
+          <button class="home-tool-card" data-launch-tool="trading"><span class="home-tool-icon">↗</span><strong>Trading Research</strong><span>Study gold and Bitcoin market structure</span></button>
+          <button class="home-tool-card" data-launch-tool="translator"><span class="home-tool-icon">文</span><strong>Translator</strong><span>Translate while preserving meaning</span></button>
+          <button class="home-tool-card" data-launch-tool="image"><span class="home-tool-icon">✧</span><strong>Image Creation</strong><span>Turn your prompts into images</span></button>
+          <button class="home-tool-card" data-launch-tool="document"><span class="home-tool-icon">▤</span><strong>Document Studio</strong><span>Summarise, question and rewrite files</span></button>
+        </div>
+        <div class="home-lower-grid">
+          <div class="home-info-card"><h3>Workforce Network</h3><p>A future RETIMEA service workspace for client projects and skilled workers. Project submission, matching and delivery workflows are not active yet.</p><div class="home-status-line"><span class="home-status-pill">Coming soon</span><span>Early-stage product area</span></div></div>
+          <div class="home-info-card"><h3>Built for focused work</h3><p>Move between AI tools without losing sight of the task. Your existing tools remain available from the navigation.</p><div class="home-status-line"><span class="home-status-pill">8 tools</span><span>One connected workspace</span></div></div>
+        </div>
+      </section>
+
       <div class="messages" id="messages">
         <div class="welcome" id="welcome">
-          <div class="welcome-logo">R</div>
+          <div class="welcome-logo"><svg viewBox="0 0 120 100" role="img" aria-label="RETIMEA flowing ribbon symbol" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="retimeaRibbon" x1="8" y1="6" x2="108" y2="94" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#159CFF"/><stop offset=".48" stop-color="#3979F5"/><stop offset=".78" stop-color="#48D5D2"/><stop offset="1" stop-color="#8BE9D6"/>
+    </linearGradient>
+    <linearGradient id="retimeaRibbonLight" x1="22" y1="15" x2="90" y2="84" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A5F5E7"/><stop offset=".5" stop-color="#31BEEB"/><stop offset="1" stop-color="#2864E8"/>
+    </linearGradient>
+  </defs>
+  <path d="M9 34C23 18 37 7 55 8c17 1 28 11 27 24-1 12-12 19-25 25L24 76c-6 3-10 7-9 10 2 5 12 5 22 1l65-29" fill="none" stroke="url(#retimeaRibbon)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 30c13-12 26-18 39-16 11 1 17 7 16 15-1 7-8 12-19 17l-5 2" fill="none" stroke="url(#retimeaRibbonLight)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M38 50c10-5 20-5 27 1 7 6 8 15 14 22 5 6 12 9 22 7" fill="none" stroke="url(#retimeaRibbon)" stroke-width="9" stroke-linecap="round"/>
+</svg></div>
           <h1>Think. Create. <span>Achieve.</span></h1>
           <p>
             Welcome to RETIMEA AI.<br>
@@ -865,7 +1589,20 @@ textarea::placeholder { color:#718aa3; }
           <p>Upload a document and let RETIMEA AI help you understand it.</p>
         </div>
 
-        <div class="document-panel">
+        <div class="document-panel create-document-panel">
+          <label class="document-label" for="documentPrompt">Create a new document with AI</label>
+          <p class="document-help">Describe the document you want. RETIMEA AI will create an original draft for you.</p>
+          <textarea class="document-question" id="documentPrompt" placeholder="Example: Create a professional business proposal for an online marketplace in Qatar. Include an executive summary, target market, revenue model, marketing plan and financial projections."></textarea>
+          <div class="document-actions">
+            <button class="document-action" id="generateDocument">✦ Generate Document</button>
+            <button class="document-action secondary" id="clearDocumentPrompt" type="button">Clear Prompt</button>
+          </div>
+          <div class="document-status" id="createDocumentStatus">Enter your instructions and select Generate Document.</div>
+        </div>
+
+        <div class="document-mode-divider"><span>OR WORK WITH AN EXISTING DOCUMENT</span></div>
+
+        <div class="document-panel upload-panel">
           <label class="document-label">Upload your document</label>
 
           <label class="upload-area" for="documentFile">
@@ -929,6 +1666,7 @@ textarea::placeholder { color:#718aa3; }
             id="documentDownload"
             download="retimea-document-result.txt"
           >↓ Download Result</a>
+          <button type="button" class="document-action secondary" id="printDocument" style="margin-top:12px">Print / Save as PDF</button>
         </div>
 
         <div class="document-smallprint">
@@ -969,6 +1707,24 @@ textarea::placeholder { color:#718aa3; }
 </div>
 
 <script>
+/* THEME PREFERENCE */
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("retimea-theme");
+if (savedTheme === "light" || savedTheme === "dark") document.body.dataset.theme = savedTheme;
+function syncThemeButton() {
+  const light = document.body.dataset.theme === "light";
+  themeToggle.textContent = light ? "☾" : "☼";
+  themeToggle.setAttribute("aria-label", light ? "Switch to dark theme" : "Switch to light theme");
+  themeToggle.title = light ? "Switch to dark theme" : "Switch to light theme";
+}
+syncThemeButton();
+themeToggle.addEventListener("click", () => {
+  const next = document.body.dataset.theme === "light" ? "dark" : "light";
+  document.body.dataset.theme = next;
+  localStorage.setItem("retimea-theme", next);
+  syncThemeButton();
+});
+
 /* PDF.JS CONFIGURATION */
 if (window.pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -987,7 +1743,7 @@ const descriptions = {
   document:"Upload, analyze and understand documents"
 };
 
-let selectedTool = "assistant";
+let selectedTool = "home";
 let history = [];
 let extractedDocumentText = "";
 let selectedDocumentName = "";
@@ -999,6 +1755,7 @@ const statusBox = document.getElementById("status");
 const sendButton = document.getElementById("sendButton");
 
 const messagesArea = document.getElementById("messages");
+const homeDashboard = document.getElementById("homeDashboard");
 const composerWrap = document.getElementById("composerWrap");
 const imageStudio = document.getElementById("imageStudio");
 const documentStudio = document.getElementById("documentStudio");
@@ -1012,6 +1769,9 @@ const documentFile = document.getElementById("documentFile");
 const fileInfo = document.getElementById("fileInfo");
 const documentStatus = document.getElementById("documentStatus");
 const documentQuestion = document.getElementById("documentQuestion");
+const documentPrompt = document.getElementById("documentPrompt");
+const generateDocumentButton = document.getElementById("generateDocument");
+const createDocumentStatus = document.getElementById("createDocumentStatus");
 const documentResult = document.getElementById("documentResult");
 const documentAnswer = document.getElementById("documentAnswer");
 const documentDownload = document.getElementById("documentDownload");
@@ -1037,7 +1797,6 @@ let visualCounter = 0;
 function addMessage(role, content, visuals = []) {
   const item = document.createElement("div");
   item.className = "message " + role;
-
   const label = document.createElement("div");
   label.className = "message-label";
   label.textContent = role === "user" ? "YOU" : "RETIMEA AI";
@@ -1048,134 +1807,8 @@ function addMessage(role, content, visuals = []) {
   item.appendChild(label);
   item.appendChild(body);
 
-  if (role === "assistant" && Array.isArray(visuals)) {
-    visuals.slice(0, 5).forEach(visual => {
-      if (!visual || typeof visual !== "object") return;
-
-      const card = document.createElement("div");
-      card.className = "visual-card";
-
-      const title = document.createElement("div");
-      title.className = "visual-title";
-      title.textContent = String(visual.title || "AI Visualization").slice(0, 150);
-      card.appendChild(title);
-
-      if (visual.description) {
-        const description = document.createElement("div");
-        description.className = "visual-description";
-        description.textContent = String(visual.description).slice(0, 500);
-        card.appendChild(description);
-      }
-
-      if (
-        ["bar", "line", "pie", "doughnut"].includes(visual.type) &&
-        window.Chart &&
-        visual.data &&
-        Array.isArray(visual.data.labels) &&
-        Array.isArray(visual.data.datasets)
-      ) {
-        const labels = visual.data.labels.slice(0, 50);
-        const datasets = visual.data.datasets.slice(0, 5);
-
-        const validDatasets = datasets.every(dataset =>
-          dataset &&
-          Array.isArray(dataset.data) &&
-          dataset.data.length === labels.length &&
-          dataset.data.every(value =>
-            typeof value === "number" && Number.isFinite(value)
-          )
-        );
-
-        if (validDatasets && labels.length > 0 && datasets.length > 0) {
-          const chartWrap = document.createElement("div");
-          chartWrap.className = "visual-chart-wrap";
-
-          const canvas = document.createElement("canvas");
-          canvas.className = "visual-chart";
-          canvas.setAttribute("role", "img");
-          canvas.setAttribute("aria-label", title.textContent + " chart");
-
-          chartWrap.appendChild(canvas);
-          card.appendChild(chartWrap);
-
-          const chartData = {
-            labels,
-            datasets: datasets.map(dataset => ({
-              label: String(dataset.label || "Data").slice(0, 100),
-              data: dataset.data,
-              borderWidth: 2,
-              tension: 0.3
-            }))
-          };
-
-          try {
-            new Chart(canvas, {
-              type: visual.type,
-              data: chartData,
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    labels: { color: "#edf6ff" }
-                  }
-                },
-                scales: ["pie", "doughnut"].includes(visual.type)
-                  ? {}
-                  : {
-                      x: {
-                        ticks: { color: "#8da5bd" },
-                        grid: { color: "#203a54" }
-                      },
-                      y: {
-                        ticks: { color: "#8da5bd" },
-                        grid: { color: "#203a54" }
-                      }
-                    }
-              }
-            });
-          } catch (error) {
-            console.error("Chart rendering error:", error);
-            chartWrap.textContent = "This chart could not be displayed.";
-          }
-        }
-      }
-
-      else if (
-        visual.type === "mermaid" &&
-        typeof visual.code === "string" &&
-        visual.code.length > 0 &&
-        visual.code.length <= 5000 &&
-        window.mermaid
-      ) {
-        const diagram = document.createElement("div");
-        diagram.className = "visual-diagram";
-        diagram.textContent = "Rendering diagram...";
-        card.appendChild(diagram);
-
-        const diagramId = "retimea-diagram-" + (++visualCounter);
-
-        mermaid.initialize({
-          startOnLoad: false,
-          securityLevel: "strict",
-          theme: "dark"
-        });
-
-        mermaid.render(diagramId, visual.code)
-          .then(result => {
-            diagram.innerHTML = result.svg;
-            messages.scrollTop = messages.scrollHeight;
-          })
-          .catch(error => {
-            console.error("Diagram rendering error:", error);
-            diagram.textContent = "This diagram could not be displayed.";
-          });
-      }
-
-      if (card.children.length > 1) {
-        item.appendChild(card);
-      }
-    });
+  if (role === "assistant" && Array.isArray(visuals) && window.RetimeaVisualization) {
+    window.RetimeaVisualization.render(item, visuals, { limit: 5 });
   }
 
   messages.appendChild(item);
@@ -1198,44 +1831,48 @@ function resetDocumentStudio() {
 }
 
 /* SIDEBAR TOOL SWITCHING */
+function activateTool(selected) {
+  const button = document.querySelector('.tool[data-tool="' + selected + '"]');
+  if (!button) return;
+  selectedTool = selected;
+  history = [];
+  document.querySelectorAll(".tool").forEach(b => b.classList.remove("active"));
+  button.classList.add("active");
+  const name = button.querySelector(".tool-name").textContent;
+  document.getElementById("topTitle").textContent = name;
+  document.querySelector(".top-subtitle").textContent =
+    selected === "home" ? "Your intelligent workspace" : descriptions[selected];
+  const isHome = selected === "home";
+  const isImageTool = selected === "image";
+  const isDocumentTool = selected === "document";
+  homeDashboard.hidden = !isHome;
+  messagesArea.hidden = isHome || isImageTool || isDocumentTool;
+  composerWrap.hidden = isHome || isImageTool || isDocumentTool;
+  imageStudio.hidden = !isImageTool;
+  documentStudio.hidden = !isDocumentTool;
+  if (isHome) {
+    statusBox.textContent = "Your workspace is ready";
+  } else if (isImageTool) {
+    imageStatus.textContent = "Ready to create";
+    imagePrompt.focus();
+  } else if (isDocumentTool) {
+    documentStatus.textContent = extractedDocumentText
+      ? "Document ready: " + selectedDocumentName
+      : "Please upload a document to get started.";
+  } else {
+    showWelcome();
+    statusBox.textContent = "Ready";
+    promptBox.focus();
+  }
+}
+
 document.querySelectorAll(".tool").forEach(button => {
-  button.addEventListener("click", () => {
-    selectedTool = button.dataset.tool;
-    history = [];
-
-    document.querySelectorAll(".tool").forEach(b => {
-      b.classList.remove("active");
-    });
-
-    button.classList.add("active");
-
-    const name = button.querySelector(".tool-name").textContent;
-    document.getElementById("topTitle").textContent = name;
-    document.querySelector(".top-subtitle").textContent =
-      descriptions[selectedTool];
-
-    const isImageTool = selectedTool === "image";
-    const isDocumentTool = selectedTool === "document";
-
-    messagesArea.hidden = isImageTool || isDocumentTool;
-    composerWrap.hidden = isImageTool || isDocumentTool;
-    imageStudio.hidden = !isImageTool;
-    documentStudio.hidden = !isDocumentTool;
-
-    if (isImageTool) {
-      imageStatus.textContent = "Ready to create";
-      imagePrompt.focus();
-    } else if (isDocumentTool) {
-      documentStatus.textContent = extractedDocumentText
-        ? "Document ready: " + selectedDocumentName
-        : "Please upload a document to get started.";
-    } else {
-      showWelcome();
-      statusBox.textContent = "Ready";
-      promptBox.focus();
-    }
-  });
+  button.addEventListener("click", () => activateTool(button.dataset.tool));
 });
+document.querySelectorAll("[data-launch-tool]").forEach(button => {
+  button.addEventListener("click", () => activateTool(button.dataset.launchTool));
+});
+activateTool("home");
 
 /* NEW CONVERSATION */
 document.getElementById("newChat").addEventListener("click", () => {
@@ -1559,6 +2196,52 @@ async function processDocument(action) {
     buttons.forEach(button => button.disabled = false);
   }
 }
+
+/* CREATE A NEW DOCUMENT FROM A PROMPT */
+async function generateDocument() {
+  const prompt = documentPrompt.value.trim();
+  if (!prompt) {
+    createDocumentStatus.textContent = "Please describe the document you want to create.";
+    documentPrompt.focus();
+    return;
+  }
+  if (prompt.length > 5000) {
+    createDocumentStatus.textContent = "Please keep your instructions under 5,000 characters.";
+    return;
+  }
+  generateDocumentButton.disabled = true;
+  createDocumentStatus.textContent = "RETIMEA AI is creating your document...";
+  documentResult.classList.remove("visible");
+  try {
+    const response = await fetch("/api/document", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "create", prompt })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) throw new Error(data.error || "Document generation failed.");
+    documentAnswer.textContent = data.answer || "No document content was returned.";
+    documentResult.classList.add("visible");
+    const blob = new Blob([data.answer || ""], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    documentDownload.href = url;
+    documentDownload.download = "retimea-created-document.txt";
+    documentStatus.textContent = "Your document is ready.";
+    createDocumentStatus.textContent = "Document created successfully.";
+    documentResult.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    createDocumentStatus.textContent = error.message || "Something went wrong. Please try again.";
+  } finally {
+    generateDocumentButton.disabled = false;
+  }
+}
+generateDocumentButton.addEventListener("click", generateDocument);
+document.getElementById("printDocument").addEventListener("click", () => window.print());
+document.getElementById("clearDocumentPrompt").addEventListener("click", () => {
+  documentPrompt.value = "";
+  createDocumentStatus.textContent = "Enter your instructions and select Generate Document.";
+  documentPrompt.focus();
+});
 
 /* DOCUMENT ACTION BUTTONS */
 document.querySelectorAll(".document-action").forEach(button => {

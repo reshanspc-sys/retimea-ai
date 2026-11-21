@@ -844,6 +844,44 @@ body[data-theme="light"] .home-secondary{color:#29435f;background:#f1f5f9}
 @media(max-width:900px){.home-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.home-dashboard{padding:18px 13px 28px}.home-hero{padding:23px}.home-lower-grid{grid-template-columns:1fr}.home-tools-grid{gap:9px}.home-tool-card{padding:13px;min-height:118px}.home-hero:after{right:-18px;font-size:180px}}
 
+
+/* RETIMEA BANNER-MATCHED COLOUR FINISH */
+:root{
+  --bg:#071321;
+  --sidebar:#09182a;
+  --panel:#10243a;
+  --panel2:#15304a;
+  --blue:#3987ed;
+  --cyan:#62d5d0;
+  --text:#f2f7fc;
+  --muted:#9aafc3;
+  --border:rgba(111,169,205,.19);
+}
+body{
+  background:
+    radial-gradient(ellipse at 18% 8%,rgba(48,112,202,.16),transparent 38%),
+    radial-gradient(ellipse at 82% 92%,rgba(58,194,190,.09),transparent 34%),
+    var(--bg);
+}
+.welcome h1 span,.image-heading h1 span,.document-heading h1 span{
+  background:linear-gradient(100deg,#4d8ff0 0%,#43b9df 52%,#69ddd0 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.send,.image-generate,.document-action{
+  background:linear-gradient(110deg,#397fe5 0%,#36a9d5 52%,#62d5d0 100%);
+}
+.tool.active{
+  background:linear-gradient(105deg,rgba(57,127,229,.24),rgba(98,213,208,.13));
+  box-shadow:inset 2px 0 #62d5d0;
+}
+.home-hero-copy{
+  background:linear-gradient(110deg,rgba(57,127,229,.12),rgba(98,213,208,.08));
+}
+body[data-theme="light"]{
+  --blue:#3478d8;
+  --cyan:#258f91;
+}
+
 </style>
 </head>
 

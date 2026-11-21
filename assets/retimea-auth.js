@@ -2,6 +2,22 @@
   "use strict";
 
   const css = `
+    .app{visibility:hidden}
+    .rt-entry{position:fixed;inset:0;z-index:9996;display:grid;place-items:center;overflow:auto;padding:24px;background:radial-gradient(ellipse at 72% -15%,rgba(57,121,245,.22),transparent 45%),radial-gradient(ellipse at 12% 90%,rgba(72,213,210,.10),transparent 38%),#07111f;color:#f1f7fc}
+    .rt-entry[hidden]{display:none}
+    .rt-entry-card{width:min(100%,760px);text-align:center;padding:clamp(26px,6vw,64px);border:1px solid rgba(133,177,207,.2);border-radius:26px;background:linear-gradient(145deg,rgba(16,33,55,.94),rgba(7,17,31,.96));box-shadow:0 28px 100px #0008}
+    .rt-entry-mark{font-size:12px;letter-spacing:4px;font-weight:800;color:#75d8d0}
+    .rt-entry h1{font-size:clamp(34px,7vw,58px);line-height:1.08;margin:22px 0 14px;letter-spacing:-1.8px}
+    .rt-entry h1 span{background:linear-gradient(90deg,#3979f5,#61d5d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .rt-entry-tagline{font-size:12px;letter-spacing:3px;color:#91a5ba;text-transform:uppercase}
+    .rt-entry-copy{max-width:520px;margin:22px auto 30px;color:#a9bbce;font-size:15px;line-height:1.8}
+    .rt-entry-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+    .rt-entry-actions button{min-width:190px;padding:14px 20px;border-radius:11px;font-size:13px;font-weight:750}
+    .rt-entry-primary{border:0;background:linear-gradient(110deg,#3979f5,#61d5d0);color:#061321}
+    .rt-entry-secondary{border:1px solid rgba(133,177,207,.35);background:rgba(255,255,255,.025);color:#f1f7fc}
+    .rt-entry-foot{margin-top:24px;color:#7890a8;font-size:11px}
+    .rt-entry-status{min-height:18px;margin-top:16px;color:#91a5ba;font-size:12px}
+    @media(max-width:600px){.rt-entry{padding:14px}.rt-entry-card{border-radius:18px}.rt-entry-actions{flex-direction:column}.rt-entry-actions button{width:100%}}
     .rt-account-button{border:1px solid rgba(101,214,207,.38);background:rgba(22,139,255,.10);color:var(--text,#f4f8ff);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:650;white-space:nowrap}
     .rt-account-button:hover{border-color:#62d5d0;background:rgba(54,200,195,.12)}
     .rt-dashboard-nav{border:1px solid rgba(107,210,203,.42);background:linear-gradient(110deg,rgba(22,139,255,.16),rgba(54,200,195,.13));color:var(--text,#f4f8ff);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700;white-space:nowrap}
@@ -58,6 +74,24 @@
   topDashboardButton.setAttribute("aria-label", "Open your RETIMEA dashboard");
   topActions.prepend(accountButton);
   topActions.prepend(topDashboardButton);
+
+  const entry = document.createElement("section");
+  entry.className = "rt-entry";
+  entry.setAttribute("aria-label", "RETIMEA AI welcome");
+  entry.innerHTML = `
+    <div class="rt-entry-card">
+      <div class="rt-entry-mark">RETIMEA AI</div>
+      <h1>Intelligence <span>Beyond Limits.</span></h1>
+      <div class="rt-entry-tagline">One account. Every intelligent tool.</div>
+      <p class="rt-entry-copy">Your all-in-one workspace to think, create, research and achieve. Create your free account to explore the RETIMEA AI platform.</p>
+      <div class="rt-entry-actions">
+        <button class="rt-entry-primary" type="button" id="rtEntrySignup">Create your free account</button>
+        <button class="rt-entry-secondary" type="button" id="rtEntrySignin">Already have an account? Sign in</button>
+      </div>
+      <div class="rt-entry-status" id="rtEntryStatus" role="status" aria-live="polite">Preparing your secure workspace…</div>
+      <div class="rt-entry-foot">Free membership · Pro and Business options coming later</div>
+    </div>`;
+  document.body.appendChild(entry);
 
   const backdrop = document.createElement("div");
   backdrop.className = "rt-auth-backdrop";
@@ -136,7 +170,7 @@
     reset.hidden = mode === "signup" || !supabase;
     say(mode === "signup" ? "Use an email address you can access. Supabase may ask you to confirm it." : "Enter your email and password to continue.");
   }
-  function show() { backdrop.hidden = false; if (supabase) email.focus(); }
+  function show(nextMode = "signin") { setMode(nextMode); backdrop.hidden = false; if (supabase) email.focus(); }
   function hide() { backdrop.hidden = true; }
   function openDashboard() {
     if (!supabase) return;
@@ -149,7 +183,9 @@
   }
   function closeDashboard() { dashboard.hidden = true; }
 
-  accountButton.addEventListener("click", show);
+  entry.querySelector("#rtEntrySignup").addEventListener("click", () => show("signup"));
+  entry.querySelector("#rtEntrySignin").addEventListener("click", () => show("signin"));
+  accountButton.addEventListener("click", () => show("signin"));
   topDashboardButton.addEventListener("click", openDashboard);
   dashboardButton.addEventListener("click", openDashboard);
   dashboard.querySelector(".rt-dash-close").addEventListener("click", closeDashboard);
@@ -161,8 +197,10 @@
   document.addEventListener("keydown", event => { if (event.key === "Escape" && !dashboard.hidden) closeDashboard(); else if (event.key === "Escape" && !backdrop.hidden) hide(); });
   modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
 
-  function renderSession(session) {
+  function renderSession(session, options = {}) {
     if (session?.user) {
+      document.querySelector(".app").style.visibility = "visible";
+      entry.hidden = true;
       const label = session.user.email || "Account";
       accountButton.textContent = label.length > 22 ? label.slice(0, 19) + "…" : label;
       accountButton.title = label;
@@ -174,7 +212,10 @@
       dashboardButton.hidden = false;
       topDashboardButton.hidden = false;
       say("Signed in successfully. Account and saved-project features will be connected in upcoming stages.");
+      if (options.openDashboard) openDashboard();
     } else {
+      document.querySelector(".app").style.visibility = "hidden";
+      entry.hidden = false;
       accountButton.textContent = "Sign in";
       accountButton.title = "Sign in or create a RETIMEA account";
       backdrop.querySelector("#rtAuthTitle").textContent = "Your RETIMEA account";
@@ -210,14 +251,15 @@
       });
       const { data, error } = await supabase.auth.getSession();
       if (error) throw error;
-      renderSession(data.session);
+      renderSession(data.session, { openDashboard: Boolean(data.session?.user) });
       supabase.auth.onAuthStateChange((event, session) => {
-        renderSession(session);
+        renderSession(session, { openDashboard: event === "SIGNED_IN" && Boolean(session?.user) });
         if (event === "SIGNED_IN" && session?.user) hide();
       });
-      say("Secure account service is ready.");
+      entry.querySelector("#rtEntryStatus").textContent = "Your secure account service is ready.";
     } catch (error) {
       configError = error.message || "Account service is not available.";
+      entry.querySelector("#rtEntryStatus").textContent = "Sign-in is temporarily unavailable. Please refresh and try again.";
       say(configError + " This Preview build needs its Supabase variables configured.");
     }
   }

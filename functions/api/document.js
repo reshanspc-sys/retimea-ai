@@ -13,9 +13,9 @@ export async function onRequestPost({ request, env }) {
     }
 
     const body = await request.json();
-    const { action, text, question } = body;
+    const { action, text, question, prompt } = body;
 
-    const allowedActions = ["summarize", "ask", "keypoints", "rewrite"];
+    const allowedActions = ["create", "summarize", "ask", "keypoints", "rewrite"];
 
     if (!allowedActions.includes(action)) {
       return Response.json(
@@ -24,14 +24,14 @@ export async function onRequestPost({ request, env }) {
       );
     }
 
-    if (typeof text !== "string" || !text.trim()) {
+    if (action === "create" && (typeof prompt !== "string" || !prompt.trim())) {\n      return Response.json({ success: false, error: "Please describe the document you want to create." }, { status: 400 });\n    }\n\n    if (action === "create" && prompt.length > 5000) {\n      return Response.json({ success: false, error: "Please keep your instructions under 5,000 characters." }, { status: 413 });\n    }\n\n    if (action !== "create" && (typeof text !== "string" || !text.trim())) {
       return Response.json(
         { success: false, error: "Please upload a document with readable text." },
         { status: 400 }
       );
     }
 
-    if (text.length > 80000) {
+    if (action !== "create" && text.length > 80000) {
       return Response.json(
         {
           success: false,
@@ -103,7 +103,7 @@ export async function onRequestPost({ request, env }) {
           },
           {
             role: "user",
-            content: `${instructions[action]}\n\nDOCUMENT TEXT:\n---\n${text}\n---`
+            content: action === "create"\n              ? `${instructions[action]}\n\nUSER BRIEF:\n---\n${prompt}\n---`\n              : `${instructions[action]}\n\nDOCUMENT TEXT:\n---\n${text}\n---`
           }
         ],
         temperature: 0.3,

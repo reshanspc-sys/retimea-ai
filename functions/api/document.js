@@ -1,3 +1,4 @@
+import { checkAndRecordUsage } from "../_shared/usage.js";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "openai/gpt-oss-120b";
@@ -47,6 +48,28 @@ export async function onRequestPost({ request, env }) {
       return Response.json(
         { success: false, error: "Please enter a question about your document." },
         { status: 400 }
+      );
+    }
+
+    // Check and record daily document usage.
+    const usage = await checkAndRecordUsage(
+      request,
+      env,
+      "document"
+    );
+
+    if (!usage.allowed) {
+      return Response.json(
+        {
+          success: false,
+          error: "Daily free document processing limit reached.",
+          usage: {
+            used: usage.used,
+            limit: usage.limit,
+            remaining: 0
+          }
+        },
+        { status: 429 }
       );
     }
 
@@ -112,7 +135,12 @@ export async function onRequestPost({ request, env }) {
 
     return Response.json({
       success: true,
-      answer
+      answer,
+      usage: {
+        used: usage.used,
+        limit: usage.limit,
+        remaining: Math.max(0, usage.limit - usage.used)
+      }
     });
 
   } catch (error) {

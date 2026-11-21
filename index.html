@@ -6,10 +6,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RETIMEA AI | Intelligence for Everyone</title>
 
-<!-- Browser document readers -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  
 <style>
 :root {
   --bg:#07111f;
@@ -35,7 +36,6 @@ body {
 }
 
 button,textarea,input { font:inherit; }
-
 button { cursor:pointer; }
 
 .app {
@@ -539,9 +539,7 @@ textarea::placeholder { color:#718aa3; }
   line-height:1.6;
 }
 
-#documentFile {
-  display:none;
-}
+#documentFile { display:none; }
 
 .file-info {
   margin-top:13px;
@@ -555,7 +553,6 @@ textarea::placeholder { color:#718aa3; }
 }
 
 .file-info.visible { display:block; }
-
 .file-info strong { color:var(--cyan); }
 
 .document-question {
@@ -628,7 +625,63 @@ textarea::placeholder { color:#718aa3; }
   line-height:1.6;
   text-align:center;
 }
+/* AI VISUALIZATION CARDS */
 
+.visual-card {
+  margin-top:18px;
+  padding:18px;
+  background:#0b1b2b;
+  border:1px solid #28506d;
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.visual-title {
+  color:var(--cyan);
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.visual-description {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  margin-bottom:15px;
+}
+
+.visual-chart-wrap {
+  position:relative;
+  width:100%;
+  height:300px;
+}
+
+.visual-chart {
+  width:100%;
+  max-width:100%;
+}
+
+.visual-diagram {
+  width:100%;
+  overflow-x:auto;
+  padding:12px 0;
+  text-align:center;
+}
+
+.visual-diagram svg {
+  max-width:100%;
+  height:auto;
+}
+
+@media(max-width:700px) {
+  .visual-card {
+    padding:13px;
+  }
+
+  .visual-chart-wrap {
+    height:240px;
+  }
+}
 @media(max-width:700px) {
   .sidebar {
     width:68px;
@@ -663,11 +716,8 @@ textarea::placeholder { color:#718aa3; }
   .tool-icon { font-size:21px; }
 
   .topbar { padding:0 15px; }
-
   .chat-area { padding:15px 12px; }
-
   .message { font-size:13px; }
-
   .welcome h1 { font-size:27px; }
 
   .image-studio,
@@ -768,7 +818,6 @@ textarea::placeholder { color:#718aa3; }
 
     <main class="chat-area">
 
-      <!-- CHAT -->
       <div class="messages" id="messages">
         <div class="welcome" id="welcome">
           <div class="welcome-logo">R</div>
@@ -980,8 +1029,12 @@ function showWelcome() {
     </div>`;
 }
 
-/* DISPLAY CHAT MESSAGE */
-function addMessage(role, content) {
+
+/* DISPLAY CHAT MESSAGE AND AI VISUALS */
+
+let visualCounter = 0;
+
+function addMessage(role, content, visuals = []) {
   const item = document.createElement("div");
   item.className = "message " + role;
 
@@ -994,9 +1047,141 @@ function addMessage(role, content) {
 
   item.appendChild(label);
   item.appendChild(body);
+
+  if (role === "assistant" && Array.isArray(visuals)) {
+    visuals.slice(0, 5).forEach(visual => {
+      if (!visual || typeof visual !== "object") return;
+
+      const card = document.createElement("div");
+      card.className = "visual-card";
+
+      const title = document.createElement("div");
+      title.className = "visual-title";
+      title.textContent = String(visual.title || "AI Visualization").slice(0, 150);
+      card.appendChild(title);
+
+      if (visual.description) {
+        const description = document.createElement("div");
+        description.className = "visual-description";
+        description.textContent = String(visual.description).slice(0, 500);
+        card.appendChild(description);
+      }
+
+      if (
+        ["bar", "line", "pie", "doughnut"].includes(visual.type) &&
+        window.Chart &&
+        visual.data &&
+        Array.isArray(visual.data.labels) &&
+        Array.isArray(visual.data.datasets)
+      ) {
+        const labels = visual.data.labels.slice(0, 50);
+        const datasets = visual.data.datasets.slice(0, 5);
+
+        const validDatasets = datasets.every(dataset =>
+          dataset &&
+          Array.isArray(dataset.data) &&
+          dataset.data.length === labels.length &&
+          dataset.data.every(value =>
+            typeof value === "number" && Number.isFinite(value)
+          )
+        );
+
+        if (validDatasets && labels.length > 0 && datasets.length > 0) {
+          const chartWrap = document.createElement("div");
+          chartWrap.className = "visual-chart-wrap";
+
+          const canvas = document.createElement("canvas");
+          canvas.className = "visual-chart";
+          canvas.setAttribute("role", "img");
+          canvas.setAttribute("aria-label", title.textContent + " chart");
+
+          chartWrap.appendChild(canvas);
+          card.appendChild(chartWrap);
+
+          const chartData = {
+            labels,
+            datasets: datasets.map(dataset => ({
+              label: String(dataset.label || "Data").slice(0, 100),
+              data: dataset.data,
+              borderWidth: 2,
+              tension: 0.3
+            }))
+          };
+
+          try {
+            new Chart(canvas, {
+              type: visual.type,
+              data: chartData,
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    labels: { color: "#edf6ff" }
+                  }
+                },
+                scales: ["pie", "doughnut"].includes(visual.type)
+                  ? {}
+                  : {
+                      x: {
+                        ticks: { color: "#8da5bd" },
+                        grid: { color: "#203a54" }
+                      },
+                      y: {
+                        ticks: { color: "#8da5bd" },
+                        grid: { color: "#203a54" }
+                      }
+                    }
+              }
+            });
+          } catch (error) {
+            console.error("Chart rendering error:", error);
+            chartWrap.textContent = "This chart could not be displayed.";
+          }
+        }
+      }
+
+      else if (
+        visual.type === "mermaid" &&
+        typeof visual.code === "string" &&
+        visual.code.length > 0 &&
+        visual.code.length <= 5000 &&
+        window.mermaid
+      ) {
+        const diagram = document.createElement("div");
+        diagram.className = "visual-diagram";
+        diagram.textContent = "Rendering diagram...";
+        card.appendChild(diagram);
+
+        const diagramId = "retimea-diagram-" + (++visualCounter);
+
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "strict",
+          theme: "dark"
+        });
+
+        mermaid.render(diagramId, visual.code)
+          .then(result => {
+            diagram.innerHTML = result.svg;
+            messages.scrollTop = messages.scrollHeight;
+          })
+          .catch(error => {
+            console.error("Diagram rendering error:", error);
+            diagram.textContent = "This diagram could not be displayed.";
+          });
+      }
+
+      if (card.children.length > 1) {
+        item.appendChild(card);
+      }
+    });
+  }
+
   messages.appendChild(item);
   messages.scrollTop = messages.scrollHeight;
 }
+
 
 /* RESET DOCUMENT STUDIO */
 function resetDocumentStudio() {
@@ -1073,7 +1258,7 @@ document.getElementById("newChat").addEventListener("click", () => {
   promptBox.focus();
 });
 
-/* CHAT API */
+/* CHAT API — CORRECTED */
 document.getElementById("chatForm").addEventListener(
   "submit",
   async event => {
@@ -1086,7 +1271,7 @@ document.getElementById("chatForm").addEventListener(
     if (welcome) welcome.remove();
 
     addMessage("user", text);
-    history.push({ role:"user", content:text });
+    history.push({ role: "user", content: text });
 
     promptBox.value = "";
     sendButton.disabled = true;
@@ -1094,22 +1279,29 @@ document.getElementById("chatForm").addEventListener(
 
     try {
       const response = await fetch("/api/chat", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body:JSON.stringify({
-          tool:selectedTool,
-          messages:history
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tool: selectedTool,
+          messages: history.slice(-10).map(message => ({
+            role: message.role,
+            content: message.content.slice(0, 4000)
+          }))
         })
       });
 
       const data = await response.json();
+      console.log("RETIMEA API RESPONSE:", data);
+
       if (!response.ok) {
         throw new Error(data.error || "Request failed");
       }
 
       const reply = data.reply || "I couldn't generate a response.";
-      addMessage("assistant", reply);
-      history.push({ role:"assistant", content:reply });
+
+      addMessage("assistant", reply, data.visuals || []);
+      history.push({ role: "assistant", content: reply });
+
       statusBox.textContent = "Response received";
 
     } catch (error) {
@@ -1118,11 +1310,12 @@ document.getElementById("chatForm").addEventListener(
 
       addMessage(
         "assistant",
-        "Sorry, something went wrong. Please try again."
+        "Request failed: " +
+        (error.message || "Unknown error. Please try again.")
       );
 
       statusBox.textContent =
-        "Connection error. Please check your deployment.";
+        "Error: " + (error.message || "Please try again.");
 
     } finally {
       sendButton.disabled = false;
@@ -1149,9 +1342,9 @@ generateImageButton.addEventListener("click", async () => {
 
   try {
     const response = await fetch("/api/image", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({ prompt })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
     });
 
     const data = await response.json();
@@ -1233,7 +1426,6 @@ documentFile.addEventListener("change", async () => {
 
   resetDocumentStudio();
 
-  // Restore selected file after clearing the previous document state.
   documentFile.files = (() => {
     const transfer = new DataTransfer();
     transfer.items.add(file);
@@ -1329,11 +1521,11 @@ async function processDocument(action) {
 
   try {
     const response = await fetch("/api/document", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         action,
-        text:extractedDocumentText,
+        text: extractedDocumentText,
         question
       })
     });
@@ -1349,7 +1541,7 @@ async function processDocument(action) {
 
     const resultBlob = new Blob(
       [data.answer || ""],
-      { type:"text/plain;charset=utf-8" }
+      { type: "text/plain;charset=utf-8" }
     );
 
     const downloadUrl = URL.createObjectURL(resultBlob);

@@ -1,4 +1,6 @@
 
+import { checkAndRecordUsage } from "../_shared/usage.js";
+
 const TOOL_INSTRUCTIONS = {
   assistant:
     "You are RETIMEA AI, a helpful general-purpose assistant. Answer clearly and accurately.",
@@ -66,6 +68,27 @@ export async function onRequestPost(context) {
       );
     }
 
+    // Check and record the daily usage limit.
+    const usage = await checkAndRecordUsage(
+      context.request,
+      context.env,
+      tool
+    );
+
+    if (!usage.allowed) {
+      return Response.json(
+        {
+          error: "Daily free usage limit reached.",
+          usage: {
+            used: usage.used,
+            limit: usage.limit,
+            remaining: 0
+          }
+        },
+        { status: 429 }
+      );
+    }
+
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -107,7 +130,14 @@ export async function onRequestPost(context) {
       );
     }
 
-    return Response.json({ reply });
+    return Response.json({
+      reply,
+      usage: {
+        used: usage.used,
+        limit: usage.limit,
+        remaining: Math.max(0, usage.limit - usage.used)
+      }
+    });
 
   } catch (error) {
     console.error("RETIMEA chat error:", error);

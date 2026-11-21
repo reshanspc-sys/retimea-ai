@@ -2331,6 +2331,9 @@ let marketChartInstance = null;
 let selectedMarketSymbol = "XAU/USD";
 let marketRefreshTimer = null;
 let marketRequestBusy = false;
+const MARKET_CACHE_TTL = 5 * 60 * 1000;
+let marketQuotesCache = { timestamp: 0, data: null };
+const marketChartCache = new Map();
 
 function marketFormatPrice(value) {
   const number = Number(value);
@@ -2393,8 +2396,13 @@ function renderMarketCards(quotes) {
   });
 }
 
-async function loadMarketQuotes() {
+async function loadMarketQuotes(force = false) {
   if (marketRequestBusy) return;
+  if (!force && marketQuotesCache.data && Date.now() - marketQuotesCache.timestamp < MARKET_CACHE_TTL) {
+    renderMarketCards(marketQuotesCache.data);
+    document.getElementById("marketUpdated").textContent = "Cached · " + new Date(marketQuotesCache.timestamp).toLocaleTimeString();
+    return;
+  }
   marketRequestBusy = true;
   const grid = document.getElementById("marketGrid");
   const updated = document.getElementById("marketUpdated");
@@ -2407,10 +2415,9 @@ async function loadMarketQuotes() {
       if (data && data.symbol) quotes[data.symbol] = data;
       else if (data && typeof data === "object") Object.assign(quotes, data);
     }
+    marketQuotesCache = { timestamp: Date.now(), data: quotes };
     renderMarketCards(quotes);
     updated.textContent = "Updated " + new Date().toLocaleTimeString();
-    const selected = MARKET_INSTRUMENTS.find(item => item.symbol === selectedMarketSymbol) || MARKET_INSTRUMENTS[0];
-    await loadMarketChart(selected);
   } catch (error) {
     grid.innerHTML = "";
     const message = document.createElement("div");
@@ -2424,6 +2431,12 @@ async function loadMarketQuotes() {
 }
 
 async function loadMarketChart(instrument) {
+  const cacheKey = instrument.symbol + "|" + document.getElementById("marketInterval").value;
+  const cached = marketChartCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < MARKET_CACHE_TTL) {
+    renderMarketChart(instrument, cached.values);
+    return;
+  }
   const title = document.getElementById("marketChartTitle");
   const subtitle = document.getElementById("marketChartSubtitle");
   const status = document.getElementById("marketChartStatus");
@@ -2437,7 +2450,23 @@ async function loadMarketChart(instrument) {
     });
     const values = Array.isArray(data.values) ? data.values.slice().reverse() : [];
     if (!values.length) throw new Error("No chart history is available for this instrument.");
-    if (!window.Chart) throw new Error("Chart library could not be loaded.");
+    marketChartCache.set(cacheKey, { timestamp: Date.now(), values });
+    renderMarketChart(instrument, values);
+  } catch (error) {
+    status.textContent = error.message + " Data coverage depends on your provider plan.";
+  }
+}
+
+
+function renderMarketChart(instrument, values) {
+  const title = document.getElementById("marketChartTitle");
+  const subtitle = document.getElementById("marketChartSubtitle");
+  const status = document.getElementById("marketChartStatus");
+  const interval = document.getElementById("marketInterval").value;
+  title.textContent = instrument.name + " price history";
+  subtitle.textContent = instrument.symbol + " · " + interval + " interval";
+  status.textContent = "Loading chart history...";
+  if (!window.Chart) throw new Error("Chart library could not be loaded.");
     const labels = values.map(item => item.datetime);
     const prices = values.map(item => Number(item.close));
     const canvas = document.getElementById("marketChart");
@@ -2466,12 +2495,9 @@ async function loadMarketChart(instrument) {
       }
     });
     status.textContent = "Showing " + values.length + " historical data points. Latest point: " + values[values.length - 1].datetime;
-  } catch (error) {
-    status.textContent = error.message + " Data coverage depends on your provider plan.";
-  }
 }
 
-document.getElementById("marketRefresh").addEventListener("click", loadMarketQuotes);
+document.getElementById("marketRefresh").addEventListener("click", () => loadMarketQuotes(true));
 document.getElementById("marketInterval").addEventListener("change", () => {
   const instrument = MARKET_INSTRUMENTS.find(item => item.symbol === selectedMarketSymbol);
   if (instrument) loadMarketChart(instrument);
@@ -2479,8 +2505,8 @@ document.getElementById("marketInterval").addEventListener("change", () => {
 document.querySelector('[data-tool="markets"]').addEventListener("click", () => {
   if (marketRefreshTimer) clearInterval(marketRefreshTimer);
   marketRefreshTimer = setInterval(() => {
-    if (selectedTool === "markets") loadMarketQuotes();
-  }, 60000);
+    if (selectedTool === "markets") loadMarketQuotes(false);
+  }, 300000);
 });
 
 /* ENTER KEY FOR CHAT */

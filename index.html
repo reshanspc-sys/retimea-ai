@@ -773,6 +773,39 @@ body[data-theme="light"] .document-action.secondary{color:#29435f;background:#ee
 body[data-theme="light"] .visual-description,body[data-theme="light"] .disclaimer,body[data-theme="light"] .composer-hint{color:#64748b}
 @media(max-width:700px){.sidebar{width:72px;padding:15px 8px}.topbar{padding:0 14px;height:66px}.topbar-actions{gap:10px}.online{font-size:9px}.chat-area{padding:16px 12px}}
 
+
+/* CLEAN DOCUMENT UPLOAD: remove redundant nested card treatments */
+.document-panel.upload-panel {
+  max-width:760px;
+  padding:0;
+  margin:0 auto 22px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+}
+.document-panel.upload-panel .document-label {
+  margin:0 0 12px 2px;
+}
+.document-panel.upload-panel .upload-area {
+  display:block;
+  border:1px dashed rgba(125,157,193,.35);
+  border-radius:14px;
+  padding:30px 18px;
+  background:rgba(120,150,185,.045);
+}
+.document-panel.upload-panel .file-info {
+  display:none;
+  padding:9px 2px 0;
+  margin-top:8px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+}
+.document-panel.upload-panel .file-info.visible { display:block; }
+.document-panel.upload-panel .file-info strong { color:var(--cyan); }
+
 </style>
 </head>
 
@@ -907,7 +940,7 @@ body[data-theme="light"] .visual-description,body[data-theme="light"] .disclaime
           <p>Upload a document and let RETIMEA AI help you understand it.</p>
         </div>
 
-        <div class="document-panel">
+        <div class="document-panel upload-panel">
           <label class="document-label">Upload your document</label>
 
           <label class="upload-area" for="documentFile">

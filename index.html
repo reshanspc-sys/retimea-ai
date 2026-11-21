@@ -1388,6 +1388,23 @@ input {
 
 /* Keep the large homepage banner/dashboard off every non-home page. */
 .home-dashboard[hidden]{display:none !important;}
+
+/* RETIMEA signature atmosphere — visually paired with the welcome screen.
+   Keep the approved homepage banner artwork and all workspace panels intact. */
+body {
+  background:
+    linear-gradient(rgba(3,12,25,.72),rgba(3,12,25,.78)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop stop-color='%230d8cff' stop-opacity='.42'/%3E%3Cstop offset='1' stop-color='%23020b1c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='1600' height='900' fill='%23051124'/%3E%3Ccircle cx='1180' cy='370' r='520' fill='url(%23g)'/%3E%3Ccircle cx='1180' cy='370' r='270' fill='none' stroke='%2300d8ff' stroke-opacity='.25' stroke-width='2'/%3E%3Ccircle cx='1180' cy='370' r='340' fill='none' stroke='%2300d8ff' stroke-opacity='.13' stroke-width='1'/%3E%3Cpath d='M0 690 Q400 570 800 710 T1600 640 V900 H0Z' fill='%230b2948' fill-opacity='.6'/%3E%3Cg fill='%23a9eaff' opacity='.8'%3E%3Ccircle cx='180' cy='120' r='2'/%3E%3Ccircle cx='380' cy='260' r='2'/%3E%3Ccircle cx='700' cy='100' r='1.5'/%3E%3Ccircle cx='980' cy='180' r='2'/%3E%3Ccircle cx='1430' cy='130' r='2'/%3E%3Ccircle cx='1320' cy='700' r='2'/%3E%3Ccircle cx='550' cy='760' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover fixed no-repeat,
+    #061326 !important;
+}
+.app { background:transparent !important; }
+.main { background:rgba(5,16,31,.16) !important; }
+.chat-area,.image-studio,.document-studio,.home-dashboard { background:transparent !important; }
+.sidebar { background:rgba(5,16,31,.94) !important;border-right-color:rgba(54,143,199,.25) !important; }
+.topbar { background:rgba(5,15,29,.88) !important;border-bottom-color:rgba(54,143,199,.24) !important;backdrop-filter:blur(18px); }
+.home-hero,.home-tool-card,.home-info-card,.image-panel,.document-panel,.document-result,.visual-card { box-shadow:0 14px 42px rgba(0,0,0,.20); }
+body[data-theme="light"] { background:linear-gradient(rgba(232,241,250,.84),rgba(232,241,250,.88)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop stop-color='%230d8cff' stop-opacity='.42'/%3E%3Cstop offset='1' stop-color='%23020b1c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='1600' height='900' fill='%23051124'/%3E%3Ccircle cx='1180' cy='370' r='520' fill='url(%23g)'/%3E%3Ccircle cx='1180' cy='370' r='270' fill='none' stroke='%2300d8ff' stroke-opacity='.25' stroke-width='2'/%3E%3Ccircle cx='1180' cy='370' r='340' fill='none' stroke='%2300d8ff' stroke-opacity='.13' stroke-width='1'/%3E%3Cpath d='M0 690 Q400 570 800 710 T1600 640 V900 H0Z' fill='%230b2948' fill-opacity='.6'/%3E%3Cg fill='%23a9eaff' opacity='.8'%3E%3Ccircle cx='180' cy='120' r='2'/%3E%3Ccircle cx='380' cy='260' r='2'/%3E%3Ccircle cx='700' cy='100' r='1.5'/%3E%3Ccircle cx='980' cy='180' r='2'/%3E%3Ccircle cx='1430' cy='130' r='2'/%3E%3Ccircle cx='1320' cy='700' r='2'/%3E%3Ccircle cx='550' cy='760' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover fixed no-repeat,#eef4fa !important; }
+body[data-theme="light"] .sidebar,body[data-theme="light"] .topbar { background:rgba(248,251,254,.94) !important; }
 </style>
 </head>
 

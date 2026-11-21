@@ -12,6 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script src="/assets/visualization-engine.js"></script>
   
 <style>
 :root {
@@ -897,8 +898,7 @@ body[data-theme="light"]{
 /* Original sidebar ribbon remains visible; top-right artwork is handled separately. */
 .topbar-brand{display:none!important;background-image:none!important}
 .topbar-actions{gap:12px}
-.send,.image-generate,.document-action,.home-primary{background:linear-gradient(110deg,#258cff 0%,#3979f5 48%,#48d5d2 100%)}
-.tool-icon,.visual-title,.document-result h3{color:#63d5cf}
+.send,.image-generate,.document-action,.home-primary{background:linear-gradient(110deg,#258cff 0%,#3979f5 48%,#48d5d2 100%)}.tool-icon,.visual-title,.document-result h3{color:#63d5cf}
 .home-hero{border-color:rgba(72,213,210,.28)}
 @media(max-width:700px){.topbar-actions{gap:8px}}
 
@@ -1797,7 +1797,6 @@ let visualCounter = 0;
 function addMessage(role, content, visuals = []) {
   const item = document.createElement("div");
   item.className = "message " + role;
-
   const label = document.createElement("div");
   label.className = "message-label";
   label.textContent = role === "user" ? "YOU" : "RETIMEA AI";
@@ -1808,134 +1807,8 @@ function addMessage(role, content, visuals = []) {
   item.appendChild(label);
   item.appendChild(body);
 
-  if (role === "assistant" && Array.isArray(visuals)) {
-    visuals.slice(0, 5).forEach(visual => {
-      if (!visual || typeof visual !== "object") return;
-
-      const card = document.createElement("div");
-      card.className = "visual-card";
-
-      const title = document.createElement("div");
-      title.className = "visual-title";
-      title.textContent = String(visual.title || "AI Visualization").slice(0, 150);
-      card.appendChild(title);
-
-      if (visual.description) {
-        const description = document.createElement("div");
-        description.className = "visual-description";
-        description.textContent = String(visual.description).slice(0, 500);
-        card.appendChild(description);
-      }
-
-      if (
-        ["bar", "line", "pie", "doughnut"].includes(visual.type) &&
-        window.Chart &&
-        visual.data &&
-        Array.isArray(visual.data.labels) &&
-        Array.isArray(visual.data.datasets)
-      ) {
-        const labels = visual.data.labels.slice(0, 50);
-        const datasets = visual.data.datasets.slice(0, 5);
-
-        const validDatasets = datasets.every(dataset =>
-          dataset &&
-          Array.isArray(dataset.data) &&
-          dataset.data.length === labels.length &&
-          dataset.data.every(value =>
-            typeof value === "number" && Number.isFinite(value)
-          )
-        );
-
-        if (validDatasets && labels.length > 0 && datasets.length > 0) {
-          const chartWrap = document.createElement("div");
-          chartWrap.className = "visual-chart-wrap";
-
-          const canvas = document.createElement("canvas");
-          canvas.className = "visual-chart";
-          canvas.setAttribute("role", "img");
-          canvas.setAttribute("aria-label", title.textContent + " chart");
-
-          chartWrap.appendChild(canvas);
-          card.appendChild(chartWrap);
-
-          const chartData = {
-            labels,
-            datasets: datasets.map(dataset => ({
-              label: String(dataset.label || "Data").slice(0, 100),
-              data: dataset.data,
-              borderWidth: 2,
-              tension: 0.3
-            }))
-          };
-
-          try {
-            new Chart(canvas, {
-              type: visual.type,
-              data: chartData,
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    labels: { color: "#edf6ff" }
-                  }
-                },
-                scales: ["pie", "doughnut"].includes(visual.type)
-                  ? {}
-                  : {
-                      x: {
-                        ticks: { color: "#8da5bd" },
-                        grid: { color: "#203a54" }
-                      },
-                      y: {
-                        ticks: { color: "#8da5bd" },
-                        grid: { color: "#203a54" }
-                      }
-                    }
-              }
-            });
-          } catch (error) {
-            console.error("Chart rendering error:", error);
-            chartWrap.textContent = "This chart could not be displayed.";
-          }
-        }
-      }
-
-      else if (
-        visual.type === "mermaid" &&
-        typeof visual.code === "string" &&
-        visual.code.length > 0 &&
-        visual.code.length <= 5000 &&
-        window.mermaid
-      ) {
-        const diagram = document.createElement("div");
-        diagram.className = "visual-diagram";
-        diagram.textContent = "Rendering diagram...";
-        card.appendChild(diagram);
-
-        const diagramId = "retimea-diagram-" + (++visualCounter);
-
-        mermaid.initialize({
-          startOnLoad: false,
-          securityLevel: "strict",
-          theme: "dark"
-        });
-
-        mermaid.render(diagramId, visual.code)
-          .then(result => {
-            diagram.innerHTML = result.svg;
-            messages.scrollTop = messages.scrollHeight;
-          })
-          .catch(error => {
-            console.error("Diagram rendering error:", error);
-            diagram.textContent = "This diagram could not be displayed.";
-          });
-      }
-
-      if (card.children.length > 1) {
-        item.appendChild(card);
-      }
-    });
+  if (role === "assistant" && Array.isArray(visuals) && window.RetimeaVisualization) {
+    window.RetimeaVisualization.render(item, visuals, { limit: 5 });
   }
 
   messages.appendChild(item);

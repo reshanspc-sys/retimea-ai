@@ -1894,15 +1894,13 @@ promptBox.addEventListener("keydown", event => {
 </body>
 </html>
 
-/* Restore the original ribbon mark on both sides; remove the cropped banner logo. */
+/* Matching ribbon artwork in sidebar and top-right header. */
 .sidebar > .brand{display:flex!important;visibility:visible!important;opacity:1!important}
-.topbar-brand{display:none}
-.topbar-ribbon{display:block;flex:0 0 43px;width:43px;height:43px;margin-right:0}
+.topbar-brand{display:none!important}
+.topbar-actions{display:flex!important;align-items:center;justify-content:flex-end;gap:12px}
+.topbar-ribbon{display:block!important;visibility:visible!important;opacity:1!important;flex:0 0 43px;width:43px;height:43px}
 .topbar-ribbon svg{display:block;width:100%;height:100%;overflow:visible}
-.topbar-actions{gap:12px}
 @media(max-width:700px){.topbar-ribbon{flex-basis:38px;width:38px;height:38px}}
 @media(max-width:390px){.topbar-ribbon{flex-basis:34px;width:34px;height:34px}}
 
-/* Keep matching ribbon artwork visible at the right end of the top bar. */
-.topbar-actions{display:flex!important;align-items:center;justify-content:flex-end}
-.topbar-ribbon{display:block!important;visibility:visible!important;opacity:1!important;flex:0 0 43px;width:43px;height:43px}
+</style>

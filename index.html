@@ -1388,6 +1388,38 @@ input {
 
 /* Keep the large homepage banner/dashboard off every non-home page. */
 .home-dashboard[hidden]{display:none !important;}
+ 
+/* LIVE MARKETS */
+.market-dashboard{flex:1;min-height:0;overflow-y:auto;padding:30px 34px 40px;max-width:1120px;width:100%;margin:0 auto}
+.market-dashboard[hidden]{display:none!important}
+.market-heading{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:8px 0 18px}
+.market-heading h1{font-size:clamp(27px,4vw,36px);letter-spacing:-1px;margin:8px 0}
+.market-heading p,.market-chart-head p{color:var(--muted);font-size:12px;line-height:1.6;margin:0}
+.market-refresh{border:1px solid var(--border);background:rgba(120,150,185,.1);color:var(--text);padding:10px 15px;border-radius:10px;font-weight:700}
+.market-toolbar{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:11px;margin:0 0 15px}
+.market-live-dot{width:7px;height:7px;border-radius:50%;background:#48d6a0;box-shadow:0 0 0 4px rgba(72,214,160,.1)}
+.market-auto{margin-left:auto}
+.market-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.market-card{border:1px solid var(--border);background:rgba(13,28,45,.82);border-radius:14px;padding:15px;min-width:0;text-align:left;color:var(--text);cursor:pointer;transition:.18s}
+.market-card:hover,.market-card.selected{border-color:rgba(97,213,208,.7);transform:translateY(-1px)}
+.market-card-name{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.market-card-symbol{font-size:10px;color:#78d5cf;margin-top:4px}
+.market-card-price{font-size:20px;font-weight:750;letter-spacing:-.5px;margin:14px 0 5px;overflow-wrap:anywhere}
+.market-card-change{font-size:11px;color:var(--muted)}
+.market-card-change.positive{color:#51d6a4}.market-card-change.negative{color:#ff8585}
+.market-card-error{font-size:11px;color:var(--muted);margin-top:12px}
+.market-chart-panel{margin-top:18px;padding:19px;border:1px solid var(--border);border-radius:16px;background:rgba(13,28,45,.78)}
+.market-chart-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px}
+.market-chart-head h2{font-size:15px;margin:0 0 5px}
+.market-chart-head select{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:9px;padding:9px}
+.market-chart-wrap{height:300px;position:relative}
+.market-chart-status{font-size:11px;color:var(--muted);margin-top:10px;min-height:16px}
+.market-loading{grid-column:1/-1;padding:30px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:14px;font-size:12px}
+.market-disclaimer{font-size:10px;line-height:1.6;color:var(--muted);margin:14px 2px}
+body[data-theme="light"] .market-card,body[data-theme="light"] .market-chart-panel{background:#fff}
+@media(max-width:900px){.market-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.market-dashboard{padding:22px 18px}}
+@media(max-width:480px){.market-grid{grid-template-columns:1fr 1fr;gap:8px}.market-card{padding:11px}.market-card-price{font-size:16px}.market-chart-wrap{height:230px}.market-heading{align-items:flex-start}.market-auto{display:none}}
+
 </style>
 </head>
 
@@ -1463,6 +1495,10 @@ input {
         <span class="tool-icon">▤</span>
         <span class="tool-name">Document Studio</span>
       </button>
+      <button class="tool" data-tool="markets">
+        <span class="tool-icon">▥</span>
+        <span class="tool-name">Live Markets</span>
+      </button>
     </nav>
 
     <div class="sidebar-bottom">
@@ -1528,6 +1564,25 @@ input {
           <div class="home-info-card"><h3>Workforce Network</h3><p>A future RETIMEA service workspace for client projects and skilled workers. Project submission, matching and delivery workflows are not active yet.</p><div class="home-status-line"><span class="home-status-pill">Coming soon</span><span>Early-stage product area</span></div></div>
           <div class="home-info-card"><h3>Built for focused work</h3><p>Move between AI tools without losing sight of the task. Your existing tools remain available from the navigation.</p><div class="home-status-line"><span class="home-status-pill">8 tools</span><span>One connected workspace</span></div></div>
         </div>
+      </section>
+
+      <section class="market-dashboard" id="marketDashboard" hidden>
+        <div class="market-heading">
+          <div><div class="home-eyebrow">GLOBAL MARKET MONITOR</div><h1>Live Markets</h1><p>Quotes and chart history from the connected market-data provider. Prices may be delayed according to your data plan.</p></div>
+          <button class="market-refresh" id="marketRefresh" type="button">↻ Refresh</button>
+        </div>
+        <div class="market-toolbar"><span class="market-live-dot"></span><span id="marketUpdated">Waiting for market data</span><span class="market-auto">Auto-refresh every 60 seconds</span></div>
+        <div class="market-grid" id="marketGrid">
+          <div class="market-loading">Market quotes will appear here when the provider connection is available.</div>
+        </div>
+        <div class="market-chart-panel">
+          <div class="market-chart-head"><div><h2 id="marketChartTitle">Market price history</h2><p id="marketChartSubtitle">Select an instrument above to view its recent price history.</p></div>
+            <select id="marketInterval" aria-label="Chart interval"><option value="1day">1 day</option><option value="1h">1 hour</option><option value="15min">15 minutes</option><option value="1week">1 week</option></select>
+          </div>
+          <div class="market-chart-wrap"><canvas id="marketChart" aria-label="Selected market price chart"></canvas></div>
+          <div class="market-chart-status" id="marketChartStatus">Choose an instrument to load its chart.</div>
+        </div>
+        <p class="market-disclaimer">Market information is provided for research and education only, may be delayed or incomplete, and is not investment advice. Data availability depends on your provider subscription and exchange permissions.</p>
       </section>
 
       <div class="messages" id="messages">
@@ -1740,7 +1795,8 @@ const descriptions = {
   translator:"Translate between languages",
   business:"Plan and grow your business",
   image:"Create stunning AI-generated images",
-  document:"Upload, analyze and understand documents"
+  document:"Upload, analyze and understand documents",
+  markets:"Monitor global stocks, currencies, commodities and crypto"
 };
 
 let selectedTool = "home";
@@ -1756,6 +1812,7 @@ const sendButton = document.getElementById("sendButton");
 
 const messagesArea = document.getElementById("messages");
 const homeDashboard = document.getElementById("homeDashboard");
+const marketDashboard = document.getElementById("marketDashboard");
 const composerWrap = document.getElementById("composerWrap");
 const imageStudio = document.getElementById("imageStudio");
 const documentStudio = document.getElementById("documentStudio");
@@ -1845,9 +1902,11 @@ function activateTool(selected) {
   const isHome = selected === "home";
   const isImageTool = selected === "image";
   const isDocumentTool = selected === "document";
+  const isMarketsTool = selected === "markets";
   homeDashboard.hidden = !isHome;
-  messagesArea.hidden = isHome || isImageTool || isDocumentTool;
-  composerWrap.hidden = isHome || isImageTool || isDocumentTool;
+  marketDashboard.hidden = !isMarketsTool;
+  messagesArea.hidden = isHome || isImageTool || isDocumentTool || isMarketsTool;
+  composerWrap.hidden = isHome || isImageTool || isDocumentTool || isMarketsTool;
   imageStudio.hidden = !isImageTool;
   documentStudio.hidden = !isDocumentTool;
   if (isHome) {
@@ -1859,6 +1918,9 @@ function activateTool(selected) {
     documentStatus.textContent = extractedDocumentText
       ? "Document ready: " + selectedDocumentName
       : "Please upload a document to get started.";
+  } else if (isMarketsTool) {
+    loadMarketQuotes();
+    marketChartStatus.textContent = "Select an instrument to load its chart.";
   } else {
     showWelcome();
     statusBox.textContent = "Ready";
@@ -2248,6 +2310,177 @@ document.querySelectorAll(".document-action").forEach(button => {
   button.addEventListener("click", () => {
     processDocument(button.dataset.action);
   });
+});
+
+
+/* LIVE MARKET DATA */
+const MARKET_INSTRUMENTS = [
+  { symbol:"SPX", name:"S&P 500", group:"Indices" },
+  { symbol:"IXIC", name:"NASDAQ Composite", group:"Indices" },
+  { symbol:"DJI", name:"Dow Jones", group:"Indices" },
+  { symbol:"EUR/USD", name:"EUR / USD", group:"Forex" },
+  { symbol:"GBP/USD", name:"GBP / USD", group:"Forex" },
+  { symbol:"USD/JPY", name:"USD / JPY", group:"Forex" },
+  { symbol:"XAU/USD", name:"Gold", group:"Commodities" },
+  { symbol:"XAG/USD", name:"Silver", group:"Commodities" },
+  { symbol:"WTI", name:"WTI Crude Oil", group:"Commodities" },
+  { symbol:"BTC/USD", name:"Bitcoin", group:"Crypto" },
+  { symbol:"ETH/USD", name:"Ethereum", group:"Crypto" }
+];
+let marketChartInstance = null;
+let selectedMarketSymbol = "XAU/USD";
+let marketRefreshTimer = null;
+let marketRequestBusy = false;
+
+function marketFormatPrice(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  return number.toLocaleString(undefined, { maximumFractionDigits: number >= 100 ? 2 : 5 });
+}
+
+async function fetchMarketData(params) {
+  const response = await fetch("/api/markets?" + new URLSearchParams(params));
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || "Market data request failed.");
+  }
+  return result.data;
+}
+
+function extractQuote(payload, symbol) {
+  if (payload && payload.symbol) return payload;
+  if (payload && payload[symbol]) return payload[symbol];
+  return null;
+}
+
+function renderMarketCards(quotes) {
+  const grid = document.getElementById("marketGrid");
+  grid.innerHTML = "";
+  MARKET_INSTRUMENTS.forEach(instrument => {
+    const quote = quotes[instrument.symbol];
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "market-card" + (selectedMarketSymbol === instrument.symbol ? " selected" : "");
+    card.dataset.symbol = instrument.symbol;
+    const name = document.createElement("div");
+    name.className = "market-card-name";
+    name.textContent = instrument.name + " · " + instrument.group;
+    const symbol = document.createElement("div");
+    symbol.className = "market-card-symbol";
+    symbol.textContent = instrument.symbol;
+    card.append(name, symbol);
+    if (quote && quote.close !== undefined) {
+      const price = document.createElement("div");
+      price.className = "market-card-price";
+      price.textContent = marketFormatPrice(quote.close);
+      const change = document.createElement("div");
+      const pct = Number(quote.percent_change);
+      change.className = "market-card-change " + (Number.isFinite(pct) && pct > 0 ? "positive" : Number.isFinite(pct) && pct < 0 ? "negative" : "");
+      change.textContent = Number.isFinite(pct) ? (pct > 0 ? "+" : "") + pct.toFixed(2) + "% today" : "Latest available quote";
+      card.append(price, change);
+    } else {
+      const error = document.createElement("div");
+      error.className = "market-card-error";
+      error.textContent = "Quote unavailable on current data plan";
+      card.append(error);
+    }
+    card.addEventListener("click", () => {
+      selectedMarketSymbol = instrument.symbol;
+      document.querySelectorAll(".market-card").forEach(el => el.classList.toggle("selected", el.dataset.symbol === selectedMarketSymbol));
+      loadMarketChart(instrument);
+    });
+    grid.appendChild(card);
+  });
+}
+
+async function loadMarketQuotes() {
+  if (marketRequestBusy) return;
+  marketRequestBusy = true;
+  const grid = document.getElementById("marketGrid");
+  const updated = document.getElementById("marketUpdated");
+  try {
+    const quotes = {};
+    const symbols = MARKET_INSTRUMENTS.map(item => item.symbol);
+    for (let i = 0; i < symbols.length; i += 8) {
+      const chunk = symbols.slice(i, i + 8);
+      const data = await fetchMarketData({ action:"quote", symbol:chunk.join(",") });
+      if (data && data.symbol) quotes[data.symbol] = data;
+      else if (data && typeof data === "object") Object.assign(quotes, data);
+    }
+    renderMarketCards(quotes);
+    updated.textContent = "Updated " + new Date().toLocaleTimeString();
+    const selected = MARKET_INSTRUMENTS.find(item => item.symbol === selectedMarketSymbol) || MARKET_INSTRUMENTS[0];
+    await loadMarketChart(selected);
+  } catch (error) {
+    grid.innerHTML = "";
+    const message = document.createElement("div");
+    message.className = "market-loading";
+    message.textContent = error.message + " Check that the Twelve Data secret is set in the Cloudflare Preview environment and that your plan supports these symbols.";
+    grid.appendChild(message);
+    updated.textContent = "Market data unavailable";
+  } finally {
+    marketRequestBusy = false;
+  }
+}
+
+async function loadMarketChart(instrument) {
+  const title = document.getElementById("marketChartTitle");
+  const subtitle = document.getElementById("marketChartSubtitle");
+  const status = document.getElementById("marketChartStatus");
+  const interval = document.getElementById("marketInterval").value;
+  title.textContent = instrument.name + " price history";
+  subtitle.textContent = instrument.symbol + " · " + interval + " interval";
+  status.textContent = "Loading chart history...";
+  try {
+    const data = await fetchMarketData({
+      action:"time_series", symbol:instrument.symbol, interval, outputsize:"45"
+    });
+    const values = Array.isArray(data.values) ? data.values.slice().reverse() : [];
+    if (!values.length) throw new Error("No chart history is available for this instrument.");
+    if (!window.Chart) throw new Error("Chart library could not be loaded.");
+    const labels = values.map(item => item.datetime);
+    const prices = values.map(item => Number(item.close));
+    const canvas = document.getElementById("marketChart");
+    if (marketChartInstance) marketChartInstance.destroy();
+    marketChartInstance = new Chart(canvas, {
+      type:"line",
+      data:{ labels, datasets:[{
+        label:instrument.symbol,
+        data:prices,
+        borderColor:"#61d5d0",
+        backgroundColor:"rgba(97,213,208,.10)",
+        borderWidth:2,
+        pointRadius:0,
+        fill:true,
+        tension:.22
+      }]},
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{ intersect:false, mode:"index" },
+        plugins:{ legend:{ display:false } },
+        scales:{
+          x:{ ticks:{ color:"#91a5ba", maxTicksLimit:7 }, grid:{ color:"rgba(145,165,186,.08)" } },
+          y:{ ticks:{ color:"#91a5ba" }, grid:{ color:"rgba(145,165,186,.08)" } }
+        }
+      }
+    });
+    status.textContent = "Showing " + values.length + " historical data points. Latest point: " + values[values.length - 1].datetime;
+  } catch (error) {
+    status.textContent = error.message + " Data coverage depends on your provider plan.";
+  }
+}
+
+document.getElementById("marketRefresh").addEventListener("click", loadMarketQuotes);
+document.getElementById("marketInterval").addEventListener("change", () => {
+  const instrument = MARKET_INSTRUMENTS.find(item => item.symbol === selectedMarketSymbol);
+  if (instrument) loadMarketChart(instrument);
+});
+document.querySelector('[data-tool="markets"]').addEventListener("click", () => {
+  if (marketRefreshTimer) clearInterval(marketRefreshTimer);
+  marketRefreshTimer = setInterval(() => {
+    if (selectedTool === "markets") loadMarketQuotes();
+  }, 60000);
 });
 
 /* ENTER KEY FOR CHAT */

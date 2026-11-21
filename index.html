@@ -884,9 +884,7 @@ body[data-theme="light"]{
 
 
 /* BANNER-MATCHED TOP BRAND AND ACCENT FINISH */
-/* Keep the original artwork in the top-right only. */
-.sidebar > .brand{display:none}
-
+/* Original sidebar ribbon remains visible; top-right artwork is handled separately. */
 .topbar-brand{display:block;flex:0 0 150px;width:150px;height:50px;margin-right:0;background-image:url("/assets/retimea-home-banner%20(1).jpg");background-repeat:no-repeat;background-position:right center;background-size:300px auto;white-space:nowrap}
 .topbar-actions{gap:12px}
 .send,.image-generate,.document-action,.home-primary{background:linear-gradient(110deg,#258cff 0%,#3979f5 48%,#48d5d2 100%)}
@@ -1897,7 +1895,7 @@ promptBox.addEventListener("keydown", event => {
 </html>
 
 /* Restore the original ribbon mark on both sides; remove the cropped banner logo. */
-.sidebar > .brand{display:flex}
+.sidebar > .brand{display:flex!important;visibility:visible!important;opacity:1!important}
 .topbar-brand{display:none}
 .topbar-ribbon{display:block;flex:0 0 43px;width:43px;height:43px;margin-right:0}
 .topbar-ribbon svg{display:block;width:100%;height:100%;overflow:visible}

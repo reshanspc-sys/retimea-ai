@@ -806,6 +806,36 @@ body[data-theme="light"] .visual-description,body[data-theme="light"] .disclaime
 .document-panel.upload-panel .file-info.visible { display:block; }
 .document-panel.upload-panel .file-info strong { color:var(--cyan); }
 
+
+/* HOME DASHBOARD */
+.home-dashboard{flex:1;min-height:0;overflow-y:auto;padding:34px 34px 42px;max-width:1120px;width:100%;margin:0 auto}
+.home-hero{position:relative;overflow:hidden;padding:34px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(120deg,rgba(61,103,164,.22),rgba(61,153,149,.10)),var(--panel);box-shadow:var(--shadow)}
+.home-hero:after{content:"R";position:absolute;right:28px;top:-48px;font-size:250px;font-weight:900;line-height:1;color:rgba(122,175,211,.055);pointer-events:none}
+.home-eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;color:#78d5cf;text-transform:uppercase}
+.home-hero h1{font-size:clamp(28px,4vw,42px);letter-spacing:-1.4px;margin:13px 0 9px;max-width:650px}
+.home-hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.7;max-width:570px}
+.home-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
+.home-primary,.home-secondary{border-radius:11px;padding:11px 16px;font-weight:700;font-size:12px;border:1px solid transparent}
+.home-primary{background:linear-gradient(115deg,#5888e8,#63c9c1);color:#081321}
+.home-secondary{background:rgba(120,150,185,.09);color:var(--text);border-color:var(--border)}
+.home-section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:28px 2px 13px}
+.home-section-head h2{font-size:15px;margin:0}.home-section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.home-tools-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.home-tool-card{min-height:128px;text-align:left;padding:17px;border:1px solid var(--border);border-radius:16px;background:var(--panel);color:var(--text);transition:.18s ease}
+.home-tool-card:hover{transform:translateY(-2px);border-color:rgba(101,214,208,.55);background:var(--panel2)}
+.home-tool-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:rgba(101,214,208,.12);color:#79d8d1;font-size:18px;margin-bottom:13px}
+.home-tool-card strong{display:block;font-size:12px;margin-bottom:5px}.home-tool-card span:last-child{display:block;color:var(--muted);font-size:10px;line-height:1.5}
+.home-lower-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:13px;margin-top:13px}
+.home-info-card{padding:19px;border:1px solid var(--border);border-radius:16px;background:var(--panel)}
+.home-info-card h3{font-size:13px;margin:0 0 7px}.home-info-card p{font-size:11px;line-height:1.7;color:var(--muted);margin:0}
+.home-status-line{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:10px;color:var(--muted)}
+.home-status-pill{font-size:9px;border:1px solid rgba(101,214,208,.24);background:rgba(101,214,208,.08);color:#78d5cf;padding:4px 8px;border-radius:20px}
+body[data-theme="light"] .home-hero{background:linear-gradient(120deg,#e8f0fb,#e9f6f3)}
+body[data-theme="light"] .home-tool-card,body[data-theme="light"] .home-info-card{background:#fff}
+body[data-theme="light"] .home-secondary{color:#29435f;background:#f1f5f9}
+@media(max-width:900px){.home-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.home-dashboard{padding:18px 13px 28px}.home-hero{padding:23px}.home-lower-grid{grid-template-columns:1fr}.home-tools-grid{gap:9px}.home-tool-card{padding:13px;min-height:118px}.home-hero:after{right:-18px;font-size:180px}}
+
 </style>
 </head>
 
@@ -823,6 +853,10 @@ body[data-theme="light"] .visual-description,body[data-theme="light"] .disclaime
       <span class="new-chat-label">New conversation</span>
     </button>
 
+    <div class="section-label">WORKSPACE</div>
+    <nav class="tools" aria-label="Main navigation">
+      <button class="tool active" data-tool="home"><span class="tool-icon">⌂</span><span class="tool-name">Overview</span></button>
+    </nav>
     <div class="section-label">AI WORKSPACE</div>
 
     <nav class="tools" id="tools">
@@ -892,6 +926,33 @@ body[data-theme="light"] .visual-description,body[data-theme="light"] .disclaime
     </header>
 
     <main class="chat-area">
+
+      <section class="home-dashboard" id="homeDashboard">
+        <div class="home-hero">
+          <div class="home-eyebrow">RETIMEA AI WORKSPACE</div>
+          <h1>Intelligence Beyond Limits.</h1>
+          <p>Your space to think clearly, create confidently and turn ideas into progress. Choose a tool to get started.</p>
+          <div class="home-actions">
+            <button class="home-primary" type="button" data-launch-tool="assistant">Start with AI Assistant <span aria-hidden="true">→</span></button>
+            <button class="home-secondary" type="button" data-launch-tool="business">Explore Business AI</button>
+          </div>
+        </div>
+        <div class="home-section-head"><div><h2>Your AI tools</h2><p>Everything you need, organised in one workspace.</p></div></div>
+        <div class="home-tools-grid">
+          <button class="home-tool-card" data-launch-tool="assistant"><span class="home-tool-icon">✦</span><strong>AI Assistant</strong><span>Ask questions and work through ideas</span></button>
+          <button class="home-tool-card" data-launch-tool="writer"><span class="home-tool-icon">✎</span><strong>AI Writer</strong><span>Create and refine written content</span></button>
+          <button class="home-tool-card" data-launch-tool="research"><span class="home-tool-icon">⌕</span><strong>Research Studio</strong><span>Explore topics and organise insights</span></button>
+          <button class="home-tool-card" data-launch-tool="business"><span class="home-tool-icon">◇</span><strong>Business AI</strong><span>Develop plans, ideas and strategies</span></button>
+          <button class="home-tool-card" data-launch-tool="trading"><span class="home-tool-icon">↗</span><strong>Trading Research</strong><span>Study gold and Bitcoin market structure</span></button>
+          <button class="home-tool-card" data-launch-tool="translator"><span class="home-tool-icon">文</span><strong>Translator</strong><span>Translate while preserving meaning</span></button>
+          <button class="home-tool-card" data-launch-tool="image"><span class="home-tool-icon">✧</span><strong>Image Creation</strong><span>Turn your prompts into images</span></button>
+          <button class="home-tool-card" data-launch-tool="document"><span class="home-tool-icon">▤</span><strong>Document Studio</strong><span>Summarise, question and rewrite files</span></button>
+        </div>
+        <div class="home-lower-grid">
+          <div class="home-info-card"><h3>Workforce Network</h3><p>A future RETIMEA service workspace for client projects and skilled workers. Project submission, matching and delivery workflows are not active yet.</p><div class="home-status-line"><span class="home-status-pill">Coming soon</span><span>Early-stage product area</span></div></div>
+          <div class="home-info-card"><h3>Built for focused work</h3><p>Move between AI tools without losing sight of the task. Your existing tools remain available from the navigation.</p><div class="home-status-line"><span class="home-status-pill">8 tools</span><span>One connected workspace</span></div></div>
+        </div>
+      </section>
 
       <div class="messages" id="messages">
         <div class="welcome" id="welcome">
@@ -1080,7 +1141,7 @@ const descriptions = {
   document:"Upload, analyze and understand documents"
 };
 
-let selectedTool = "assistant";
+let selectedTool = "home";
 let history = [];
 let extractedDocumentText = "";
 let selectedDocumentName = "";
@@ -1092,6 +1153,7 @@ const statusBox = document.getElementById("status");
 const sendButton = document.getElementById("sendButton");
 
 const messagesArea = document.getElementById("messages");
+const homeDashboard = document.getElementById("homeDashboard");
 const composerWrap = document.getElementById("composerWrap");
 const imageStudio = document.getElementById("imageStudio");
 const documentStudio = document.getElementById("documentStudio");
@@ -1291,44 +1353,48 @@ function resetDocumentStudio() {
 }
 
 /* SIDEBAR TOOL SWITCHING */
+function activateTool(selected) {
+  const button = document.querySelector('.tool[data-tool="' + selected + '"]');
+  if (!button) return;
+  selectedTool = selected;
+  history = [];
+  document.querySelectorAll(".tool").forEach(b => b.classList.remove("active"));
+  button.classList.add("active");
+  const name = button.querySelector(".tool-name").textContent;
+  document.getElementById("topTitle").textContent = name;
+  document.querySelector(".top-subtitle").textContent =
+    selected === "home" ? "Your intelligent workspace" : descriptions[selected];
+  const isHome = selected === "home";
+  const isImageTool = selected === "image";
+  const isDocumentTool = selected === "document";
+  homeDashboard.hidden = !isHome;
+  messagesArea.hidden = isHome || isImageTool || isDocumentTool;
+  composerWrap.hidden = isHome || isImageTool || isDocumentTool;
+  imageStudio.hidden = !isImageTool;
+  documentStudio.hidden = !isDocumentTool;
+  if (isHome) {
+    statusBox.textContent = "Your workspace is ready";
+  } else if (isImageTool) {
+    imageStatus.textContent = "Ready to create";
+    imagePrompt.focus();
+  } else if (isDocumentTool) {
+    documentStatus.textContent = extractedDocumentText
+      ? "Document ready: " + selectedDocumentName
+      : "Please upload a document to get started.";
+  } else {
+    showWelcome();
+    statusBox.textContent = "Ready";
+    promptBox.focus();
+  }
+}
+
 document.querySelectorAll(".tool").forEach(button => {
-  button.addEventListener("click", () => {
-    selectedTool = button.dataset.tool;
-    history = [];
-
-    document.querySelectorAll(".tool").forEach(b => {
-      b.classList.remove("active");
-    });
-
-    button.classList.add("active");
-
-    const name = button.querySelector(".tool-name").textContent;
-    document.getElementById("topTitle").textContent = name;
-    document.querySelector(".top-subtitle").textContent =
-      descriptions[selectedTool];
-
-    const isImageTool = selectedTool === "image";
-    const isDocumentTool = selectedTool === "document";
-
-    messagesArea.hidden = isImageTool || isDocumentTool;
-    composerWrap.hidden = isImageTool || isDocumentTool;
-    imageStudio.hidden = !isImageTool;
-    documentStudio.hidden = !isDocumentTool;
-
-    if (isImageTool) {
-      imageStatus.textContent = "Ready to create";
-      imagePrompt.focus();
-    } else if (isDocumentTool) {
-      documentStatus.textContent = extractedDocumentText
-        ? "Document ready: " + selectedDocumentName
-        : "Please upload a document to get started.";
-    } else {
-      showWelcome();
-      statusBox.textContent = "Ready";
-      promptBox.focus();
-    }
-  });
+  button.addEventListener("click", () => activateTool(button.dataset.tool));
 });
+document.querySelectorAll("[data-launch-tool]").forEach(button => {
+  button.addEventListener("click", () => activateTool(button.dataset.launchTool));
+});
+activateTool("home");
 
 /* NEW CONVERSATION */
 document.getElementById("newChat").addEventListener("click", () => {

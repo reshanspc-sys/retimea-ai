@@ -4,7 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RETIMEA AI | Intelligence for Everyone</title>
+<title>RETIMEA AI — Intelligence Beyond Limits</title>
+<meta name="theme-color" content="#080f1b">
+<meta name="description" content="RETIMEA AI — an intelligent workspace to think, create, research and achieve.">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
@@ -734,6 +736,43 @@ textarea::placeholder { color:#718aa3; }
     grid-template-columns:1fr;
   }
 }
+
+/* RETIMEA PREMIUM DESIGN LAYER */
+:root{--bg:#080f1b;--sidebar:#0b1422;--panel:#101d2d;--panel2:#14263a;--blue:#4b8dff;--cyan:#65d6d0;--text:#edf2f8;--muted:#91a0b4;--border:rgba(150,174,202,.15);--shadow:0 18px 50px rgba(0,0,0,.22)}
+body{background:radial-gradient(ellipse at 72% -15%,rgba(61,119,181,.13),transparent 42%),var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.sidebar{width:258px;padding:24px 15px 18px;background:rgba(9,17,29,.96);border-right:1px solid var(--border);backdrop-filter:blur(18px)}
+.brand{padding:3px 9px 26px;gap:12px}.brand-icon,.welcome-logo{background:linear-gradient(145deg,#477fe8 0%,#59c9c2 100%);box-shadow:0 8px 24px rgba(71,127,232,.22)}
+.brand-icon{border-radius:13px}.brand-name{letter-spacing:1.55px;font-size:18px}.brand-name span{color:#75d8d0}
+.new-chat{border:1px solid rgba(108,151,205,.28);background:linear-gradient(120deg,rgba(53,94,151,.23),rgba(50,126,132,.12));border-radius:12px;padding:13px 14px;transition:.2s ease}
+.new-chat:hover{border-color:rgba(101,214,208,.65);transform:translateY(-1px)}
+.section-label{color:#71849c;font-size:9px;letter-spacing:1.7px;padding:0 12px 11px}
+.tool{color:#aab8c9;border-radius:11px;padding:11px 12px;font-size:13px;transition:background .18s ease,color .18s ease,transform .18s ease}
+.tool:hover{background:rgba(109,145,187,.11);color:#fff}.tool.active{color:#f4f8ff;background:linear-gradient(100deg,rgba(67,112,179,.25),rgba(64,145,148,.12));box-shadow:inset 2px 0 #6bd2cb}
+.tool-icon{color:#77d5cf}.sidebar-note{border-color:var(--border)}.main{background:transparent}
+.topbar{height:74px;padding:0 30px;background:rgba(9,17,29,.78);border-color:var(--border);backdrop-filter:blur(18px)}
+.top-title{font-size:14px;letter-spacing:.1px}.top-subtitle{color:#8293a9}.online{color:#7bd8b7;letter-spacing:.5px;font-size:10px}.dot{box-shadow:0 0 0 4px rgba(69,220,174,.10)}
+.chat-area,.image-studio,.document-studio{max-width:1120px}.chat-area{padding-top:32px}.welcome-logo{border-radius:21px}.welcome h1{letter-spacing:-1.3px}.welcome p{color:#9aa9bc}
+.message{border-radius:15px;box-shadow:0 8px 24px rgba(0,0,0,.10)}.message.user{background:rgba(54,99,153,.22);border-color:rgba(91,145,203,.25)}.message.assistant{background:rgba(17,31,48,.9);border-color:var(--border)}
+.composer{border:1px solid rgba(125,157,193,.24);background:rgba(13,25,40,.94);border-radius:18px;box-shadow:var(--shadow)}.composer:focus-within{border-color:rgba(101,214,208,.7)}
+.send,.image-generate,.document-action{background:linear-gradient(115deg,#5888e8,#63c9c1);color:#081321;border-radius:11px;box-shadow:0 7px 18px rgba(72,132,195,.16)}
+.image-panel,.document-panel,.document-result{background:linear-gradient(145deg,rgba(18,32,49,.96),rgba(13,25,40,.96));border-color:var(--border);border-radius:18px;box-shadow:var(--shadow)}
+.image-prompt,.document-question,.upload-area{background:rgba(7,16,27,.65);border-color:rgba(125,157,193,.22);border-radius:12px}
+.image-prompt:focus,.document-question:focus{border-color:#66cfc8}.document-action.secondary{color:#d9e7f6;background:rgba(72,111,153,.15);border-color:rgba(125,157,193,.24);box-shadow:none}
+.visual-card{background:rgba(8,19,32,.72);border-color:var(--border)}.visual-title{color:#7ad8d1}
+.topbar-actions{display:flex;align-items:center;gap:18px}.theme-toggle{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--border);border-radius:11px;color:var(--text);background:rgba(120,150,185,.09);font-size:16px;cursor:pointer;transition:.2s ease}
+.theme-toggle:hover{border-color:rgba(101,214,208,.6);transform:translateY(-1px)}
+body[data-theme="light"]{--bg:#f3f6fa;--sidebar:#fff;--panel:#fff;--panel2:#edf2f8;--text:#172538;--muted:#64748b;--border:rgba(45,67,94,.14);--shadow:0 16px 42px rgba(25,45,70,.08);background:radial-gradient(ellipse at 75% -15%,rgba(89,150,205,.12),transparent 42%),var(--bg)}
+body[data-theme="light"] .sidebar,body[data-theme="light"] .topbar{background:rgba(255,255,255,.9)}
+body[data-theme="light"] .tool{color:#53657b}body[data-theme="light"] .tool:hover{background:#edf3f8;color:#172538}body[data-theme="light"] .tool.active{color:#1d3854;background:#eaf2f8}
+body[data-theme="light"] .top-subtitle,body[data-theme="light"] .welcome p{color:#64748b}
+body[data-theme="light"] .message.user{color:#17324d;background:#e6f0fb;border-color:#d3e2f2}
+body[data-theme="light"] .message.assistant,body[data-theme="light"] .image-panel,body[data-theme="light"] .document-panel,body[data-theme="light"] .document-result{background:#fff;color:#172538}
+body[data-theme="light"] .composer{background:#fff}
+body[data-theme="light"] .image-prompt,body[data-theme="light"] .document-question,body[data-theme="light"] .upload-area{background:#f7f9fc;color:#172538}
+body[data-theme="light"] .document-action.secondary{color:#29435f;background:#eef3f8}body[data-theme="light"] .visual-card{background:#f7f9fc}
+body[data-theme="light"] .visual-description,body[data-theme="light"] .disclaimer,body[data-theme="light"] .composer-hint{color:#64748b}
+@media(max-width:700px){.sidebar{width:72px;padding:15px 8px}.topbar{padding:0 14px;height:66px}.topbar-actions{gap:10px}.online{font-size:9px}.chat-area{padding:16px 12px}}
+
 </style>
 </head>
 
@@ -797,7 +836,7 @@ textarea::placeholder { color:#718aa3; }
 
     <div class="sidebar-bottom">
       <div class="sidebar-note">
-        Intelligence for Everyone.<br>
+        Intelligence Beyond Limits.<br>
         <span style="color:#35e0ed">
           Think · Create · Research · Achieve
         </span>
@@ -811,8 +850,11 @@ textarea::placeholder { color:#718aa3; }
         <div class="top-title" id="topTitle">AI Assistant</div>
         <div class="top-subtitle">Your intelligent workspace</div>
       </div>
-      <div class="online">
-        <span class="dot"></span> AI ONLINE
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch colour theme" title="Switch theme">☼</button>
+        <div class="online">
+          <span class="dot"></span> AI ONLINE
+        </div>
       </div>
     </header>
 
@@ -969,6 +1011,24 @@ textarea::placeholder { color:#718aa3; }
 </div>
 
 <script>
+/* THEME PREFERENCE */
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("retimea-theme");
+if (savedTheme === "light" || savedTheme === "dark") document.body.dataset.theme = savedTheme;
+function syncThemeButton() {
+  const light = document.body.dataset.theme === "light";
+  themeToggle.textContent = light ? "☾" : "☼";
+  themeToggle.setAttribute("aria-label", light ? "Switch to dark theme" : "Switch to light theme");
+  themeToggle.title = light ? "Switch to dark theme" : "Switch to light theme";
+}
+syncThemeButton();
+themeToggle.addEventListener("click", () => {
+  const next = document.body.dataset.theme === "light" ? "dark" : "light";
+  document.body.dataset.theme = next;
+  localStorage.setItem("retimea-theme", next);
+  syncThemeButton();
+});
+
 /* PDF.JS CONFIGURATION */
 if (window.pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =

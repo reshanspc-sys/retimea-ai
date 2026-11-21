@@ -32,7 +32,12 @@ export async function checkAndRecordUsage(request, env, tool) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
   const identifier = await hashIdentifier(ip);
 
-  const today = new Date().toISOString().slice(0, 10);
+ const today = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Qatar",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit"
+}).format(new Date());
   const key = `usage:${today}:${identifier}:${tool}`;
 
   const stored = await env.USAGE_KV.get(key);

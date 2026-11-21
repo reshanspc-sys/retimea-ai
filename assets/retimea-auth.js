@@ -70,6 +70,15 @@
     .rt-entry{position:fixed;inset:0;display:block;padding:0;overflow:hidden;background:#061326;color:#f1f7fc}
     .rt-entry-artwork{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
     .rt-entry-status{display:none}
+    .rt-intro-nav{position:absolute;z-index:2;top:clamp(12px,3vh,30px);left:50%;transform:translateX(-50%);width:min( calc(100% - 32px),1180px);display:flex;align-items:center;justify-content:center;gap:clamp(5px,1.1vw,14px);padding:10px 14px;border:1px solid rgba(151,190,214,.24);border-radius:16px;background:rgba(5,17,32,.76);backdrop-filter:blur(14px);box-shadow:0 12px 36px #0005}
+    .rt-intro-nav button{border:1px solid transparent;border-radius:10px;padding:10px clamp(9px,1.3vw,17px);background:transparent;color:#eef7ff;font-size:clamp(11px,1vw,13px);font-weight:650;white-space:nowrap;cursor:pointer}
+    .rt-intro-nav button:hover,.rt-intro-nav button:focus-visible{border-color:rgba(112,216,210,.55);background:rgba(104,173,197,.13);outline:none}
+    .rt-intro-nav .rt-intro-signin{border-color:rgba(151,190,214,.4)}
+    .rt-intro-nav .rt-intro-signup{border:0;background:linear-gradient(110deg,#3979f5,#61d5d0);color:#061321}
+    .rt-intro-nav-spacer{flex:1}
+    .rt-intro-info{position:absolute;z-index:3;top:86px;left:50%;transform:translateX(-50%);width:min(calc(100% - 32px),620px);padding:24px 26px;border:1px solid rgba(151,190,214,.3);border-radius:18px;background:rgba(5,17,32,.94);backdrop-filter:blur(18px);box-shadow:0 22px 70px #0009;color:#f1f7fc}
+    .rt-intro-info[hidden]{display:none}.rt-intro-info h2{margin:0 0 10px;font-size:21px}.rt-intro-info p,.rt-intro-info li{color:#c0cfdd;font-size:13px;line-height:1.7}.rt-intro-info ul{padding-left:20px}.rt-intro-info-close{float:right;border:1px solid rgba(151,190,214,.35);border-radius:8px;padding:5px 10px;background:transparent;color:#fff;cursor:pointer}
+    @media(max-width:680px){.rt-intro-nav{top:10px;flex-wrap:wrap;gap:4px;padding:7px}.rt-intro-nav button{padding:8px 9px}.rt-intro-nav-spacer{display:none}.rt-intro-info{top:118px;padding:19px}}
 
 `;
   const style = document.createElement("style");
@@ -98,6 +107,16 @@
   entry.setAttribute("aria-label", "RETIMEA AI welcome");
   entry.innerHTML = `
     <img class="rt-entry-artwork" src="/assets/retimea-ai-shared-hero.jpg" alt="RETIMEA AI — Intelligence Beyond Limits">
+    <nav class="rt-intro-nav" aria-label="Main navigation">
+      <button type="button" data-intro-home>Home</button>
+      <button type="button" data-intro-panel="features">Features</button>
+      <button type="button" data-intro-panel="about">About</button>
+      <button type="button" data-intro-panel="pricing">Pricing</button>
+      <button type="button" data-intro-panel="contact">Contact</button>
+      <span class="rt-intro-nav-spacer"></span>
+      <button type="button" class="rt-intro-signin" data-intro-signin>Sign in</button>
+      <button type="button" class="rt-intro-signup" data-intro-signup>Create account</button>
+    </nav>
     <div class="rt-entry-status" id="rtEntryStatus" role="status" aria-live="polite">Preparing your secure workspace…</div>`;
   document.body.appendChild(entry);
 
@@ -191,8 +210,26 @@
   }
   function closeDashboard() { dashboard.hidden = true; }
 
-  entry.querySelector("#rtEntrySignup").addEventListener("click", () => show("signup"));
-  entry.querySelector("#rtEntrySignin").addEventListener("click", () => show("signin"));
+  const introInfo = document.createElement("section");
+  introInfo.className = "rt-intro-info";
+  introInfo.hidden = true;
+  introInfo.setAttribute("aria-live", "polite");
+  introInfo.innerHTML = `<button type="button" class="rt-intro-info-close" aria-label="Close information">Close</button><div class="rt-intro-info-content"></div>`;
+  entry.appendChild(introInfo);
+  const introPanels = {
+    features: "<h2>Explore RETIMEA AI</h2><p>One workspace for creating, researching and working with ideas.</p><ul><li>AI chat and research</li><li>Image and document creation</li><li>Visualizations and charts</li><li>Trading research and market tools</li></ul>",
+    about: "<h2>About RETIMEA AI</h2><p>RETIMEA AI brings useful intelligent tools together in one workspace, designed to help you think, create, research and achieve.</p><p><strong>Intelligence Beyond Limits.</strong></p>",
+    pricing: "<h2>Simple access</h2><p>Free access is currently available for the Preview workspace. Pro and Business plans are planned for a later stage; paid-plan features and prices have not yet been announced.</p>",
+    contact: "<h2>Contact</h2><p>For now, please use the account sign-in window for access support. Official contact details will be added here before public launch.</p>"
+  };
+  entry.querySelector("[data-intro-home]").addEventListener("click", () => { introInfo.hidden = true; });
+  entry.querySelectorAll("[data-intro-panel]").forEach(button => button.addEventListener("click", () => {
+    introInfo.querySelector(".rt-intro-info-content").innerHTML = introPanels[button.dataset.introPanel] || "";
+    introInfo.hidden = false;
+  }));
+  introInfo.querySelector(".rt-intro-info-close").addEventListener("click", () => { introInfo.hidden = true; });
+  entry.querySelector("[data-intro-signup]").addEventListener("click", () => show("signup"));
+  entry.querySelector("[data-intro-signin]").addEventListener("click", () => show("signin"));
   accountButton.addEventListener("click", () => show("signin"));
   topDashboardButton.addEventListener("click", openDashboard);
   dashboardButton.addEventListener("click", openDashboard);

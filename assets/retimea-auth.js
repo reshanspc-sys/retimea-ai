@@ -3,7 +3,7 @@
 
   const css = `
     .app{visibility:hidden}
-.rt-entry{position:fixed;inset:0;z-index:9996;display:grid;place-items:center;overflow:auto;padding:24px;background:linear-gradient(90deg,rgba(3,12,28,.30),rgba(3,13,32,.64) 52%,rgba(3,13,32,.30)),url("/assets/retimea-ai-shared-hero.jpg") center/contain no-repeat,#061326;color:#f1f7fc}
+.rt-entry{position:fixed;inset:0;z-index:9996;display:grid;place-items:center;overflow:auto;padding:24px;background:linear-gradient(90deg,rgba(3,12,28,.30),rgba(3,13,32,.64) 52%,rgba(3,13,32,.30)),url("/assets/retimea-ai-hero-clean.png") center/contain no-repeat,#061326;color:#f1f7fc}
     .rt-entry[hidden]{display:none}
     .rt-entry-card{width:min(100%,760px);text-align:center;padding:clamp(26px,6vw,64px);border:1px solid rgba(133,177,207,.2);border-radius:26px;background:linear-gradient(145deg,rgba(16,33,55,.94),rgba(7,17,31,.96));box-shadow:0 28px 100px #0008}
     .rt-entry-mark{font-size:12px;letter-spacing:4px;font-weight:800;color:#75d8d0}
@@ -54,7 +54,7 @@
     .rt-dash-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.rt-dash-action{border:1px solid var(--border);border-radius:9px;padding:10px 13px;background:rgba(57,121,245,.12);color:var(--text);font-size:11px}
     @media(max-width:700px){.rt-dashboard-backdrop{padding:10px}.rt-dashboard{margin:8px auto}.rt-dash-head,.rt-dash-body{padding:18px}.rt-dash-grid{grid-template-columns:1fr}.rt-dash-projects{grid-template-columns:1fr}.rt-dash-head h2{font-size:20px}}
   
-    .rt-entry{background:linear-gradient(90deg,rgba(3,12,28,.34),rgba(3,13,32,.58) 52%,rgba(3,13,32,.38)),url("/assets/retimea-ai-shared-hero.jpg") center/cover no-repeat,#07111f;color:#f1f7fc}
+    .rt-entry{background:linear-gradient(90deg,rgba(3,12,28,.34),rgba(3,13,32,.58) 52%,rgba(3,13,32,.38)),url("/assets/retimea-ai-hero-clean.png") center/cover no-repeat,#07111f;color:#f1f7fc}
     .rt-entry-card{width:min(100%,820px);padding:clamp(32px,6vw,76px);border:1px solid rgba(119,204,224,.28);border-radius:30px;background:linear-gradient(145deg,rgba(11,29,50,.84),rgba(5,17,32,.91));box-shadow:0 32px 110px rgba(0,0,0,.48),0 0 70px rgba(25,128,190,.12);backdrop-filter:blur(18px)}
     .rt-entry-mark{letter-spacing:5px;color:#8be9df}
     .rt-entry h1{font-size:clamp(38px,7vw,68px);letter-spacing:-2px;margin:26px 0 16px}
@@ -66,9 +66,9 @@
     .rt-entry-primary{box-shadow:0 12px 30px rgba(57,121,245,.24)}
     .rt-entry-secondary{border-color:rgba(151,190,214,.4);background:rgba(255,255,255,.055)}
     @media(max-width:600px){.rt-entry{padding:16px}.rt-entry-card{padding:34px 22px;border-radius:22px}.rt-entry h1{font-size:39px}.rt-entry-tagline{font-size:10px;letter-spacing:2px}.rt-entry-copy{font-size:14px}}
-    /* Intro page: artwork only; preserve the full image without cropping */
-    .rt-entry{position:fixed;inset:0;display:block;padding:0;overflow:hidden;background:#061326;color:#f1f7fc}
-    .rt-entry-artwork{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+    /* Intro page: use the clean artwork at full width without distortion or cropping */
+    .rt-entry{position:fixed;inset:0;display:block;padding:0;overflow:auto;background:#061326;color:#f1f7fc}
+    .rt-entry-artwork{display:block;width:100%;height:auto;min-height:100%;object-fit:contain;object-position:center top}
     .rt-entry-status{display:none}
     .rt-intro-nav{position:absolute;z-index:2;top:clamp(12px,3vh,30px);left:50%;transform:translateX(-50%);width:min( calc(100% - 32px),1180px);display:flex;align-items:center;justify-content:center;gap:clamp(5px,1.1vw,14px);padding:10px 14px;border:1px solid rgba(151,190,214,.24);border-radius:16px;background:rgba(5,17,32,.76);backdrop-filter:blur(14px);box-shadow:0 12px 36px #0005}
     .rt-intro-nav button{border:1px solid transparent;border-radius:10px;padding:10px clamp(9px,1.3vw,17px);background:transparent;color:#eef7ff;font-size:clamp(11px,1vw,13px);font-weight:650;white-space:nowrap;cursor:pointer}
@@ -106,7 +106,7 @@
   entry.className = "rt-entry";
   entry.setAttribute("aria-label", "RETIMEA AI welcome");
   entry.innerHTML = `
-    <img class="rt-entry-artwork" src="/assets/retimea-ai-shared-hero.jpg" alt="RETIMEA AI — Intelligence Beyond Limits">
+    <img class="rt-entry-artwork" src="/assets/retimea-ai-hero-clean.png" alt="RETIMEA AI — Intelligence Beyond Limits">
     <nav class="rt-intro-nav" aria-label="Main navigation">
       <button type="button" data-intro-home>Home</button>
       <button type="button" data-intro-panel="features">Features</button>

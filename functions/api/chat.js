@@ -44,15 +44,18 @@ Return valid JSON with this structure:
 }
 
 Important accuracy rules:
-- Only create visuals when useful.
+- If the user explicitly requests a chart, graph, flowchart or diagram, you MUST generate the corresponding visual object in the visuals array.
+- For chart requests, put the numerical data in the structured data object. Do not create a Markdown image or QuickChart URL.
+- Never put chart image URLs, HTML, SVG or Markdown image links in the answer.
+- Only create additional visuals when they genuinely improve the answer.
 - Never invent real-world statistics, prices, research findings or market data.
 - Use only data supplied by the user or established in the conversation.
 - If an example uses hypothetical data, clearly label it as illustrative.
-- If reliable numerical data is unavailable, use a conceptual diagram instead.
+- If reliable numerical data is unavailable, use a conceptual Mermaid diagram instead of inventing numbers.
 - Never describe a chart as live unless genuine live data was supplied.
 - Do not create empty visuals.
-- If no visual is useful, return an empty visuals array.
-- Keep the written answer useful even when no visual is generated.
+- Keep the written answer useful even when a visual is generated.
+- If no visual is useful and none was explicitly requested, return an empty visuals array.
 - Return JSON only. Do not wrap it in Markdown code fences.
 `;
 

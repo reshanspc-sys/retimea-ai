@@ -138,7 +138,10 @@
       const { data, error } = await supabase.auth.getSession();
       if (error) throw error;
       renderSession(data.session);
-      supabase.auth.onAuthStateChange((_event, session) => renderSession(session));
+      supabase.auth.onAuthStateChange((event, session) => {
+        renderSession(session);
+        if (event === "SIGNED_IN" && session?.user) hide();
+      });
       say("Secure account service is ready.");
     } catch (error) {
       configError = error.message || "Account service is not available.";

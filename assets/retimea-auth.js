@@ -66,9 +66,9 @@
     .rt-entry-primary{box-shadow:0 12px 30px rgba(57,121,245,.24)}
     .rt-entry-secondary{border-color:rgba(151,190,214,.4);background:rgba(255,255,255,.055)}
     @media(max-width:600px){.rt-entry{padding:16px}.rt-entry-card{padding:34px 22px;border-radius:22px}.rt-entry h1{font-size:39px}.rt-entry-tagline{font-size:10px;letter-spacing:2px}.rt-entry-copy{font-size:14px}}
-    /* Intro page: use the clean artwork at full width without distortion or cropping */
-    .rt-entry{position:fixed;inset:0;display:block;padding:0;overflow:auto;background:#061326;color:#f1f7fc}
-    .rt-entry-artwork{display:block;width:100%;height:auto;min-height:100%;object-fit:contain;object-position:center top}
+    /* Intro page: fit the complete artwork inside the viewport with no page scrolling */
+    .rt-entry{position:fixed;inset:0;display:block;padding:0;overflow:hidden;background:#061326;color:#f1f7fc}
+    .rt-entry-artwork{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
     .rt-entry-status{display:none}
     .rt-intro-nav{position:absolute;z-index:2;top:clamp(12px,3vh,30px);left:50%;transform:translateX(-50%);width:min( calc(100% - 32px),1180px);display:flex;align-items:center;justify-content:center;gap:clamp(5px,1.1vw,14px);padding:10px 14px;border:1px solid rgba(151,190,214,.24);border-radius:16px;background:rgba(5,17,32,.76);backdrop-filter:blur(14px);box-shadow:0 12px 36px #0005}
     .rt-intro-nav button{border:1px solid transparent;border-radius:10px;padding:10px clamp(9px,1.3vw,17px);background:transparent;color:#eef7ff;font-size:clamp(11px,1vw,13px);font-weight:650;white-space:nowrap;cursor:pointer}

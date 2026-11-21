@@ -1171,6 +1171,89 @@ input {
   .image-panel,.document-panel {padding:14px}
 }
 
+
+/* HOMEPAGE ONE-SCREEN LAYOUT — preserve original artwork and palette */
+@media (min-width: 901px) and (min-height: 650px) {
+  .home-dashboard {
+    height:100%;
+    overflow-y:hidden;
+    padding:clamp(10px,1.8vh,20px) clamp(18px,2.2vw,34px);
+    display:flex;
+    flex-direction:column;
+    gap:clamp(7px,1.1vh,12px);
+  }
+  .home-hero {
+    flex:0 0 auto;
+    border-radius:16px;
+  }
+  .home-banner-image {
+    height:clamp(112px,19vh,168px);
+    aspect-ratio:auto;
+    object-fit:cover;
+    object-position:center 48%;
+  }
+  .home-hero-copy {
+    padding:clamp(9px,1.4vh,14px) clamp(16px,2vw,24px);
+  }
+  .home-eyebrow {font-size:9px}
+  .home-hero h1 {
+    font-size:clamp(21px,2.3vw,30px);
+    margin:5px 0 4px;
+    letter-spacing:-.8px;
+  }
+  .home-hero p {font-size:11px;line-height:1.4}
+  .home-actions {margin-top:9px;gap:7px}
+  .home-primary,.home-secondary {padding:7px 11px;font-size:10px}
+  .home-section-head {margin:clamp(3px,.7vh,7px) 2px 0}
+  .home-section-head h2 {font-size:13px}
+  .home-section-head p {font-size:9px;margin-top:2px}
+  .home-tools-grid {
+    flex:0 0 auto;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:clamp(7px,.8vw,10px);
+  }
+  .home-tool-card {
+    min-height:0;
+    height:clamp(70px,10.4vh,88px);
+    padding:clamp(8px,1vw,12px);
+    border-radius:12px;
+  }
+  .home-tool-icon {
+    width:25px;height:25px;border-radius:8px;
+    font-size:14px;margin-bottom:5px;
+  }
+  .home-tool-card strong {font-size:11px;margin-bottom:2px}
+  .home-tool-card span:last-child {font-size:9px;line-height:1.25}
+  .home-lower-grid {
+    flex:1 1 auto;
+    min-height:0;
+    margin-top:0;
+    gap:9px;
+  }
+  .home-info-card {
+    padding:clamp(9px,1.2vh,13px);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .home-info-card h3 {font-size:11px;margin-bottom:4px}
+  .home-info-card p {font-size:9px;line-height:1.35}
+  .home-status-line {margin-top:6px;font-size:8px;gap:6px}
+  .home-status-pill {font-size:8px;padding:3px 6px}
+}
+@media (min-width: 901px) and (max-height: 649px) {
+  .home-dashboard {padding-top:8px;padding-bottom:8px}
+  .home-banner-image {height:100px;aspect-ratio:auto;object-fit:cover}
+  .home-hero-copy {padding:8px 16px}
+  .home-hero h1 {font-size:20px;margin:4px 0}
+  .home-hero p {font-size:10px;line-height:1.3}
+  .home-actions {margin-top:6px}
+  .home-section-head {margin:5px 2px 5px}
+  .home-tool-card {min-height:0;height:66px;padding:7px}
+  .home-tool-icon {width:22px;height:22px;margin-bottom:3px}
+  .home-lower-grid {margin-top:7px}
+  .home-info-card {padding:8px}
+}
+
 </style>
 </head>
 

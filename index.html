@@ -1700,6 +1700,32 @@ body[data-theme="light"] .home-secondary{color:#23445d!important;background:rgba
   .home-dashboard{max-width:1480px!important;padding-left:clamp(18px,2.4vw,36px)!important;padding-right:clamp(18px,2.4vw,36px)!important}
 }
 
+
+
+/* HOMEPAGE HERO — add more vertical breathing room for the artwork and welcome message */
+.home-hero{
+  min-height:clamp(380px,40vw,500px)!important;
+}
+.home-banner-image{
+  min-height:360px!important;
+  padding:28px!important;
+}
+.home-hero-copy{
+  padding-top:clamp(38px,5vw,68px)!important;
+  padding-bottom:clamp(38px,5vw,68px)!important;
+}
+@media(max-width:900px){
+  .home-hero{min-height:350px!important}
+  .home-banner-image{min-height:310px!important}
+}
+@media(max-width:600px){
+  .home-hero{min-height:0!important}
+  .home-banner-image{
+    min-height:220px!important;
+    padding:18px 16px 8px!important;
+  }
+  .home-hero-copy{padding:24px 20px 28px!important}
+}
 </style>
 </head>
 

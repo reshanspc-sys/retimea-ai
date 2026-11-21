@@ -1020,6 +1020,48 @@ body[data-theme="light"] .tool.active{
 }
 body[data-theme="light"] .send,body[data-theme="light"] .image-generate,body[data-theme="light"] .document-action,body[data-theme="light"] .home-primary{color:#fff}
 
+
+
+/* FULL-WIDTH CENTRE WORKSPACE — retain sidebar, banner and approved palette */
+.chat-area,
+.image-studio,
+.document-studio,
+.home-dashboard {
+  box-sizing:border-box;
+  width:100%;
+  max-width:none !important;
+  margin-left:0;
+  margin-right:0;
+}
+.chat-area,
+.image-studio,
+.document-studio {
+  padding-left:clamp(24px,3.2vw,56px);
+  padding-right:clamp(24px,3.2vw,56px);
+}
+.home-dashboard {
+  padding-left:clamp(24px,3.2vw,56px);
+  padding-right:clamp(24px,3.2vw,56px);
+}
+.message {
+  width:100%;
+  max-width:1400px;
+}
+.image-panel,
+.document-panel,
+.image-result,
+.document-result,
+.document-smallprint {
+  width:100%;
+  max-width:1400px;
+}
+@media(max-width:700px) {
+  .chat-area,.image-studio,.document-studio,.home-dashboard {
+    padding-left:12px;
+    padding-right:12px;
+  }
+  .message {max-width:100%}
+}
 </style>
 </head>
 
@@ -1957,56 +1999,3 @@ promptBox.addEventListener("keydown", event => {
 
 </body>
 </html>
-
-/* Matching ribbon artwork in sidebar and top-right header. */
-.sidebar > .brand{display:flex!important;visibility:visible!important;opacity:1!important}
-.topbar-brand{display:none!important}
-.topbar-actions{display:flex!important;align-items:center;justify-content:flex-end;gap:12px}
-.topbar-ribbon{display:block!important;visibility:visible!important;opacity:1!important;flex:0 0 43px;width:43px;height:43px}
-.topbar-ribbon svg{display:block;width:100%;height:100%;overflow:visible}
-@media(max-width:700px){.topbar-ribbon{flex-basis:38px;width:38px;height:38px}}
-@media(max-width:390px){.topbar-ribbon{flex-basis:34px;width:34px;height:34px}}
-
-
-/* FULL-WIDTH CENTRE WORKSPACE — retain sidebar, banner and approved palette */
-.chat-area,
-.image-studio,
-.document-studio,
-.home-dashboard {
-  box-sizing:border-box;
-  width:100%;
-  max-width:none !important;
-  margin-left:0;
-  margin-right:0;
-}
-.chat-area,
-.image-studio,
-.document-studio {
-  padding-left:clamp(24px,3.2vw,56px);
-  padding-right:clamp(24px,3.2vw,56px);
-}
-.home-dashboard {
-  padding-left:clamp(24px,3.2vw,56px);
-  padding-right:clamp(24px,3.2vw,56px);
-}
-.message {
-  width:100%;
-  max-width:1400px;
-}
-.image-panel,
-.document-panel,
-.image-result,
-.document-result,
-.document-smallprint {
-  width:100%;
-  max-width:1400px;
-}
-@media(max-width:700px) {
-  .chat-area,.image-studio,.document-studio,.home-dashboard {
-    padding-left:12px;
-    padding-right:12px;
-  }
-  .message {max-width:100%}
-}
-
-</style>

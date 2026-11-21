@@ -517,6 +517,14 @@ textarea::placeholder { color:#718aa3; }
 .document-action:disabled{opacity:.55;cursor:wait}
 @media print{body *{visibility:hidden!important}#documentResult,#documentResult *{visibility:visible!important}#documentResult{display:block!important;position:absolute;inset:0;width:auto;max-width:none;border:0;box-shadow:none;color:#111;background:#fff}#documentResult h3{color:#111}#documentAnswer{color:#111;white-space:pre-wrap}}
 
+/* CREATE DOCUMENT */
+.document-help{color:var(--muted);font-size:12px;line-height:1.5;margin:-8px 0 12px}
+.document-mode-divider{display:flex;align-items:center;gap:14px;margin:8px 0 18px;color:var(--muted);font-size:10px;letter-spacing:1.3px;font-weight:700}
+.document-mode-divider:before,.document-mode-divider:after{content:"";height:1px;flex:1;background:var(--border)}
+#createDocumentStatus{margin-top:12px}
+.document-action:disabled{opacity:.55;cursor:wait}
+@media print{body *{visibility:hidden!important}#documentResult,#documentResult *{visibility:visible!important}#documentResult{display:block!important;position:absolute;inset:0;width:auto;max-width:none;border:0;box-shadow:none;color:#111;background:#fff}#documentResult h3{color:#111}#documentAnswer{color:#111;white-space:pre-wrap}}
+
 /* DOCUMENT STUDIO */
 
 .document-panel {
@@ -1602,6 +1610,19 @@ input {
 
         <div class="document-mode-divider"><span>OR WORK WITH AN EXISTING DOCUMENT</span></div>
 
+        <div class="document-panel create-document-panel">
+          <label class="document-label" for="documentPrompt">Create a new document with AI</label>
+          <p class="document-help">Describe the document you want. RETIMEA AI will create an original draft for you.</p>
+          <textarea class="document-question" id="documentPrompt" placeholder="Example: Create a professional business proposal for an online marketplace in Qatar. Include an executive summary, target market, revenue model, marketing plan and financial projections."></textarea>
+          <div class="document-actions">
+            <button class="document-action" id="generateDocument">✦ Generate Document</button>
+            <button class="document-action secondary" id="clearDocumentPrompt" type="button">Clear Prompt</button>
+          </div>
+          <div class="document-status" id="createDocumentStatus">Enter your instructions and select Generate Document.</div>
+        </div>
+
+        <div class="document-mode-divider"><span>OR WORK WITH AN EXISTING DOCUMENT</span></div>
+
         <div class="document-panel upload-panel">
           <label class="document-label">Upload your document</label>
 
@@ -1768,6 +1789,9 @@ const documentFile = document.getElementById("documentFile");
 const fileInfo = document.getElementById("fileInfo");
 const documentStatus = document.getElementById("documentStatus");
 const documentQuestion = document.getElementById("documentQuestion");
+const documentPrompt = document.getElementById("documentPrompt");
+const generateDocumentButton = document.getElementById("generateDocument");
+const createDocumentStatus = document.getElementById("createDocumentStatus");
 const documentPrompt = document.getElementById("documentPrompt");
 const generateDocumentButton = document.getElementById("generateDocument");
 const createDocumentStatus = document.getElementById("createDocumentStatus");
@@ -2353,6 +2377,50 @@ async function generateDocument() {
     documentDownload.href = url;
     documentDownload.download = "retimea-created-document.txt";
     documentStatus.textContent = "Your document is ready.";
+    createDocumentStatus.textContent = "Document created successfully.";
+    documentResult.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    createDocumentStatus.textContent = error.message || "Something went wrong. Please try again.";
+  } finally {
+    generateDocumentButton.disabled = false;
+  }
+}
+generateDocumentButton.addEventListener("click", generateDocument);
+document.getElementById("clearDocumentPrompt").addEventListener("click", () => {
+  documentPrompt.value = "";
+  createDocumentStatus.textContent = "Enter your instructions and select Generate Document.";
+  documentPrompt.focus();
+});
+
+/* CREATE A NEW DOCUMENT FROM A PROMPT */
+async function generateDocument() {
+  const prompt = documentPrompt.value.trim();
+  if (!prompt) {
+    createDocumentStatus.textContent = "Please describe the document you want to create.";
+    documentPrompt.focus();
+    return;
+  }
+  if (prompt.length > 5000) {
+    createDocumentStatus.textContent = "Please keep your instructions under 5,000 characters.";
+    return;
+  }
+  generateDocumentButton.disabled = true;
+  createDocumentStatus.textContent = "RETIMEA AI is creating your document...";
+  documentResult.classList.remove("visible");
+  try {
+    const response = await fetch("/api/document", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "create", prompt })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) throw new Error(data.error || "Document generation failed.");
+    documentAnswer.textContent = data.answer || "No document content was returned.";
+    documentResult.classList.add("visible");
+    const blob = new Blob([data.answer || ""], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    documentDownload.href = url;
+    documentDownload.download = "retimea-created-document.txt";
     createDocumentStatus.textContent = "Document created successfully.";
     documentResult.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {

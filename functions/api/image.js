@@ -1,4 +1,6 @@
 
+import { checkAndRecordUsage } from "../_shared/usage.js";
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -35,6 +37,27 @@ export async function onRequestPost(context) {
       );
     }
 
+    // Check and record daily image usage.
+    const usage = await checkAndRecordUsage(
+      request,
+      env,
+      "image"
+    );
+
+    if (!usage.allowed) {
+      return Response.json(
+        {
+          error: "Daily free image generation limit reached.",
+          usage: {
+            used: usage.used,
+            limit: usage.limit,
+            remaining: 0
+          }
+        },
+        { status: 429 }
+      );
+    }
+
     const result = await env.AI.run(
       "@cf/black-forest-labs/flux-1-schnell",
       {
@@ -49,7 +72,12 @@ export async function onRequestPost(context) {
 
     return Response.json({
       success: true,
-      image: "data:image/jpeg;base64," + result.image
+      image: "data:image/jpeg;base64," + result.image,
+      usage: {
+        used: usage.used,
+        limit: usage.limit,
+        remaining: Math.max(0, usage.limit - usage.used)
+      }
     });
 
   } catch (error) {

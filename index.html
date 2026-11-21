@@ -1062,6 +1062,115 @@ body[data-theme="light"] .send,body[data-theme="light"] .image-generate,body[dat
   }
   .message {max-width:100%}
 }
+
+/* RESPONSIVE VIEWPORT FIT — desktop, laptop, tablet and mobile */
+html {
+  width:100%;
+  min-height:100%;
+  overflow:hidden;
+}
+body {
+  width:100%;
+  min-width:320px;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+.app {
+  width:100%;
+  min-width:0;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+.main {
+  flex:1 1 0%;
+  width:calc(100% - 258px);
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+}
+.topbar {
+  flex:0 0 74px;
+  min-width:0;
+}
+.chat-area,
+.image-studio,
+.document-studio,
+.home-dashboard {
+  min-width:0;
+  width:100%;
+  max-width:none !important;
+  margin-inline:0;
+  box-sizing:border-box;
+}
+.chat-area {
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
+}
+.messages,
+.image-studio,
+.document-studio,
+.home-dashboard {
+  min-height:0;
+  overscroll-behavior:contain;
+}
+.home-dashboard {
+  overflow-x:hidden;
+}
+.home-hero,
+.home-tools-grid,
+.home-lower-grid,
+.image-panel,
+.document-panel,
+.image-result,
+.document-result {
+  min-width:0;
+  max-width:100%;
+}
+.home-banner-image {
+  width:100%;
+  max-width:100%;
+  height:auto;
+}
+img,video,canvas,svg {
+  max-width:100%;
+}
+.message,
+.composer,
+textarea,
+input {
+  min-width:0;
+  max-width:100%;
+}
+@media (max-width:900px) {
+  .home-tools-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-lower-grid {grid-template-columns:1fr}
+}
+@media (max-width:700px) {
+  .app {height:100dvh}
+  .sidebar {width:68px;flex:0 0 68px}
+  .main {width:calc(100% - 68px)}
+  .topbar {flex-basis:66px;padding-inline:12px}
+  .chat-area,.image-studio,.document-studio,.home-dashboard {
+    padding-left:12px;
+    padding-right:12px;
+  }
+  .home-tools-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-lower-grid {grid-template-columns:1fr}
+  .message {max-width:100%}
+}
+@media (max-width:420px) {
+  .topbar {padding-inline:9px}
+  .topbar-actions {gap:7px}
+  .online {font-size:8px;gap:5px}
+  .topbar-ribbon {flex-basis:32px;width:32px;height:32px}
+  .home-tools-grid {grid-template-columns:1fr}
+  .home-hero-copy {padding:18px}
+  .image-panel,.document-panel {padding:14px}
+}
+
 </style>
 </head>
 

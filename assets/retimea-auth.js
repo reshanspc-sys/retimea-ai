@@ -69,6 +69,12 @@
     /* Intro page: show the artwork at full screen width and allow vertical scrolling when needed */
     .rt-entry{position:fixed;inset:0;display:block;padding:0;overflow-x:hidden;overflow-y:auto;background:radial-gradient(ellipse at 12% 50%,rgba(30,112,166,.42),transparent 46%),radial-gradient(ellipse at 88% 50%,rgba(34,170,166,.30),transparent 46%),linear-gradient(135deg,#061326 0%,#0a2540 52%,#061b2b 100%);color:#f1f7fc}
     .rt-entry-artwork{display:block;width:100%;height:auto;object-fit:contain;object-position:top center}
+    /* Intro scrollbar: subtle brand-matched blue/teal styling */
+    .rt-entry{scrollbar-width:thin;scrollbar-color:#287f9e #071b2d}
+    .rt-entry::-webkit-scrollbar{width:9px}
+    .rt-entry::-webkit-scrollbar-track{background:#071b2d}
+    .rt-entry::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#3979f5,#36c8c3);border:2px solid #071b2d;border-radius:20px}
+    .rt-entry::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#5590ff,#61d5d0)}
     .rt-entry-status{display:none}
     .rt-intro-nav{position:absolute;z-index:2;top:clamp(12px,3vh,30px);left:50%;transform:translateX(-50%);width:min( calc(100% - 32px),1180px);display:flex;align-items:center;justify-content:center;gap:clamp(5px,1.1vw,14px);padding:10px 14px;border:1px solid rgba(151,190,214,.24);border-radius:16px;background:rgba(5,17,32,.76);backdrop-filter:blur(14px);box-shadow:0 12px 36px #0005}
     .rt-intro-nav button{border:1px solid transparent;border-radius:10px;padding:10px clamp(9px,1.3vw,17px);background:transparent;color:#eef7ff;font-size:clamp(11px,1vw,13px);font-weight:650;white-space:nowrap;cursor:pointer}

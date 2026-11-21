@@ -4,6 +4,9 @@
   const css = `
     .rt-account-button{border:1px solid rgba(101,214,207,.38);background:rgba(22,139,255,.10);color:var(--text,#f4f8ff);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:650;white-space:nowrap}
     .rt-account-button:hover{border-color:#62d5d0;background:rgba(54,200,195,.12)}
+    .rt-dashboard-nav{border:1px solid rgba(107,210,203,.42);background:linear-gradient(110deg,rgba(22,139,255,.16),rgba(54,200,195,.13));color:var(--text,#f4f8ff);border-radius:10px;padding:9px 13px;font-size:12px;font-weight:700;white-space:nowrap}
+    .rt-dashboard-nav:hover{border-color:#62d5d0;background:rgba(54,200,195,.2)}
+    .rt-dashboard-nav[hidden]{display:none}
     .rt-auth-backdrop{position:fixed;inset:0;z-index:9998;display:grid;place-items:center;padding:18px;background:rgba(1,8,18,.72);backdrop-filter:blur(8px)}
     .rt-auth-backdrop[hidden]{display:none}
     .rt-auth-card{position:relative;width:min(100%,430px);padding:28px;background:var(--panel,#0b1c31);color:var(--text,#f4f8ff);border:1px solid var(--border,rgba(75,151,207,.22));border-radius:18px;box-shadow:0 24px 80px #0008}
@@ -47,7 +50,14 @@
   accountButton.className = "rt-account-button";
   accountButton.textContent = "Sign in";
   accountButton.setAttribute("aria-haspopup", "dialog");
+  const topDashboardButton = document.createElement("button");
+  topDashboardButton.type = "button";
+  topDashboardButton.className = "rt-dashboard-nav";
+  topDashboardButton.textContent = "Dashboard";
+  topDashboardButton.hidden = true;
+  topDashboardButton.setAttribute("aria-label", "Open your RETIMEA dashboard");
   topActions.prepend(accountButton);
+  topActions.prepend(topDashboardButton);
 
   const backdrop = document.createElement("div");
   backdrop.className = "rt-auth-backdrop";
@@ -140,6 +150,7 @@
   function closeDashboard() { dashboard.hidden = true; }
 
   accountButton.addEventListener("click", show);
+  topDashboardButton.addEventListener("click", openDashboard);
   dashboardButton.addEventListener("click", openDashboard);
   dashboard.querySelector(".rt-dash-close").addEventListener("click", closeDashboard);
   dashboard.querySelector("#rtDashBack").addEventListener("click", closeDashboard);
@@ -161,6 +172,7 @@
       reset.hidden = true;
       signOut.hidden = false;
       dashboardButton.hidden = false;
+      topDashboardButton.hidden = false;
       say("Signed in successfully. Account and saved-project features will be connected in upcoming stages.");
     } else {
       accountButton.textContent = "Sign in";
@@ -170,6 +182,7 @@
       form.hidden = false;
       signOut.hidden = true;
       dashboardButton.hidden = true;
+      topDashboardButton.hidden = true;
       closeDashboard();
       setMode("signin");
     }

@@ -2418,6 +2418,10 @@ async function loadMarketQuotes(force = false) {
     marketQuotesCache = { timestamp: Date.now(), data: quotes };
     renderMarketCards(quotes);
     updated.textContent = "Updated " + new Date().toLocaleTimeString();
+    if (!marketChartInstance) {
+      const selected = MARKET_INSTRUMENTS.find(item => item.symbol === selectedMarketSymbol) || MARKET_INSTRUMENTS[0];
+      loadMarketChart(selected);
+    }
   } catch (error) {
     grid.innerHTML = "";
     const message = document.createElement("div");
@@ -2497,7 +2501,7 @@ function renderMarketChart(instrument, values) {
     status.textContent = "Showing " + values.length + " historical data points. Latest point: " + values[values.length - 1].datetime;
 }
 
-document.getElementById("marketRefresh").addEventListener("click", () => loadMarketQuotes(true));
+document.getElementById("marketRefresh").addEventListener("click", () => loadMarketQuotes(false));
 document.getElementById("marketInterval").addEventListener("change", () => {
   const instrument = MARKET_INSTRUMENTS.find(item => item.symbol === selectedMarketSymbol);
   if (instrument) loadMarketChart(instrument);

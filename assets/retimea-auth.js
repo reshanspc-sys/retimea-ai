@@ -70,12 +70,39 @@
       </form>
       <div class="rt-auth-row">
         <button class="rt-auth-link" id="rtAuthReset" type="button">Forgot password?</button>
+        <button class="rt-auth-link" id="rtAuthDashboard" type="button" hidden>Open dashboard</button>
         <button class="rt-auth-link" id="rtAuthSignOut" type="button" hidden>Sign out</button>
       </div>
       <div class="rt-auth-status" id="rtAuthStatus" role="status" aria-live="polite">Loading secure account service…</div>
       <p class="rt-auth-note">Your password is handled by Supabase Authentication. RETIMEA AI does not store your password.</p>
     </section>`;
   document.body.appendChild(backdrop);
+
+  const dashboard = document.createElement("div");
+  dashboard.className = "rt-dashboard-backdrop";
+  dashboard.hidden = true;
+  dashboard.innerHTML = `
+    <main class="rt-dashboard" role="dialog" aria-modal="true" aria-labelledby="rtDashTitle">
+      <header class="rt-dash-head">
+        <div><div class="rt-dash-kicker">RETIMEA AI · PERSONAL WORKSPACE</div><h2 id="rtDashTitle">Your dashboard</h2><p id="rtDashWelcome">Your creative and intelligent workspace, all in one place.</p></div>
+        <button class="rt-dash-close" type="button">Close</button>
+      </header>
+      <div class="rt-dash-body">
+        <div class="rt-dash-grid">
+          <section class="rt-dash-card"><h3>ACCOUNT</h3><div class="rt-dash-value" id="rtDashAccount">Active</div><div class="rt-dash-muted" id="rtDashEmail">Signed-in account</div></section>
+          <section class="rt-dash-card"><h3>YOUR PLAN</h3><div class="rt-dash-value">Free</div><div class="rt-dash-muted">Free access is active. Pro and Business upgrades will be introduced later.</div></section>
+          <section class="rt-dash-card"><h3>USAGE</h3><div class="rt-dash-value">Not connected</div><div class="rt-dash-muted">Usage tracking will be enabled after secure account limits are configured.</div></section>
+        </div>
+        <section class="rt-dash-section"><h3>My workspace</h3><div class="rt-dash-projects">
+          <article class="rt-dash-project"><strong>My Projects</strong><p>Your documents, designs and visualizations will appear here when secure project saving is enabled.</p><span class="rt-dash-tag">Coming next</span></article>
+          <article class="rt-dash-project"><strong>Recent Activity</strong><p>Your recent tool activity will be collected here after account-linked activity storage is ready.</p><span class="rt-dash-tag">Coming next</span></article>
+          <article class="rt-dash-project"><strong>AI Workspaces</strong><p>Access the RETIMEA tools from the main navigation. Your existing tools remain available.</p><span class="rt-dash-tag">Available</span></article>
+          <article class="rt-dash-project"><strong>Account & Security</strong><p>Your account is managed securely through Supabase Authentication.</p><span class="rt-dash-tag">Connected</span></article>
+        </div></section>
+        <div class="rt-dash-actions"><button class="rt-dash-action" type="button" id="rtDashBack">Back to RETIMEA</button><button class="rt-dash-action" type="button" id="rtDashAccountSettings">Account settings</button></div>
+      </div>
+    </main>`;
+  document.body.appendChild(dashboard);
 
   const form = backdrop.querySelector("#rtAuthForm");
   const email = backdrop.querySelector("#rtAuthEmail");

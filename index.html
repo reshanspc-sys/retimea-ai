@@ -1968,34 +1968,45 @@ promptBox.addEventListener("keydown", event => {
 @media(max-width:390px){.topbar-ribbon{flex-basis:34px;width:34px;height:34px}}
 
 
-/* WIDER CENTRE WORKSPACE — preserve the approved palette and banner */
+/* FULL-WIDTH CENTRE WORKSPACE — retain sidebar, banner and approved palette */
+.chat-area,
+.image-studio,
+.document-studio,
+.home-dashboard {
+  box-sizing:border-box;
+  width:100%;
+  max-width:none !important;
+  margin-left:0;
+  margin-right:0;
+}
 .chat-area,
 .image-studio,
 .document-studio {
-  max-width:none;
-  width:100%;
-  margin-left:0;
-  margin-right:0;
-  padding-left:clamp(22px,3vw,48px);
-  padding-right:clamp(22px,3vw,48px);
+  padding-left:clamp(24px,3.2vw,56px);
+  padding-right:clamp(24px,3.2vw,56px);
 }
 .home-dashboard {
-  max-width:none;
-  padding-left:clamp(22px,3vw,48px);
-  padding-right:clamp(22px,3vw,48px);
+  padding-left:clamp(24px,3.2vw,56px);
+  padding-right:clamp(24px,3.2vw,56px);
 }
 .message {
-  max-width:min(1050px,100%);
+  width:100%;
+  max-width:1400px;
+}
+.image-panel,
+.document-panel,
+.image-result,
+.document-result,
+.document-smallprint {
+  width:100%;
+  max-width:1400px;
 }
 @media(max-width:700px) {
-  .chat-area,.image-studio,.document-studio {
+  .chat-area,.image-studio,.document-studio,.home-dashboard {
     padding-left:12px;
     padding-right:12px;
   }
-  .home-dashboard {
-    padding-left:13px;
-    padding-right:13px;
-  }
+  .message {max-width:100%}
 }
 
 </style>

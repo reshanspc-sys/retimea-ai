@@ -1268,17 +1268,17 @@ input {
 }
 
 
-/* Slightly reduce the full banner so the lower homepage links remain visible */
+/* Keep the banner close to its original size, with only a modest reduction */
 .home-banner-image {
   width:100%;
   height:auto !important;
-  max-height:clamp(100px,14vh,140px);
+  max-height:clamp(150px,17.5vh,160px);
   object-fit:contain !important;
   object-position:center !important;
 }
 @media (max-width:700px) {
   .home-banner-image {
-    max-height:clamp(84px,13vh,112px);
+    max-height:clamp(112px,16vh,132px);
   }
 }
 </style>

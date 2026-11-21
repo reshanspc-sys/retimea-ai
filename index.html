@@ -1689,6 +1689,17 @@ body[data-theme="light"] .home-tool-card>span:last-child,
 body[data-theme="light"] .home-info-card p{color:#5d7488!important}
 body[data-theme="light"] .home-secondary{color:#23445d!important;background:rgba(255,255,255,.72)!important}
 
+
+/* WIDER DESKTOP HOMEPAGE — keep the chat and studio workspaces unchanged */
+@media(min-width:1100px){
+  .chat-area:has(#homeDashboard:not([hidden])){
+    max-width:1480px;
+    padding-left:clamp(32px,3.2vw,58px);
+    padding-right:clamp(32px,3.2vw,58px);
+  }
+  .home-dashboard{max-width:1480px!important;padding-left:clamp(18px,2.4vw,36px)!important;padding-right:clamp(18px,2.4vw,36px)!important}
+}
+
 </style>
 </head>
 

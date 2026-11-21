@@ -1,4 +1,3 @@
-
 import { checkAndRecordUsage } from "../_shared/usage.js";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";

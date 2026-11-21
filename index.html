@@ -956,6 +956,70 @@ body[data-theme="light"] .home-info-card{
   box-shadow:var(--shadow);
 }
 
+
+/* FINAL BANNER-ALIGNED RETIMEA PALETTE */
+:root{
+  --bg:#050d1b;
+  --sidebar:#071426;
+  --panel:#0b1c31;
+  --panel2:#102943;
+  --blue:#168bff;
+  --cyan:#36c8c3;
+  --text:#f4f8ff;
+  --muted:#91a9c2;
+  --border:rgba(75,151,207,.22);
+  --shadow:0 18px 48px rgba(0,5,15,.38);
+}
+body{
+  background:
+    radial-gradient(ellipse at 14% 0%,rgba(22,139,255,.16),transparent 38%),
+    radial-gradient(ellipse at 88% 100%,rgba(54,200,195,.10),transparent 36%),
+    var(--bg);
+}
+.sidebar{background:rgba(5,16,31,.97);border-right-color:rgba(54,143,199,.22)}
+.topbar{background:rgba(5,15,29,.94);border-bottom-color:rgba(54,143,199,.22)}
+.tool.active{
+  color:#f4f8ff;
+  background:linear-gradient(100deg,rgba(22,139,255,.23),rgba(54,200,195,.13));
+  box-shadow:inset 2px 0 #36c8c3;
+}
+.tool-icon,.visual-title,.document-result h3{color:#55d7d0}
+.home-hero,.home-tool-card,.home-info-card,.image-panel,.document-panel,.document-result,.visual-card{
+  border-color:rgba(65,151,204,.23);
+}
+.home-hero-copy{background:linear-gradient(110deg,rgba(22,139,255,.13),rgba(54,200,195,.09))}
+.send,.image-generate,.document-action,.home-primary{
+  background:linear-gradient(110deg,#168bff 0%,#3479e9 48%,#36c8c3 100%);
+  color:#04111f;
+}
+.composer:focus-within,.image-prompt:focus,.document-question:focus{
+  border-color:rgba(54,200,195,.78);
+  box-shadow:0 0 0 3px rgba(54,200,195,.10);
+}
+body[data-theme="light"]{
+  --bg:#f2f7fb;
+  --sidebar:#f8fbfe;
+  --panel:#ffffff;
+  --panel2:#eaf3fa;
+  --blue:#1676d2;
+  --cyan:#168f91;
+  --text:#12263b;
+  --muted:#5f7890;
+  --border:rgba(31,94,143,.17);
+  --shadow:0 16px 42px rgba(17,55,86,.09);
+  background:
+    radial-gradient(ellipse at 10% 0%,rgba(22,139,255,.08),transparent 38%),
+    radial-gradient(ellipse at 90% 100%,rgba(54,200,195,.07),transparent 36%),
+    var(--bg);
+}
+body[data-theme="light"] .sidebar,body[data-theme="light"] .topbar{background:rgba(248,251,254,.96)}
+body[data-theme="light"] .tool.active{
+  color:#153b5b;
+  background:linear-gradient(100deg,rgba(22,118,210,.12),rgba(22,143,145,.10));
+  box-shadow:inset 2px 0 #168f91;
+}
+body[data-theme="light"] .send,body[data-theme="light"] .image-generate,body[data-theme="light"] .document-action,body[data-theme="light"] .home-primary{color:#fff}
+
 </style>
 </head>
 

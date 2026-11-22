@@ -52,6 +52,13 @@
     .rt-dash-project{padding:16px;border:1px solid var(--border);border-radius:12px;background:rgba(16,33,55,.55)}.rt-dash-project strong{font-size:12px}.rt-dash-project p{font-size:11px;color:var(--muted);line-height:1.6;margin:7px 0 0}
     .rt-dash-tag{display:inline-flex;border:1px solid rgba(107,210,203,.28);color:#79d8d1;background:rgba(107,210,203,.08);border-radius:30px;padding:5px 9px;font-size:10px;font-weight:700}
     .rt-dash-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.rt-dash-action{border:1px solid var(--border);border-radius:9px;padding:10px 13px;background:rgba(57,121,245,.12);color:var(--text);font-size:11px}
+    .rt-dash-project-form{display:grid;gap:8px;padding:16px;border:1px solid var(--border);border-radius:12px;background:rgba(16,33,55,.42);margin-bottom:14px}
+    .rt-dash-project-form label{font-size:11px;color:var(--muted);margin-top:4px}
+    .rt-dash-project-form input,.rt-dash-project-form select,.rt-dash-project-form textarea{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:rgba(2,12,24,.55);color:var(--text);font:inherit;font-size:12px}
+    .rt-dash-project-card{padding:15px;border:1px solid var(--border);border-radius:12px;background:rgba(16,33,55,.55);min-width:0}
+    .rt-dash-project-card strong{font-size:12px}.rt-dash-project-card p{font-size:11px;color:var(--muted);line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;max-height:90px;overflow:hidden}
+    .rt-dash-project-card button{margin:8px 6px 0 0;border:1px solid var(--border);border-radius:8px;padding:7px 10px;background:rgba(57,121,245,.12);color:var(--text);font-size:11px}
+    .rt-dash-activity{display:grid;gap:8px}.rt-dash-activity-item{padding:11px 13px;border:1px solid var(--border);border-radius:10px;background:rgba(16,33,55,.38);font-size:11px}.rt-dash-activity-item time{display:block;color:var(--muted);margin-top:4px}
     @media(max-width:700px){.rt-dashboard-backdrop{padding:10px}.rt-dashboard{margin:8px auto}.rt-dash-head,.rt-dash-body{padding:18px}.rt-dash-grid{grid-template-columns:1fr}.rt-dash-projects{grid-template-columns:1fr}.rt-dash-head h2{font-size:20px}}
   
     .rt-entry{background:linear-gradient(90deg,rgba(3,12,28,.34),rgba(3,13,32,.58) 52%,rgba(3,13,32,.38)),url("/assets/retimea-ai-hero-clean.png") center/cover no-repeat,#07111f;color:#f1f7fc}
@@ -170,11 +177,20 @@
           <section class="rt-dash-card"><h3>YOUR PLAN</h3><div class="rt-dash-value">Free</div><div class="rt-dash-muted">Free access is active. Pro and Business upgrades will be introduced later.</div></section>
           <section class="rt-dash-card"><h3>USAGE</h3><div class="rt-dash-value">Not connected</div><div class="rt-dash-muted">Usage tracking will be enabled after secure account limits are configured.</div></section>
         </div>
-        <section class="rt-dash-section"><h3>My workspace</h3><div class="rt-dash-projects">
-          <article class="rt-dash-project"><strong>My Projects</strong><p>Your documents, designs and visualizations will appear here when secure project saving is enabled.</p><span class="rt-dash-tag">Coming next</span></article>
-          <article class="rt-dash-project"><strong>Recent Activity</strong><p>Your recent tool activity will be collected here after account-linked activity storage is ready.</p><span class="rt-dash-tag">Coming next</span></article>
-          <article class="rt-dash-project"><strong>AI Workspaces</strong><p>Access the RETIMEA tools from the main navigation. Your existing tools remain available.</p><span class="rt-dash-tag">Available</span></article>
-          <article class="rt-dash-project"><strong>Account & Security</strong><p>Your account is managed securely through Supabase Authentication.</p><span class="rt-dash-tag">Connected</span></article>
+        <section class="rt-dash-section">
+          <h3>My Projects</h3>
+          <div class="rt-dash-project-form">
+            <label for="rtProjectTitle">Project title</label><input id="rtProjectTitle" maxlength="180" placeholder="e.g. Qatar marketplace business plan">
+            <label for="rtProjectTool">Workspace</label><select id="rtProjectTool"><option value="assistant">AI Assistant</option><option value="writer">AI Writer</option><option value="research">Research Studio</option><option value="business">Business AI</option><option value="trading">Trading Research</option><option value="translator">Translator</option><option value="image">Image Creation</option><option value="document">Document Studio</option><option value="other">Other</option></select>
+            <label for="rtProjectContent">Project notes or content</label><textarea id="rtProjectContent" rows="4" maxlength="12000" placeholder="Paste the work you want to save here..."></textarea>
+            <button class="rt-dash-action" id="rtProjectSave" type="button">Save private project</button><span id="rtProjectStatus" role="status" class="rt-dash-muted"></span>
+          </div>
+          <div id="rtProjectList" class="rt-dash-projects" aria-live="polite"><p class="rt-dash-muted">Loading your private projects…</p></div>
+        </section>
+        <section class="rt-dash-section"><h3>Recent Activity</h3><div id="rtActivityList" class="rt-dash-activity" aria-live="polite"><p class="rt-dash-muted">Loading your activity…</p></div></section>
+        <section class="rt-dash-section"><h3>Account & Workspaces</h3><div class="rt-dash-projects">
+          <article class="rt-dash-project"><strong>AI Workspaces</strong><p>Access RETIMEA tools from the main navigation.</p><span class="rt-dash-tag">Available</span></article>
+          <article class="rt-dash-project"><strong>Account & Security</strong><p>Your account is managed through Supabase Authentication.</p><span class="rt-dash-tag">Connected</span></article>
         </div></section>
         <div class="rt-dash-actions"><button class="rt-dash-action" type="button" id="rtDashBack">Back to RETIMEA</button><button class="rt-dash-action" type="button" id="rtDashAccountSettings">Account settings</button></div>
       </div>
@@ -210,10 +226,66 @@
     dashboard.querySelector("#rtDashEmail").textContent = supabase.auth.getUser ? "Loading account…" : "Signed-in account";
     dashboard.hidden = false;
     hide();
+    loadProjectsAndActivity();
     supabase.auth.getUser().then(({ data }) => {
       if (data?.user?.email) dashboard.querySelector("#rtDashEmail").textContent = data.user.email;
     }).catch(() => {});
   }
+  const projectList = dashboard.querySelector("#rtProjectList");
+  const activityList = dashboard.querySelector("#rtActivityList");
+  const projectTitle = dashboard.querySelector("#rtProjectTitle");
+  const projectTool = dashboard.querySelector("#rtProjectTool");
+  const projectContent = dashboard.querySelector("#rtProjectContent");
+  const projectStatus = dashboard.querySelector("#rtProjectStatus");
+  async function logActivity(eventType, toolKey, summary = "") {
+    if (!supabase) return;
+    try {
+      const { data } = await supabase.auth.getUser();
+      if (!data?.user) return;
+      await supabase.from("user_activity").insert({ user_id: data.user.id, event_type: eventType, tool_key: toolKey, summary: String(summary).slice(0,240) });
+    } catch (error) { console.warn("Activity logging failed", error); }
+  }
+  async function loadProjectsAndActivity() {
+    if (!supabase) return;
+    projectList.innerHTML = '<p class="rt-dash-muted">Loading your private projects…</p>';
+    activityList.innerHTML = '<p class="rt-dash-muted">Loading your activity…</p>';
+    const [projects, activity] = await Promise.all([
+      supabase.from("user_projects").select("id,title,tool_key,preview_text,content,created_at,updated_at").order("updated_at",{ascending:false}).limit(50),
+      supabase.from("user_activity").select("id,event_type,tool_key,summary,created_at").order("created_at",{ascending:false}).limit(20)
+    ]);
+    if (projects.error) projectList.textContent = "Could not load projects: " + projects.error.message;
+    else {
+      projectList.innerHTML = "";
+      if (!projects.data?.length) projectList.innerHTML = '<p class="rt-dash-muted">No saved projects yet. Add your first project above.</p>';
+      (projects.data || []).forEach(project => {
+        const card = document.createElement("article"); card.className = "rt-dash-project-card";
+        const title = document.createElement("strong"); title.textContent = project.title;
+        const meta = document.createElement("div"); meta.className = "rt-dash-muted"; meta.textContent = project.tool_key + " · Updated " + new Date(project.updated_at).toLocaleString();
+        const preview = document.createElement("p"); preview.textContent = project.preview_text || "";
+        const open = document.createElement("button"); open.type="button"; open.textContent="Open";
+        open.addEventListener("click",()=>{projectTitle.value=project.title;projectTool.value=project.tool_key;projectContent.value=project.content?.text || project.preview_text || "";projectStatus.textContent="Project loaded into the editor above.";projectContent.focus();});
+        const del = document.createElement("button"); del.type="button"; del.textContent="Delete";
+        del.addEventListener("click",async()=>{if(!confirm("Delete this saved project? This cannot be undone."))return;del.disabled=true;const {error}=await supabase.from("user_projects").delete().eq("id",project.id);if(error){projectStatus.textContent=error.message;del.disabled=false;return;}await logActivity("project_deleted",project.tool_key,"Deleted "+project.title);await loadProjectsAndActivity();});
+        card.append(title,meta,preview,open,del);projectList.appendChild(card);
+      });
+    }
+    if (activity.error) activityList.textContent = "Could not load activity: " + activity.error.message;
+    else {
+      activityList.innerHTML = "";
+      if (!activity.data?.length) activityList.innerHTML = '<p class="rt-dash-muted">Your recent activity will appear here as you use RETIMEA.</p>';
+      (activity.data || []).forEach(item=>{const row=document.createElement("div");row.className="rt-dash-activity-item";const label=document.createElement("strong");label.textContent=item.summary || item.event_type.replaceAll("_"," ")+" · "+item.tool_key;const time=document.createElement("time");time.textContent=new Date(item.created_at).toLocaleString();row.append(label,time);activityList.appendChild(row);});
+    }
+  }
+  dashboard.querySelector("#rtProjectSave").addEventListener("click",async()=>{
+    const title=projectTitle.value.trim(),text=projectContent.value.trim(),tool=projectTool.value;
+    if(!title||!text){projectStatus.textContent="Enter a title and some project content first.";return;}
+    const {data,error}=await supabase.auth.getUser();if(error||!data?.user){projectStatus.textContent="Please sign in again to save.";return;}
+    const saveButton=dashboard.querySelector("#rtProjectSave");saveButton.disabled=true;projectStatus.textContent="Saving securely…";
+    const result=await supabase.from("user_projects").insert({user_id:data.user.id,title,tool_key:tool,content:{text},preview_text:text.slice(0,500)}).select("id").single();
+    saveButton.disabled=false;
+    if(result.error){projectStatus.textContent="Save failed: "+result.error.message;return;}
+    await logActivity("project_saved",tool,"Saved "+title);projectStatus.textContent="Project saved to your private workspace.";projectTitle.value="";projectContent.value="";await loadProjectsAndActivity();
+  });
   function closeDashboard() { dashboard.hidden = true; }
 
   const introInfo = document.createElement("section");
@@ -262,7 +334,7 @@
       signOut.hidden = false;
       dashboardButton.hidden = false;
       topDashboardButton.hidden = false;
-      say("Signed in successfully. Account and saved-project features will be connected in upcoming stages.");
+      say("Signed in successfully. Your private workspace is ready.");
       if (options.openDashboard) openDashboard();
     } else {
       document.querySelector(".app").style.visibility = "hidden";

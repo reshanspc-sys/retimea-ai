@@ -11,6 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script src="/assets/visualization-engine.js"></script>
   
@@ -1903,7 +1904,7 @@ body[data-theme="light"] .market-card,body[data-theme="light"] .market-chart-pan
         <div class="market-heading"><div><div class="home-eyebrow">GLOBAL MARKET MONITOR</div><h1>Live Markets</h1><p>Track selected markets and explore recent price history.</p></div><button class="market-refresh" id="marketRefresh" type="button">↻ Refresh</button></div>
         <div class="market-toolbar"><span class="market-live-dot"></span><span id="marketUpdated">Waiting for market data</span></div>
         <div class="market-grid" id="marketGrid"><div class="market-loading">Market quotes will appear here.</div></div>
-        <div class="market-chart-panel"><div class="market-chart-head"><div><h2 id="marketChartTitle">Market price history</h2><p id="marketChartSubtitle">Select an instrument above.</p></div><select id="marketInterval" aria-label="Chart interval"><option value="1day">1 day</option><option value="1h">1 hour</option><option value="15min">15 minutes</option><option value="1week">1 week</option></select></div><div class="market-chart-wrap"><canvas id="marketChart" aria-label="Selected market price chart"></canvas></div><div class="market-chart-status" id="marketChartStatus">Choose an instrument to load its chart.</div></div>
+        <div class="market-chart-panel"><div class="market-chart-head"><div><h2 id="marketChartTitle">Market price history</h2><p id="marketChartSubtitle">Select an instrument above.</p></div><select id="marketInterval" aria-label="Chart interval"><option value="1day">1 day</option><option value="1h">1 hour</option><option value="15min">15 minutes</option><option value="1week">1 week</option></select></div><div class="market-chart-wrap"><div id="marketChart" role="img" aria-label="Selected market candlestick chart" style="width:100%;height:100%"></div></div><div class="market-chart-status" id="marketChartStatus">Choose an instrument to load its chart.</div></div>
         <p class="market-disclaimer">Market information may be delayed or incomplete and is for research and education only, not investment advice. Availability depends on your provider subscription and exchange permissions.</p>
       </section>
 
@@ -2639,7 +2640,7 @@ const MARKET_INSTRUMENTS=[
  {symbol:"XAU/USD",name:"Gold"},{symbol:"BTC/USD",name:"Bitcoin"},
  {symbol:"EUR/USD",name:"EUR / USD"},{symbol:"SPY",name:"S&P 500 ETF"}
 ];
-let selectedMarketSymbol="XAU/USD", marketChartInstance=null, marketQuoteCache=null, marketQuoteTime=0;
+let selectedMarketSymbol="XAU/USD", marketChartInstance=null, marketCandleSeries=null, marketQuoteCache=null, marketQuoteTime=0;
 const marketHistoryCache=new Map();
 async function marketFetch(params){
  const response=await fetch("/api/markets?"+new URLSearchParams(params));
@@ -2679,10 +2680,16 @@ async function loadMarketChart(item){
  try{
   let values=marketHistoryCache.get(key);
   if(!values){status.textContent="Loading chart history…";const data=await marketFetch({action:"time_series",symbol:item.symbol,interval,outputsize:"45"});values=Array.isArray(data.values)?data.values.slice().reverse():[];if(!values.length)throw new Error("No history available for this symbol or interval.");marketHistoryCache.set(key,values)}
-  if(!window.Chart)throw new Error("Chart library could not be loaded.");
-  if(marketChartInstance)marketChartInstance.destroy();
-  marketChartInstance=new Chart(document.getElementById("marketChart"),{type:"line",data:{labels:values.map(x=>x.datetime),datasets:[{label:item.symbol,data:values.map(x=>Number(x.close)),borderColor:"#61d5d0",backgroundColor:"rgba(97,213,208,.10)",borderWidth:2,pointRadius:0,fill:true,tension:.22}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#91a5ba",maxTicksLimit:7}},y:{ticks:{color:"#91a5ba"}}}}});
-  status.textContent="Showing "+values.length+" historical data points.";
+  if(!window.LightweightCharts)throw new Error("Candlestick chart library could not be loaded.");
+  const container=document.getElementById("marketChart");
+  if(marketChartInstance)marketChartInstance.remove();
+  marketChartInstance=LightweightCharts.createChart(container,{autoSize:true,layout:{background:{color:"transparent"},textColor:"#91a5ba"},grid:{vertLines:{color:"rgba(145,165,186,.08)"},horzLines:{color:"rgba(145,165,186,.08)"}},rightPriceScale:{borderColor:"rgba(145,165,186,.2)"},timeScale:{borderColor:"rgba(145,165,186,.2)",timeVisible:interval!=="1day"&&interval!=="1week"}});
+  marketCandleSeries=marketChartInstance.addCandlestickSeries({upColor:"#22c997",downColor:"#f06b78",borderUpColor:"#22c997",borderDownColor:"#f06b78",wickUpColor:"#22c997",wickDownColor:"#f06b78"});
+  const candles=values.map(x=>{const raw=String(x.datetime||"");const time=interval==="1day"||interval==="1week"||interval==="1month"?raw.slice(0,10):Math.floor(Date.parse(raw.replace(" ","T")+"Z")/1000);return {time,open:Number(x.open),high:Number(x.high),low:Number(x.low),close:Number(x.close)}}).filter(x=>x.time&&[x.open,x.high,x.low,x.close].every(Number.isFinite));
+  if(!candles.length)throw new Error("The provider returned no valid OHLC candle data.");
+  marketCandleSeries.setData(candles);
+  marketChartInstance.timeScale().fitContent();
+  status.textContent="Showing "+candles.length+" OHLC candles.";
  }catch(e){status.textContent=e.message}
 }
 document.getElementById("marketRefresh").addEventListener("click",()=>loadMarketQuotes(true));

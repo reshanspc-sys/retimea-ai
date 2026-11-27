@@ -264,7 +264,7 @@
         const meta = document.createElement("div"); meta.className = "rt-dash-muted"; meta.textContent = project.tool_key + " · Updated " + new Date(project.updated_at).toLocaleString();
         const preview = document.createElement("p"); preview.textContent = project.preview_text || "";
         const open = document.createElement("button"); open.type="button"; open.textContent="Open";
-        open.addEventListener("click",()=>{projectTitle.value=project.title;projectTool.value=project.tool_key;projectContent.value=project.content?.text || project.preview_text || "";projectStatus.textContent="Project loaded into the editor above.";projectContent.focus();});
+        open.addEventListener("click",()=>{selectedProjectId=project.id;projectTitle.value=project.title;projectTool.value=project.tool_key;projectContent.value=project.content?.text || project.preview_text || "";projectStatus.textContent="Project opened for editing. Save will update this project.";saveButton.textContent="Update project";projectContent.focus();});
         const del = document.createElement("button"); del.type="button"; del.textContent="Delete";
         del.addEventListener("click",async()=>{if(!confirm("Delete this saved project? This cannot be undone."))return;del.disabled=true;const {error}=await supabase.from("user_projects").delete().eq("id",project.id);if(error){projectStatus.textContent=error.message;del.disabled=false;return;}await logActivity("project_deleted",project.tool_key,"Deleted "+project.title);await loadProjectsAndActivity();});
         card.append(title,meta,preview,open,del);projectList.appendChild(card);
@@ -277,15 +277,19 @@
       (activity.data || []).forEach(item=>{const row=document.createElement("div");row.className="rt-dash-activity-item";const label=document.createElement("strong");label.textContent=item.summary || item.event_type.replaceAll("_"," ")+" · "+item.tool_key;const time=document.createElement("time");time.textContent=new Date(item.created_at).toLocaleString();row.append(label,time);activityList.appendChild(row);});
     }
   }
+  let selectedProjectId = null;
+  const saveButton = dashboard.querySelector("#rtProjectSave");
   dashboard.querySelector("#rtProjectSave").addEventListener("click",async()=>{
     const title=projectTitle.value.trim(),text=projectContent.value.trim(),tool=projectTool.value;
     if(!title||!text){projectStatus.textContent="Enter a title and some project content first.";return;}
     const {data,error}=await supabase.auth.getUser();if(error||!data?.user){projectStatus.textContent="Please sign in again to save.";return;}
     const saveButton=dashboard.querySelector("#rtProjectSave");saveButton.disabled=true;projectStatus.textContent="Saving securely…";
-    const result=await supabase.from("user_projects").insert({user_id:data.user.id,title,tool_key:tool,content:{text},preview_text:text.slice(0,500)}).select("id").single();
+    const result = selectedProjectId
+      ? await supabase.from("user_projects").update({title,tool_key:tool,content:{text},preview_text:text.slice(0,500),updated_at:new Date().toISOString()}).eq("id",selectedProjectId).select("id").single()
+      : await supabase.from("user_projects").insert({user_id:data.user.id,title,tool_key:tool,content:{text},preview_text:text.slice(0,500)}).select("id").single();
     saveButton.disabled=false;
     if(result.error){projectStatus.textContent="Save failed: "+result.error.message;return;}
-    await logActivity("project_saved",tool,"Saved "+title);projectStatus.textContent="Project saved to your private workspace.";projectTitle.value="";projectContent.value="";await loadProjectsAndActivity();
+    await logActivity(selectedProjectId ? "project_updated" : "project_saved",tool,(selectedProjectId ? "Updated " : "Saved ")+title);projectStatus.textContent=selectedProjectId ? "Project updated." : "Project saved to your private workspace.";selectedProjectId=null;saveButton.textContent="Save private project";projectTitle.value="";projectContent.value="";await loadProjectsAndActivity();
   });
   dashboard.querySelector("#rtSaveLatest").addEventListener("click", () => {
     const messageRoot = document.querySelector("#messages");

@@ -183,7 +183,8 @@
             <label for="rtProjectTitle">Project title</label><input id="rtProjectTitle" maxlength="180" placeholder="e.g. Qatar marketplace business plan">
             <label for="rtProjectTool">Workspace</label><select id="rtProjectTool"><option value="assistant">AI Assistant</option><option value="writer">AI Writer</option><option value="research">Research Studio</option><option value="business">Business AI</option><option value="trading">Trading Research</option><option value="translator">Translator</option><option value="image">Image Creation</option><option value="document">Document Studio</option><option value="other">Other</option></select>
             <label for="rtProjectContent">Project notes or content</label><textarea id="rtProjectContent" rows="4" maxlength="12000" placeholder="Paste the work you want to save here..."></textarea>
-            <button class="rt-dash-action" id="rtProjectSave" type="button">Save private project</button><span id="rtProjectStatus" role="status" class="rt-dash-muted"></span>
+            <button class="rt-dash-action" id="rtProjectSave" type="button">Save private project</button>
+            <button class="rt-dash-action" id="rtSaveLatest" type="button">Save latest AI response</button><span id="rtProjectStatus" role="status" class="rt-dash-muted"></span>
           </div>
           <div id="rtProjectList" class="rt-dash-projects" aria-live="polite"><p class="rt-dash-muted">Loading your private projects…</p></div>
         </section>
@@ -285,6 +286,21 @@
     saveButton.disabled=false;
     if(result.error){projectStatus.textContent="Save failed: "+result.error.message;return;}
     await logActivity("project_saved",tool,"Saved "+title);projectStatus.textContent="Project saved to your private workspace.";projectTitle.value="";projectContent.value="";await loadProjectsAndActivity();
+  });
+  dashboard.querySelector("#rtSaveLatest").addEventListener("click", () => {
+    const messageRoot = document.querySelector("#messages");
+    const userMessages = messageRoot ? [...messageRoot.querySelectorAll(".message.user")] : [];
+    const assistantMessages = messageRoot ? [...messageRoot.querySelectorAll(".message.assistant")] : [];
+    const latestUser = userMessages.at(-1)?.innerText?.trim() || "";
+    const latestAssistant = assistantMessages.at(-1)?.innerText?.trim() || "";
+    if (!latestAssistant) { projectStatus.textContent = "No AI response found to save yet."; return; }
+    const promptText = latestUser;
+    const combined = promptText ? "PROMPT:\\n" + promptText + "\\n\\nAI RESPONSE:\\n" + latestAssistant : latestAssistant;
+    projectTitle.value = (promptText || "AI response").slice(0,180);
+    projectTool.value = "assistant";
+    projectContent.value = combined;
+    projectStatus.textContent = "Latest response captured. Add or edit the project title, then select Save private project.";
+    projectContent.focus();
   });
   function closeDashboard() { dashboard.hidden = true; }
 

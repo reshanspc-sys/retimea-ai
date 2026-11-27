@@ -184,7 +184,7 @@
             <label for="rtProjectTool">Workspace</label><select id="rtProjectTool"><option value="assistant">AI Assistant</option><option value="writer">AI Writer</option><option value="research">Research Studio</option><option value="business">Business AI</option><option value="trading">Trading Research</option><option value="translator">Translator</option><option value="image">Image Creation</option><option value="document">Document Studio</option><option value="other">Other</option></select>
             <label for="rtProjectContent">Project notes or content</label><textarea id="rtProjectContent" rows="4" maxlength="12000" placeholder="Paste the work you want to save here..."></textarea>
             <button class="rt-dash-action" id="rtProjectSave" type="button">Save private project</button>
-            <button class="rt-dash-action" id="rtSaveLatest" type="button">Save latest AI response</button><span id="rtProjectStatus" role="status" class="rt-dash-muted"></span>
+            <button class="rt-dash-action" id="rtSaveLatest" type="button">Save latest AI response</button><button class="rt-dash-action" id="rtSaveDocumentOutput" type="button">Save Document Studio output</button><span id="rtProjectStatus" role="status" class="rt-dash-muted"></span>
           </div>
           <div id="rtProjectList" class="rt-dash-projects" aria-live="polite"><p class="rt-dash-muted">Loading your private projects…</p></div>
         </section>
@@ -318,6 +318,18 @@
     projectTool.value = "assistant";
     projectContent.value = combined;
     projectStatus.textContent = "Latest response captured. Add or edit the project title, then select Save private project.";
+    projectContent.focus();
+  });
+  dashboard.querySelector("#rtSaveDocumentOutput").addEventListener("click", () => {
+    const answer = document.querySelector("#documentAnswer")?.innerText?.trim() || "";
+    if (!answer) { projectStatus.textContent = "No Document Studio output found yet."; return; }
+    const prompt = document.querySelector("#documentPrompt")?.value?.trim() || document.querySelector("#documentQuestion")?.value?.trim() || "";
+    const fileName = document.querySelector("#fileInfo strong")?.innerText?.trim() || "";
+    const title = (prompt || fileName || "Document Studio output").slice(0,180);
+    projectTitle.value = title;
+    projectTool.value = "document";
+    projectContent.value = (prompt ? "PROMPT / QUESTION:\n"+prompt+"\n\n" : "")+(fileName ? "SOURCE FILE: "+fileName+"\n\n" : "")+"DOCUMENT STUDIO OUTPUT:\n"+answer;
+    projectStatus.textContent = "Document Studio output captured. Review it, then select Save private project.";
     projectContent.focus();
   });
   function closeDashboard() { dashboard.hidden = true; }

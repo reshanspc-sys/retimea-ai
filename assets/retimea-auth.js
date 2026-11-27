@@ -264,7 +264,7 @@
         const meta = document.createElement("div"); meta.className = "rt-dash-muted"; meta.textContent = project.tool_key + " · Updated " + new Date(project.updated_at).toLocaleString();
         const preview = document.createElement("p"); preview.textContent = project.preview_text || "";
         const open = document.createElement("button"); open.type="button"; open.textContent="Open";
-        open.addEventListener("click",()=>{selectedProjectId=project.id;projectTitle.value=project.title;projectTool.value=project.tool_key;projectContent.value=project.content?.text || project.preview_text || "";projectStatus.textContent="Project opened for editing. Save will update this project.";saveButton.textContent="Update project";projectContent.focus();});
+        open.addEventListener("click",()=>{selectedProjectId=project.id;projectTitle.value=project.title;projectTool.value=project.tool_key;projectContent.value=project.content?.text || project.preview_text || "";if(project.tool_key==="document"&&window.retimeaDocumentState)window.retimeaDocumentState.set(project.content?.source_text || "",project.content?.source_filename || "");projectStatus.textContent="Project opened for editing. Save will update this project.";saveButton.textContent="Update project";projectContent.focus();});
         const isDocumentProject = project.tool_key === "document";
         const continueButton = document.createElement("button"); continueButton.type="button";
         continueButton.textContent = isDocumentProject ? "Open in Document Studio" : "Continue in AI Assistant";
@@ -283,7 +283,8 @@
             documentButton.click();
             answer.textContent=restoredOutput;
             result.classList.add("visible");
-            if(status) status.textContent="Saved Document Studio output restored. Upload a source document to run a new analysis.";
+            if(window.retimeaDocumentState) window.retimeaDocumentState.set(project.content?.source_text || "",project.content?.source_filename || "");
+            if(status && !window.retimeaDocumentState) status.textContent="Saved Document Studio output restored. Upload a source document to run a new analysis.";
             await logActivity("project_opened",project.tool_key,"Opened "+project.title+" in Document Studio");
             return;
           }
@@ -317,9 +318,13 @@
     if(!title||!text){projectStatus.textContent="Enter a title and some project content first.";return;}
     const {data,error}=await supabase.auth.getUser();if(error||!data?.user){projectStatus.textContent="Please sign in again to save.";return;}
     const saveButton=dashboard.querySelector("#rtProjectSave");saveButton.disabled=true;projectStatus.textContent="Saving securely…";
+    const documentState = tool === "document" ? (window.retimeaDocumentState?.get() || {}) : {};
+    const projectContentData = tool === "document"
+      ? {text,source_text:documentState.text || "",source_filename:documentState.name || ""}
+      : {text};
     const result = selectedProjectId
-      ? await supabase.from("user_projects").update({title,tool_key:tool,content:{text},preview_text:text.slice(0,500),updated_at:new Date().toISOString()}).eq("id",selectedProjectId).select("id").single()
-      : await supabase.from("user_projects").insert({user_id:data.user.id,title,tool_key:tool,content:{text},preview_text:text.slice(0,500)}).select("id").single();
+      ? await supabase.from("user_projects").update({title,tool_key:tool,content:projectContentData,preview_text:text.slice(0,500),updated_at:new Date().toISOString()}).eq("id",selectedProjectId).select("id").single()
+      : await supabase.from("user_projects").insert({user_id:data.user.id,title,tool_key:tool,content:projectContentData,preview_text:text.slice(0,500)}).select("id").single();
     saveButton.disabled=false;
     if(result.error){projectStatus.textContent="Save failed: "+result.error.message;return;}
     await logActivity(selectedProjectId ? "project_updated" : "project_saved",tool,(selectedProjectId ? "Updated " : "Saved ")+title);projectStatus.textContent=selectedProjectId ? "Project updated." : "Project saved to your private workspace.";selectedProjectId=null;saveButton.textContent="Save private project";projectTitle.value="";projectContent.value="";await loadProjectsAndActivity();

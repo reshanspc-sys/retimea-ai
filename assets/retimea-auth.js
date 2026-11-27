@@ -265,9 +265,28 @@
         const preview = document.createElement("p"); preview.textContent = project.preview_text || "";
         const open = document.createElement("button"); open.type="button"; open.textContent="Open";
         open.addEventListener("click",()=>{selectedProjectId=project.id;projectTitle.value=project.title;projectTool.value=project.tool_key;projectContent.value=project.content?.text || project.preview_text || "";projectStatus.textContent="Project opened for editing. Save will update this project.";saveButton.textContent="Update project";projectContent.focus();});
-        const continueButton = document.createElement("button"); continueButton.type="button"; continueButton.textContent="Continue in AI Assistant";
+        const isDocumentProject = project.tool_key === "document";
+        const continueButton = document.createElement("button"); continueButton.type="button";
+        continueButton.textContent = isDocumentProject ? "Open in Document Studio" : "Continue in AI Assistant";
         continueButton.addEventListener("click",async()=>{
           const savedText=project.content?.text || project.preview_text || "";
+          if (isDocumentProject) {
+            const documentButton=document.querySelector('.tool[data-tool="document"]');
+            const answer=document.querySelector("#documentAnswer");
+            const result=document.querySelector("#documentResult");
+            const status=document.querySelector("#documentStatus");
+            if(!documentButton||!answer||!result){projectStatus.textContent="Could not open Document Studio.";return;}
+            const marker="DOCUMENT STUDIO OUTPUT:\\n";
+            const markerIndex=savedText.lastIndexOf(marker);
+            const restoredOutput=markerIndex>=0?savedText.slice(markerIndex+marker.length).trim():savedText;
+            closeDashboard();
+            documentButton.click();
+            answer.textContent=restoredOutput;
+            result.classList.add("visible");
+            if(status) status.textContent="Saved Document Studio output restored. Upload a source document to run a new analysis.";
+            await logActivity("project_opened",project.tool_key,"Opened "+project.title+" in Document Studio");
+            return;
+          }
           const continuation="Continue this saved RETIMEA AI project.\\n\\nProject title: "+project.title+"\\nOriginal tool: "+project.tool_key+"\\n\\nSaved context:\\n"+savedText.slice(0,12000)+"\\n\\nPlease continue from this context, avoid repeating completed work, and ask only if a critical detail is missing.";
           const assistantButton=document.querySelector('.tool[data-tool="assistant"]');
           const promptBox=document.querySelector("#prompt");

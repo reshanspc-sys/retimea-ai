@@ -265,9 +265,23 @@
         const preview = document.createElement("p"); preview.textContent = project.preview_text || "";
         const open = document.createElement("button"); open.type="button"; open.textContent="Open";
         open.addEventListener("click",()=>{selectedProjectId=project.id;projectTitle.value=project.title;projectTool.value=project.tool_key;projectContent.value=project.content?.text || project.preview_text || "";projectStatus.textContent="Project opened for editing. Save will update this project.";saveButton.textContent="Update project";projectContent.focus();});
+        const continueButton = document.createElement("button"); continueButton.type="button"; continueButton.textContent="Continue in AI Assistant";
+        continueButton.addEventListener("click",async()=>{
+          const savedText=project.content?.text || project.preview_text || "";
+          const continuation="Continue this saved RETIMEA AI project.\\n\\nProject title: "+project.title+"\\nOriginal tool: "+project.tool_key+"\\n\\nSaved context:\\n"+savedText.slice(0,12000)+"\\n\\nPlease continue from this context, avoid repeating completed work, and ask only if a critical detail is missing.";
+          const assistantButton=document.querySelector('.tool[data-tool="assistant"]');
+          const promptBox=document.querySelector("#prompt");
+          if(!assistantButton||!promptBox){projectStatus.textContent="Could not open AI Assistant.";return;}
+          closeDashboard();
+          assistantButton.click();
+          promptBox.value=continuation;
+          promptBox.focus();
+          await logActivity("project_continued",project.tool_key,"Continued "+project.title+" in AI Assistant");
+          projectStatus.textContent="Project context prepared in AI Assistant. Review the prompt and press Send.";
+        });
         const del = document.createElement("button"); del.type="button"; del.textContent="Delete";
         del.addEventListener("click",async()=>{if(!confirm("Delete this saved project? This cannot be undone."))return;del.disabled=true;const {error}=await supabase.from("user_projects").delete().eq("id",project.id);if(error){projectStatus.textContent=error.message;del.disabled=false;return;}await logActivity("project_deleted",project.tool_key,"Deleted "+project.title);await loadProjectsAndActivity();});
-        card.append(title,meta,preview,open,del);projectList.appendChild(card);
+        card.append(title,meta,preview,open,continueButton,del);projectList.appendChild(card);
       });
     }
     if (activity.error) activityList.textContent = "Could not load activity: " + activity.error.message;

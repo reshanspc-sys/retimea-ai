@@ -2127,6 +2127,35 @@ let history = [];
 let extractedDocumentText = "";
 let selectedDocumentName = "";
 
+// Shared Document Studio state for private project save/restore.
+window.retimeaDocumentState = {
+  get: () => ({ text: extractedDocumentText, name: selectedDocumentName }),
+  set: (text, name) => {
+    extractedDocumentText = typeof text === "string" ? text : "";
+    selectedDocumentName = typeof name === "string" ? name : "";
+    const info = document.getElementById("fileInfo");
+    const status = document.getElementById("documentStatus");
+    if (info) {
+      info.innerHTML = "";
+      if (selectedDocumentName) {
+        const label = document.createElement("strong");
+        label.textContent = selectedDocumentName;
+        const detail = document.createElement("span");
+        detail.textContent = extractedDocumentText
+          ? " · Saved source text restored (" + extractedDocumentText.length.toLocaleString() + " characters)"
+          : " · Source text not saved in this older project";
+        info.append(label, detail);
+        info.classList.add("visible");
+      } else {
+        info.classList.remove("visible");
+      }
+    }
+    if (status) status.textContent = extractedDocumentText
+      ? "Saved source document restored. You can ask another question without uploading again."
+      : "Saved output restored. This older project has no saved source text; upload the original document to ask follow-up questions.";
+  }
+};
+
 /* ELEMENT REFERENCES */
 const messages = document.getElementById("messages");
 const promptBox = document.getElementById("prompt");
